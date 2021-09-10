@@ -1,6 +1,6 @@
 {
   "name": "phaser-plugin-inspector",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "module": "dist/phaser-plugin-inspector.esm.js",
   "browser": "dist/phaser-plugin-inspector.umd.js",
   "devDependencies": {
