@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../node_modules/mocha/mocha.css">
+<style>
+  #mocha {
+    font-family: system-ui, sans-serif !important;
+  }
+
+  #mocha h1 {
+    font-weight: 400 !important;
+  }
+
+  .passes::after {
+    content: "😀"
+  }
+
+  .failures::after {
+    content: "😢"
+  }
+</style>
+<title>Test of Phaser 3 Inspector Plugin, script loading</title>
+
+<body>
+  <div id="mocha"></div>
+
+  <script src="../vendor/mocha.js"></script>
+  <script src="../vendor/chai.js"></script>
+  <script src="../vendor/phaser.js"></script>
+  <script src="./test-load.js"></script>
+</body>

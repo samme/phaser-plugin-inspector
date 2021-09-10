@@ -1,0 +1,9 @@
+env:
+  browser: yes
+  es6: no
+extends: semistandard
+globals:
+  Atomics: readonly
+  SharedArrayBuffer: readonly
+  Phaser: readonly
+  __Global__: readonly
