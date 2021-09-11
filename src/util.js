@@ -218,11 +218,8 @@ export function addCamera (camera, pane) {
   folder.addButton({ title: 'Shake' }).on('click', () => { camera.shake(); });
 
   camera.on(CameraEvents.DESTROY, () => {
-    console.debug('Dispose camera ', camera.id);
     folder.dispose();
   });
-
-  console.debug('Add camera', camera.id);
 
   return folder;
 }

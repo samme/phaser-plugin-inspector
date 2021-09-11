@@ -22,29 +22,21 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
   }
 
   init (data) {
-    console.debug('init', data);
   }
 
   start () {
-    console.debug('start');
-
     this.pane = new Tweakpane.Pane();
     this.pane.containerElem_.style.width = '320px';
     this.add();
   }
 
   stop () {
-    console.debug('stop');
-
     this.pane.dispose();
     this.pane = null;
   }
 
   destroy () {
-    console.debug('destroy');
-
     this.stop();
-
     super.destroy();
   }
 

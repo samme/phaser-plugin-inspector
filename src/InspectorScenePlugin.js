@@ -20,67 +20,27 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
   }
 
   boot () {
-    console.debug('boot', this.systems.settings.key);
-
     this.pane = this.pluginManager.get(GLOBAL_PLUGIN_KEY).pane;
     this.folder = this.pane.addFolder({ title: `Scene “${this.systems.settings.key}”`, expanded: false });
 
     this.systems.events
-      .on(START, this.sceneStart, this)
-      .on(CREATE, this.sceneCreate, this)
-      .on(SHUTDOWN, this.sceneShutdown, this)
       .on(DESTROY, this.sceneDestroy, this);
-
-    if (this.systems.settings.isBooted) {
-      console.info('Scene already booted');
-    }
 
     this.add();
   }
 
-  start () {
-    console.debug('start');
-  }
-
-  stop () {
-    console.debug('stop');
-  }
-
   destroy () {
-    console.debug('destroy', this.systems.settings.key);
-
     this.folder.dispose();
     this.folder = null;
 
     this.systems.events
-      .off(START, this.sceneStart, this)
-      .off(CREATE, this.sceneCreate, this)
-      .off(SHUTDOWN, this.sceneShutdown, this)
       .off(DESTROY, this.sceneDestroy, this);
 
     super.destroy();
   }
 
   sceneDestroy () {
-    console.debug('sceneDestroy', this.systems.settings.key);
-
     this.destroy();
-  }
-
-  sceneStart () {
-    console.debug('sceneStart', this.systems.settings.key, this.systems.settings);
-
-    // TODO add physics
-  }
-
-  sceneCreate () {
-    console.debug('sceneCreate', this.systems.settings.key);
-
-    // TODO add cameras
-  }
-
-  sceneShutdown () {
-    console.debug('sceneShutdown', this.systems.settings.key);
   }
 
   add () {
