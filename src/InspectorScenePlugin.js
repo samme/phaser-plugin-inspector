@@ -5,7 +5,6 @@ import { addArcadePhysicsWorld, addCamera, addMatterPhysicsWorld, cameraToPrint,
 const {
   CREATE,
   DESTROY,
-  SHUTDOWN,
   START
 } = Phaser.Scenes.Events;
 
