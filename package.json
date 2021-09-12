@@ -1,8 +1,15 @@
 {
   "name": "phaser-plugin-inspector",
   "version": "1.0.1",
+  "description": "View and change Phaser 3 game properties",
   "module": "dist/phaser-plugin-inspector.esm.js",
   "browser": "dist/phaser-plugin-inspector.umd.js",
+  "files": [
+    "dist"
+  ],
+  "directories": {
+    "test": "test"
+  },
   "devDependencies": {
     "@rollup/plugin-buble": "^0.21.3",
     "@rollup/plugin-commonjs": "^11.1.0",
@@ -34,7 +41,21 @@
     "preversion": "npm run build",
     "test": "eslint src"
   },
-  "files": [
-    "dist"
-  ]
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samme/phaser-plugin-inspector.git"
+  },
+  "keywords": [
+    "phaser",
+    "phaser-plugin",
+    "phaser3",
+    "phaser3-plugin",
+    "tweakpane"
+  ],
+  "author": "samme",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samme/phaser-plugin-inspector/issues"
+  },
+  "homepage": "https://github.com/samme/phaser-plugin-inspector#readme"
 }
