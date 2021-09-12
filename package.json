@@ -25,7 +25,6 @@
     "eslint-plugin-standard": "^4.0.1",
     "mocha": "^7.2.0",
     "phaser": "3.55.2",
-    "replace-in-file": "^6.2.0",
     "rollup": "^2.23.0"
   },
   "peerDependencies": {
