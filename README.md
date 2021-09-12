@@ -8,8 +8,6 @@ Install
 
 ### Browser / UMD
 
-#### HTML
-
 Include Phaser, Tweakpane, and the plugin UMD script. 
 
 ```html
@@ -18,10 +16,9 @@ Include Phaser, Tweakpane, and the plugin UMD script.
 <script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.0.2/dist/phaser-plugin-inspector.umd.js"></script>
 ```
 
-#### JS
-
 ```js
 /* global PhaserPluginInspector */
+
 new Phaser.Game({
   plugins: PhaserPluginInspector.DefaultPluginsConfig
 });
@@ -31,6 +28,7 @@ or
 
 ```js
 /* global PhaserPluginInspector */
+
 const { InspectorGlobalPlugin, InspectorScenePlugin } = PhaserPluginInspector;
 
 new Phaser.Game({
@@ -87,5 +85,6 @@ You can add your own controls like so:
 
 ```js
 // In scene `create()`:
+
 this.inspectorScene.folder.addInput(sprite, 'alpha');
 ```
