@@ -15,7 +15,7 @@ Include Phaser, Tweakpane, and the plugin UMD script.
 ```html
 <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.0.5/dist/tweakpane.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.0.1/dist/phaser-plugin-inspector.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.0.2/dist/phaser-plugin-inspector.umd.js"></script>
 ```
 
 #### JS
@@ -72,7 +72,7 @@ new Phaser.Game({
 function preload() {
   this.load.scripts('inspector', [
     'https://cdn.jsdelivr.net/npm/tweakpane@3.0.5',
-    'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.0.1',
+    'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.0.2',
   ]);
   this.load.once('complete', () => {
     PhaserPluginInspector.Install(this.plugins);
