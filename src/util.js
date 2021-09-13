@@ -228,14 +228,14 @@ export function addArcadePhysicsWorld (world, pane) {
   const { arcadePhysics, events } = world.scene.sys;
   const folder = pane.addFolder({ title: 'Arcade Physics', expanded: false });
 
-  folder.addMonitor(world.bodies, 'size', { label: 'bodies (size)' });
+  folder.addMonitor(world.bodies, 'size', { label: 'bodies' });
   folder.addInput(world, 'fixedStep');
   folder.addInput(world, 'forceX');
   folder.addMonitor(world, 'fps');
   folder.addInput(world, 'gravity', { x: { min: -1000, max: 1000 }, y: { min: -1000, max: 1000 } });
   folder.addInput(world, 'isPaused');
   folder.addInput(world, 'OVERLAP_BIAS', { label: 'overlap bias', min: 0, max: 16, step: 1 });
-  folder.addMonitor(world.staticBodies, 'size', { label: 'staticBodies (size)' });
+  folder.addMonitor(world.staticBodies, 'size', { label: 'staticBodies' });
   folder.addInput(world, 'TILE_BIAS', { label: 'tile bias', min: 0, max: 32, step: 1 });
   folder.addInput(world, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
   folder.addInput(world, 'useTree');
