@@ -13,6 +13,7 @@ function create () {
   const particles = this.add.particles('red');
 
   const emitter = particles.createEmitter({
+    frequency: 25,
     speed: 100,
     scale: { start: 1, end: 0 },
     blendMode: 'ADD'
@@ -45,9 +46,16 @@ function addGameObjectFolder (gameObject, parent) {
 }
 
 function addEmitterFolder (emitter, parent) {
-  const folder = parent.addFolder({ title: 'Particle emitter' });
+  const folder = parent.addFolder({ title: 'Particle Emitter' });
 
   folder.visible = true;
+
+  folder.addMonitor(emitter, 'active');
+  folder.addInput(emitter, 'visible');
+  folder.addInput(emitter, 'blendMode', { options: Phaser.BlendModes });
+  folder.addInput(emitter, 'frequency', { min: -1, max: 1000 });
+  folder.addMonitor(emitter.alive, 'length', { view: 'graph', min: 0, max: 100, label: 'alive' });
+  folder.addMonitor(emitter.dead, 'length', { view: 'graph', min: 0, max: 100, label: 'dead' });
 
   folder.addButton({ title: 'Start' }).on('click', () => { emitter.start(); });
   folder.addButton({ title: 'Stop' }).on('click', () => { emitter.stop(); });
