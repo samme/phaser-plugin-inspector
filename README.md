@@ -1,6 +1,8 @@
 Phaser 3 Inspector Plugin 🧐
 =========================
 
+View and change game properties, with [Tweakpane](https://cocopon.github.io/tweakpane/).
+
 - [Demos](http://phaser-plugin-inspector.surge.sh/index.html?dir=games/)
 
 Install
@@ -81,10 +83,12 @@ function preload() {
 Use
 ---
 
+All of the “Print” buttons use `console.info()` or `console.table()`.
+
 You can add your own controls like so:
 
 ```js
-// In scene `create()`:
+const sprite = this.add.sprite(/*…*/);
 
 this.inspectorScene.folder.addInput(sprite, 'alpha');
 ```
