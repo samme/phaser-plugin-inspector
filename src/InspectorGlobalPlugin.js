@@ -56,6 +56,7 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
     animsFolder.addButton({ title: 'Pause all' }).on('click', () => { console.info('Pause all animations'); anims.pauseAll(); });
     animsFolder.addButton({ title: 'Resume all' }).on('click', () => { console.info('Resume all animations'); anims.resumeAll(); });
     animsFolder.addButton({ title: 'Print animations' }).on('click', () => { console.info('Animations:'); console.table(anims.anims.getArray().map(animToPrint)); });
+    animsFolder.addButton({ title: 'Print JSON' }).on('click', () => { console.info(JSON.stringify(anims.toJSON())); });
 
     const cacheFolder = folder.addFolder({ title: 'Cache', expanded: false });
     cacheFolder.addButton({ title: 'Print cache contents' }).on('click', () => { printCaches(cache); });
