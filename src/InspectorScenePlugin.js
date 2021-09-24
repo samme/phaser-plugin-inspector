@@ -112,6 +112,7 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     scenePluginFolder.addButton({ title: 'Wake' }).on('click', () => { console.info('Wake', sceneKey); scenePlugin.wake(); });
     scenePluginFolder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop', sceneKey); scenePlugin.stop(); });
     scenePluginFolder.addButton({ title: 'Restart' }).on('click', () => { console.info('Restart', sceneKey); scenePlugin.restart(); });
+    scenePluginFolder.addButton({ title: 'Remove' }).on('click', () => { console.info('Remove', sceneKey); scenePlugin.remove(); });
     scenePluginFolder.addButton({ title: 'Print scene data' }).on('click', () => { console.info(`Scene data for ${sceneKey}:`); console.table(scenePlugin.settings.data); });
 
     if (time) {
