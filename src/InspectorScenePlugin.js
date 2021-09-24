@@ -106,13 +106,13 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     scenePluginFolder.addMonitor(scenePlugin.settings, 'active');
     scenePluginFolder.addMonitor(scenePlugin.settings, 'visible');
     scenePluginFolder.addMonitor(scenePlugin.settings, 'status');
-    scenePluginFolder.addButton({ title: 'Pause' }).on('click', () => { console.info('Pause', sceneKey); scenePlugin.pause(); });
-    scenePluginFolder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume', sceneKey); scenePlugin.resume(); });
-    scenePluginFolder.addButton({ title: 'Sleep' }).on('click', () => { console.info('Sleep', sceneKey); scenePlugin.sleep(); });
-    scenePluginFolder.addButton({ title: 'Wake' }).on('click', () => { console.info('Wake', sceneKey); scenePlugin.wake(); });
-    scenePluginFolder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop', sceneKey); scenePlugin.stop(); });
-    scenePluginFolder.addButton({ title: 'Restart' }).on('click', () => { console.info('Restart', sceneKey); scenePlugin.restart(); });
-    scenePluginFolder.addButton({ title: 'Remove' }).on('click', () => { console.info('Remove', sceneKey); scenePlugin.remove(); });
+    scenePluginFolder.addButton({ title: 'Pause' }).on('click', () => { console.info('Pause scene', sceneKey); scenePlugin.pause(); });
+    scenePluginFolder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume scene', sceneKey); scenePlugin.resume(); });
+    scenePluginFolder.addButton({ title: 'Sleep' }).on('click', () => { console.info('Sleep scene', sceneKey); scenePlugin.sleep(); });
+    scenePluginFolder.addButton({ title: 'Wake' }).on('click', () => { console.info('Wake scene', sceneKey); scenePlugin.wake(); });
+    scenePluginFolder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop scene', sceneKey); scenePlugin.stop(); });
+    scenePluginFolder.addButton({ title: 'Restart' }).on('click', () => { console.info('Restart scene', sceneKey); scenePlugin.restart(); });
+    scenePluginFolder.addButton({ title: 'Remove' }).on('click', () => { console.info('Remove scene', sceneKey); scenePlugin.remove(); });
     scenePluginFolder.addButton({ title: 'Print scene data' }).on('click', () => { console.info(`Scene data for ${sceneKey}:`); console.table(scenePlugin.settings.data); });
 
     if (time) {
