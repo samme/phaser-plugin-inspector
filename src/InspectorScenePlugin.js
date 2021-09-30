@@ -14,8 +14,6 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
 
     this.folder = null;
     this.pane = null;
-
-    Object.seal(this);
   }
 
   boot () {

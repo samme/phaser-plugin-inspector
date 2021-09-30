@@ -17,8 +17,6 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
     super(pluginManager);
 
     this.pane = null;
-
-    Object.seal(this);
   }
 
   init (data) {
