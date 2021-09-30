@@ -36,7 +36,7 @@
     "clean": "rm dist/*.js",
     "dev": "rollup -c -w",
     "postbuild": "node -c dist/phaser-plugin-inspector.umd.js",
-    "postinstall": "cp -v node_modules/tweakpane/dist/tweakpane.js node_modules/mocha/mocha.js node_modules/chai/chai.js node_modules/phaser/dist/phaser.js vendor/",
+    "vendor": "cp -v node_modules/tweakpane/dist/tweakpane.js node_modules/mocha/mocha.js node_modules/chai/chai.js node_modules/phaser/dist/phaser.js vendor/",
     "preversion": "npm run build",
     "test": "eslint src"
   },
