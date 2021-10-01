@@ -45,6 +45,12 @@ You can use any mapping, or `{ start: true }` for no mapping.
 
 ### Module
 
+```sh
+npm install phaser-plugin-inspector tweakpane
+```
+
+This package has an [ES module](dist/phaser-plugin-inspector.esm.js) (marked as `module`) and a [CommonJS-compatible UMD module](dist/phaser-plugin-inspector.umd.js) (marked as `browser`). You should use the ES module, but some bundlers may pick the UMD module by default. Configure your bundler to use the `module` field, or add an alias to the ES module file, or import the ES module file directly.
+
 ```js
 import { DefaultPluginsConfig } from 'phaser-plugin-inspector';
 
