@@ -7,7 +7,6 @@ globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
   Phaser: readonly
-  __Global__: readonly
   chai: readonly
 rules:
   no-new: off
