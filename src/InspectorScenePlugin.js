@@ -67,6 +67,7 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
       inputFolder.addMonitor(input, 'y');
       inputFolder.addButton({ title: 'Set poll always' }).on('click', () => { console.info('Poll always'); input.setPollAlways(); });
       inputFolder.addButton({ title: 'Set poll on move' }).on('click', () => { console.info('Poll on move'); input.setPollOnMove(); });
+      inputFolder.addButton({ title: 'Print game objects' }).on('click', () => { console.info('Interactive game objects: '); console.table(input._list.map(displayListItemToPrint)); });
 
       if (gamepad) {
         const gamepadFolder = this.folder.addFolder({ title: 'Gamepads', expanded: false });
