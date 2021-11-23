@@ -245,6 +245,7 @@ export function addArcadePhysicsWorld (world, pane) {
   folder.addButton({ title: 'Enable update' }).on('click', () => { arcadePhysics.enableUpdate(); });
   folder.addButton({ title: 'Disable update' }).on('click', () => { arcadePhysics.disableUpdate(); });
   folder.addButton({ title: 'Update' }).on('click', () => { world.update(0, world._frameTimeMS || (1000 / 60)); });
+  folder.addButton({ title: 'Print colliders' }).on('click', () => { console.info('Colliders', world.colliders.getActive()); });
 
   events.once(SceneEvents.SHUTDOWN, () => {
     folder.dispose();
