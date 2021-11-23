@@ -10,6 +10,8 @@ function preload () {
 function create () {
   const sky = this.add.image(400, 300, 'sky');
 
+  sky.setInteractive({ draggable: true }).on('drag', function (pointer, x, y) { this.setPosition(x, y); });
+
   const particles = this.add.particles('red');
 
   const emitter = particles.createEmitter({
