@@ -3,7 +3,11 @@ Phaser 3 Inspector Plugin 🧐
 
 View and change game properties, with [Tweakpane](https://cocopon.github.io/tweakpane/).
 
-- [Demos](http://phaser-plugin-inspector.surge.sh/index.html?dir=games/)
+Demos
+-----
+
+- [Games](http://phaser-plugin-inspector.surge.sh/index.html?dir=games/) — early version of the plugin, many game features
+- [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) — simple game
 
 Install
 -------
