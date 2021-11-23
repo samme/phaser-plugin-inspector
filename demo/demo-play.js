@@ -21,10 +21,17 @@ function create () {
     blendMode: 'ADD'
   });
 
-  const logo = this.physics.add.image(400, 100, 'logo')
+  const ghost = this.physics.add.image(400, 150, 'logo')
+    .setAlpha(0.2);
+
+  ghost.body.setAllowGravity(false);
+
+  const logo = this.physics.add.image(400, 150, 'logo')
     .setVelocity(100, 200)
     .setBounce(1, 1)
     .setCollideWorldBounds(true);
+
+  this.physics.add.overlap(ghost, logo);
 
   emitter.startFollow(logo);
 
