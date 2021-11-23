@@ -109,7 +109,7 @@ scene.load.scripts('inspector', [
 ]);
 scene.load.once('complete', () => {
   PhaserPluginInspector.Install(this.plugins);
-});
+}).start();
 ```
 
 Use
