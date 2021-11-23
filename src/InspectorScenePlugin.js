@@ -116,6 +116,7 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     if (time) {
       const timeFolder = this.folder.addFolder({ title: 'Time', expanded: false });
       timeFolder.addMonitor(time._active, 'length', { label: 'events' });
+      timeFolder.addMonitor(time, 'now');
       timeFolder.addInput(time, 'paused');
       timeFolder.addButton({ title: 'Print timer events' }).on('click', () => { console.info('Timer events:'); console.table(time._active.map(timerEventToPrint)); });
     }
