@@ -482,7 +482,7 @@ export function AddTimerEvent (timer, pane, options = { title: 'Timer Event' }) 
   return folder;
 }
 
-export function AddInput (input, pane, options = { title: 'Input' }) {
+export function AddInput (input, pane, options = { title: `Input (${input.gameObject.type} “${input.gameObject.name}”)` }) {
   const folder = pane.addFolder(options);
 
   folder.addMonitor(input, 'alwaysEnabled');
@@ -506,7 +506,7 @@ export function AddInput (input, pane, options = { title: 'Input' }) {
   return folder;
 }
 
-export function AddArcadeBody (body, pane, options = { title: `Body (${body.gameObject.type})` }) {
+export function AddArcadeBody (body, pane, options = { title: `Body (${body.gameObject.type} “${body.gameObject.name}”)` }) {
   const folder = pane.addFolder(options);
 
   folder.addMonitor(body, 'enable');
