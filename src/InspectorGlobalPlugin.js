@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import Tweakpane from 'tweakpane';
 import {
-  addPointer,
+  AddPointer,
   copyToSafeObj,
   animToPrint,
   sceneToPrint,
@@ -71,7 +71,7 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
     inputFolder.addInput(input, 'globalTopOnly');
 
     for (const pointer of input.pointers) {
-      addPointer(pointer, inputFolder);
+      AddPointer(pointer, inputFolder);
     }
 
     const keyboardFolder = folder.addFolder({ title: 'Keyboard', expanded: false });

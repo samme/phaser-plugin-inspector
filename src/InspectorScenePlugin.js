@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { GLOBAL_PLUGIN_KEY } from './const';
-import { addArcadePhysicsWorld, addCamera, addMatterPhysicsWorld, cameraToPrint, displayListItemToPrint, keyToPrint, lightToPrint, timerEventToPrint, tweenToPrint, updateListItemToPrint } from './util';
+import { AddArcadePhysicsWorld, AddCamera, AddMatterPhysicsWorld, cameraToPrint, displayListItemToPrint, keyToPrint, lightToPrint, timerEventToPrint, tweenToPrint, updateListItemToPrint } from './util';
 
 const {
   CREATE,
@@ -136,15 +136,15 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     updateListFolder.addButton({ title: 'Print update list' }).on('click', () => { console.info('Update list:'); console.table(updateList.getActive().map(updateListItemToPrint)); });
 
     events.on(CREATE, () => {
-      for (const cam of cameras.cameras) { addCamera(cam, camerasFolder); }
+      for (const cam of cameras.cameras) { AddCamera(cam, camerasFolder); }
     });
 
     if (arcadePhysics) {
-      events.on(START, () => { addArcadePhysicsWorld(arcadePhysics.world, this.folder); });
+      events.on(START, () => { AddArcadePhysicsWorld(arcadePhysics.world, this.folder); });
     }
 
     if (matterPhysics) {
-      events.on(START, () => { addMatterPhysicsWorld(matterPhysics.world, this.folder); });
+      events.on(START, () => { AddMatterPhysicsWorld(matterPhysics.world, this.folder); });
     }
   }
 }

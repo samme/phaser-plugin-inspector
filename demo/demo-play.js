@@ -1,6 +1,11 @@
 
 /* global Phaser, PhaserPluginInspector */
 
+console.info(PhaserPluginInspector);
+// console.info('{ %s }', Object.keys(PhaserPluginInspector).sort().join(', '));
+
+const { AddArcadeBody, AddGameObject, AddGroup, AddInput, AddParticleEmitter, AddTimerEvent, AddTween } = PhaserPluginInspector;
+
 function preload () {
   this.load.image('sky', 'assets/skies/space3.png');
   this.load.image('logo', 'assets/sprites/phaser3-logo.png');
@@ -8,7 +13,11 @@ function preload () {
 }
 
 function create () {
-  const sky = this.add.image(400, 300, 'sky');
+  const sky = this.add.image(400, 300, 'sky')
+    .setName('sky')
+    .setState('dark')
+    .setInteractive({ cursor: 'grab', draggable: true })
+    .on('drag', function (pointer, dragX, dragY) { this.setPosition(dragX, dragY); });
 
   sky.setInteractive({ draggable: true }).on('drag', function (pointer, x, y) { this.setPosition(x, y); });
 
@@ -26,7 +35,8 @@ function create () {
 
   ghost.body.setAllowGravity(false);
 
-  const logo = this.physics.add.image(400, 150, 'logo')
+  const logo = this.physics.add.image(400, 100, 'logo')
+    .setName('logo')
     .setVelocity(100, 200)
     .setBounce(1, 1)
     .setCollideWorldBounds(true);
@@ -35,57 +45,41 @@ function create () {
 
   emitter.startFollow(logo);
 
+  const group = this.add.group([sky, logo]).setName('sky and logo');
+
+  const tween = this.tweens.add({
+    targets: logo,
+    props: { alpha: { from: 1, to: 0.5, repeat: 9, yoyo: true, ease: 'Quad.easeInOut' }, angle: { from: 0, to: 360, duration: 20000 } }
+  });
+
+  const timer = this.time.delayedCall(10000, () => { emitter.stop(); });
+
+  emitter.startFollow(logo);
+
   const { folder } = this.inspectorScene;
 
-  addGameObjectFolder(sky, folder);
-  addGameObjectFolder(logo, folder);
-  addEmitterFolder(emitter, folder);
-}
-
-function addGameObjectFolder (gameObject, parent) {
-  const folder = parent.addFolder({ title: `${gameObject.type} ${gameObject.name}` });
-
-  folder.addMonitor(gameObject, 'x');
-  folder.addMonitor(gameObject, 'y');
-  folder.addInput(gameObject, 'alpha', { min: 0, max: 1, step: 0.1 });
-
-  gameObject.once('destroy', () => { folder.dispose(); });
-
-  return folder;
-}
-
-function addEmitterFolder (emitter, parent) {
-  const folder = parent.addFolder({ title: 'Particle Emitter' });
-
-  folder.visible = true;
-
-  folder.addMonitor(emitter, 'active');
-  folder.addInput(emitter, 'visible');
-  folder.addInput(emitter, 'blendMode', { options: Phaser.BlendModes });
-  folder.addInput(emitter, 'frequency', { min: -1, max: 1000 });
-  folder.addMonitor(emitter.alive, 'length', { view: 'graph', min: 0, max: 100, label: 'alive' });
-  folder.addMonitor(emitter.dead, 'length', { view: 'graph', min: 0, max: 100, label: 'dead' });
-
-  folder.addButton({ title: 'Start' }).on('click', () => { emitter.start(); });
-  folder.addButton({ title: 'Stop' }).on('click', () => { emitter.stop(); });
-  folder.addButton({ title: 'Pause' }).on('click', () => { emitter.pause(); });
-  folder.addButton({ title: 'Resume' }).on('click', () => { emitter.resume(); });
-  folder.addButton({ title: 'To JSON' }).on('click', () => { console.log(emitter.toJSON()); });
-
-  return folder;
+  AddTimerEvent(timer, folder);
+  AddTween(tween, folder);
+  AddGroup(group, folder);
+  AddGameObject(sky, folder);
+  AddInput(sky.input, folder);
+  AddGameObject(logo, folder);
+  AddArcadeBody(logo.body, folder);
+  AddGameObject(particles, folder);
+  AddParticleEmitter(emitter, folder);
 }
 
 // eslint-disable-next-line no-new
 new Phaser.Game({
   scene: { preload, create },
   plugins: PhaserPluginInspector.DefaultPluginsConfig,
-  loader: {
-    baseURL: 'https://labs.phaser.io',
-    crossOrigin: 'anonymous'
+  audio: {
+    disableWebAudio: true
   },
   physics: {
     default: 'arcade',
     arcade: {
+      debug: true,
       gravity: { y: 200 }
     }
   }

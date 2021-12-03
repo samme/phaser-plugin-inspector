@@ -44,6 +44,31 @@ describe('PhaserPluginInspector.InspectorScenePlugin', function () {
   });
 });
 
+for (
+  const name of [
+    'AddAnimationState',
+    'AddArcadeBody',
+    'AddArcadePhysicsWorld',
+    'AddCamera',
+    'AddGameObject',
+    'AddGroup',
+    'AddInput',
+    'AddMatterPhysicsWorld',
+    'AddParticleEmitter',
+    'AddPointer',
+    'AddSound',
+    'AddTimeline',
+    'AddTimerEvent',
+    'AddTween'
+  ]
+) {
+  describe(`PhaserPluginInspector.${name}`, function () {
+    it('is a function', function () {
+      assert.isFunction(PhaserPluginInspector[name]);
+    });
+  });
+}
+
 describe('new Game', function () {
   let game;
 
@@ -169,6 +194,213 @@ describe('new Game', function () {
           }
         }
       });
+    });
+  });
+});
+
+describe('new Game, no install', function () {
+  const { AddAnimationState, AddArcadeBody, AddGameObject, AddGroup, AddInput, AddParticleEmitter, AddTimeline, AddTimerEvent, AddTween } = PhaserPluginInspector;
+
+  let pane = new Tweakpane.Pane();
+  let game;
+  let scene;
+
+  before(function (done) {
+    game = new Phaser.Game({
+      type: Phaser.AUTO,
+      canvasStyle: 'display: none',
+      scene: {
+        physics: { arcade: { debug: true }, matter: {} },
+        init: function () {
+          scene = this;
+          this.scene.pause();
+          done();
+        }
+      }
+    });
+  });
+
+  after(function () {
+    pane.dispose();
+    game.destroy(true);
+    game.runDestroy();
+    game = null;
+    pane = null;
+    scene = null;
+  });
+
+  describe('AddAnimationState(sprite.anims)', function () {
+    it('does not error', function () {
+      AddAnimationState(scene.add.sprite(0, 0, '__DEFAULT').anims, pane);
+    });
+  });
+
+  describe('AddArcadeBody(body)', function () {
+    it('does not error', function () {
+      AddArcadeBody(scene.physics.add.image(0, 0, '__DEFAULT').body, pane);
+    });
+  });
+
+  describe('AddGameObject(bitmap text', function () {
+    it('does not error', function () {
+      scene.cache.bitmapFont.add('bitmapFont', Phaser.GameObjects.RetroFont.Parse(scene, {
+        image: '__DEFAULT',
+        width: 1,
+        height: 1,
+        chars: Phaser.GameObjects.RetroFont.TEXT_SET6,
+        charsPerRow: 32
+      }));
+
+      AddGameObject(scene.add.bitmapText(0, 0, 'bitmapFont', 'Hello'), pane);
+    });
+  });
+
+  describe('AddGameObject(blitter)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.blitter(0, 0, '__DEFAULT'), pane);
+    });
+  });
+
+  describe('AddGameObject(container)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.container(0, 0, [scene.add.sprite(0, 0, '__DEFAULT')]), pane);
+    });
+  });
+
+  describe('AddGameObject(dom)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.dom(0, 0, 'b', '', 'Hello'), pane);
+    });
+  });
+
+  describe('AddGameObject(graphics)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.graphics(), pane);
+    });
+  });
+
+  describe('AddGameObject(image)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.image(0, 0, '__DEFAULT'), pane);
+    });
+  });
+
+  describe('AddGameObject(layer)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.layer(scene.add.sprite(0, 0, '__DEFAULT')), pane);
+    });
+  });
+
+  describe('AddGameObject(particle manager)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.particles('__DEFAULT'), pane);
+    });
+  });
+
+  describe('AddGameObject(point light)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.pointlight(0, 0), pane);
+    });
+  });
+
+  describe('AddGameObject(render texture)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.renderTexture(0, 0, 128, 128), pane);
+    });
+  });
+
+  describe('AddGameObject(rope)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.rope(0, 0, '__DEFAULT'), pane);
+    });
+  });
+
+  describe('AddGameObject(sprite)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.sprite(0, 0, '__DEFAULT'), pane);
+    });
+  });
+
+  describe('AddGameObject(star)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.star(0, 0, 5, 10, 20), pane);
+    });
+  });
+
+  describe('AddGameObject(text)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.text(0, 0, 'Hello'), pane);
+    });
+  });
+
+  describe('AddGameObject(tilemap layer)', function () {
+    it('does not error', function () {
+      const map = scene.make.tilemap({ width: 64, height: 64, tileWidth: 16, tileHeight: 16 });
+      const tileset = map.addTilesetImage('__DEFAULT');
+
+      AddGameObject(map.createBlankLayer('layer', tileset), pane);
+    });
+  });
+
+  describe('AddGameObject(tilesprite)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.tileSprite(0, 0, 32, 32, '__DEFAULT'), pane);
+    });
+  });
+
+  describe('AddGroup(group)', function () {
+    it('does not error', function () {
+      AddGroup(scene.add.group(), pane);
+    });
+  });
+
+  describe('AddGroup(physics group)', function () {
+    it('does not error', function () {
+      AddGroup(scene.physics.add.group(), pane);
+    });
+  });
+
+  describe('AddGroup(static physics group)', function () {
+    it('does not error', function () {
+      AddGroup(scene.physics.add.staticGroup(), pane);
+    });
+  });
+
+  describe('AddInput(sprite.input)', function () {
+    it('does not error', function () {
+      AddInput(scene.add.sprite(0, 0, '__DEFAULT').setInteractive().input, pane);
+    });
+  });
+
+  describe('AddParticleEmitter(particle emitter)', function () {
+    it('does not error', function () {
+      const particles = scene.add.particles('__DEFAULT');
+
+      AddParticleEmitter(particles.createEmitter(), pane);
+    });
+  });
+
+  describe('AddTimeline(timeline)', function () {
+    it('does not error', function () {
+      AddTimeline(scene.tweens.timeline(), pane);
+    });
+  });
+
+  describe('AddTimerEvent(timer event)', function () {
+    it('does not error', function () {
+      AddTimerEvent(scene.time.addEvent({ delay: 1000 }), pane);
+    });
+  });
+
+  describe('AddTween(tween)', function () {
+    it('does not error', function () {
+      AddTween(scene.add.tween({ targets: {} }), pane);
+    });
+  });
+
+  describe('AddTween(counter tween)', function () {
+    it('does not error', function () {
+      AddTween(scene.tweens.addCounter({ from: 1, to: 10 }), pane);
     });
   });
 });

@@ -4,6 +4,8 @@ const TAU = 2 * Math.PI;
 const CacheNames = ['audio', 'binary', 'bitmapFont', 'html', 'json', 'obj', 'physics', 'shader', 'text', 'tilemap', 'video', 'xml'];
 const CameraEvents = Phaser.Cameras.Scene2D.Events;
 const SceneEvents = Phaser.Scenes.Events;
+const GameObjectEvents = Phaser.GameObjects.Events;
+const { BlendModes } = Phaser;
 
 export function animToPrint ({ key, delay, duration, frameRate, repeat, repeatDelay }) {
   return { key, delay, duration, frameRate, repeat, repeatDelay };
@@ -85,7 +87,7 @@ export function snapshot (img) {
   document.body.appendChild(img);
 }
 
-export function addPointer (pointer, pane) {
+export function AddPointer (pointer, pane) {
   const folder = pane.addFolder({ title: `Pointer ${pointer.id}`, expanded: false });
 
   folder.addMonitor(pointer, 'active');
@@ -115,10 +117,14 @@ export function addPointer (pointer, pane) {
   return folder;
 }
 
-export function addSound (sound, pane) {
+export function AddSound (sound, pane) {
   const folder = pane.addFolder({ title: `Sound “${sound.key}”`, expanded: false });
 
   sound.once('destroy', () => { folder.dispose(); });
+
+  if (sound.currentMarker) {
+    folder.addMonitor(sound.currentMarker, 'name');
+  }
 
   folder.addMonitor(sound, 'duration');
   folder.addMonitor(sound, 'isPaused');
@@ -128,7 +134,6 @@ export function addSound (sound, pane) {
 
   folder.addInput(sound, 'loop');
   folder.addInput(sound, 'mute');
-  folder.addInput(sound, 'seek', { min: 0, max: sound.totalDuration });
   folder.addInput(sound, 'volume', { min: 0, max: 1 });
 
   folder.addButton({ title: 'Play' }).on('click', () => { console.info('Play sound “%s”', sound.key); sound.play(); });
@@ -136,6 +141,10 @@ export function addSound (sound, pane) {
   folder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume sound “%s”', sound.key); sound.resume(); });
   folder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop sound “%s”', sound.key); sound.stop(); });
   folder.addButton({ title: 'Remove' }).on('click', () => { console.info('Remove sound “%s”', sound.key); sound.destroy(); });
+
+  for (const name in sound.markers) {
+    folder.addButton({ title: `Play “${name}”` }).on('click', () => { console.info('Play sound “%s” marker “%s”', sound.key, name); sound.play(name); });
+  }
 
   return folder;
 }
@@ -168,7 +177,7 @@ export function lightToPrint ({ x, y, radius, color, intensity, visible }) {
   return { x, y, radius, color: `rgb(${color.r.toFixed(2)}, ${color.g.toFixed(2)}, ${color.b.toFixed(2)})`, intensity, visible };
 }
 
-export function addCamera (camera, pane) {
+export function AddCamera (camera, pane) {
   const defaultCamera = camera.cameraManager.default;
   const w = defaultCamera.width;
   const h = defaultCamera.height;
@@ -224,7 +233,7 @@ export function addCamera (camera, pane) {
   return folder;
 }
 
-export function addArcadePhysicsWorld (world, pane) {
+export function AddArcadePhysicsWorld (world, pane) {
   const { arcadePhysics, events } = world.scene.sys;
   const folder = pane.addFolder({ title: 'Arcade Physics', expanded: false });
 
@@ -234,7 +243,7 @@ export function addArcadePhysicsWorld (world, pane) {
   folder.addMonitor(world, 'fps');
   folder.addInput(world, 'gravity', { x: { min: -1000, max: 1000 }, y: { min: -1000, max: 1000 } });
   folder.addInput(world, 'isPaused');
-  folder.addInput(world, 'OVERLAP_BIAS', { label: 'overlap bias', min: 0, max: 16, step: 1 });
+  folder.addInput(world, 'OVERLAP_BIAS', { label: 'overlap bias', min: 0, max: 32, step: 1 });
   folder.addMonitor(world.staticBodies, 'size', { label: 'staticBodies' });
   folder.addInput(world, 'TILE_BIAS', { label: 'tile bias', min: 0, max: 32, step: 1 });
   folder.addInput(world, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
@@ -254,7 +263,7 @@ export function addArcadePhysicsWorld (world, pane) {
   return folder;
 }
 
-export function addMatterPhysicsWorld (world, pane) {
+export function AddMatterPhysicsWorld (world, pane) {
   const { events } = world.scene.sys;
   const folder = pane.addFolder({ title: 'Matter Physics', expanded: false });
   folder.addInput(world, 'autoUpdate');
@@ -272,6 +281,277 @@ export function addMatterPhysicsWorld (world, pane) {
   events.once(SceneEvents.SHUTDOWN, () => {
     folder.dispose();
   });
+
+  return folder;
+}
+
+export function AddGameObject (obj, pane, options = { title: `${obj.type} “${obj.name}”` }) {
+  const folder = pane.addFolder(options);
+
+  folder.addInput(obj, 'active');
+  folder.addMonitor(obj, 'cameraFilter');
+  folder.addMonitor(obj, 'state');
+
+  if ('alpha' in obj) {
+    folder.addInput(obj, 'alpha', { min: 0, max: 1, step: 0.05 });
+  }
+
+  if ('blendMode' in obj) {
+    folder.addInput(obj, 'blendMode', { options: BlendModes });
+  }
+
+  if ('depth' in obj) {
+    folder.addMonitor(obj, 'depth');
+  }
+
+  if ('width' in obj) {
+    folder.addMonitor(obj, 'width');
+    folder.addMonitor(obj, 'height');
+  }
+
+  if ('displayWidth' in obj) {
+    folder.addMonitor(obj, 'displayWidth');
+    folder.addMonitor(obj, 'displayHeight');
+  }
+
+  if ('originX' in obj) {
+    folder.addMonitor(obj, 'originX');
+    folder.addMonitor(obj, 'originY');
+  }
+
+  if ('displayOriginX' in obj) {
+    folder.addMonitor(obj, 'displayOriginX');
+    folder.addMonitor(obj, 'displayOriginY');
+  }
+
+  if ('scaleX' in obj) {
+    folder.addMonitor(obj, 'scaleX');
+    folder.addMonitor(obj, 'scaleY');
+    folder.addInput(obj, 'scale', { min: 0.1, max: 10, step: 0.1 });
+  }
+
+  if ('flipX' in obj) {
+    folder.addInput(obj, 'flipX');
+    folder.addInput(obj, 'flipY');
+  }
+
+  if ('angle' in obj) {
+    folder.addMonitor(obj, 'angle');
+  }
+
+  if ('rotation' in obj) {
+    folder.addInput(obj, 'rotation', { min: 0, max: TAU, step: 0.01 * TAU });
+  }
+
+  if ('visible' in obj) {
+    folder.addInput(obj, 'visible');
+  }
+
+  if ('x' in obj) {
+    folder.addMonitor(obj, 'x');
+    folder.addMonitor(obj, 'y');
+    folder.addMonitor(obj, 'z');
+    folder.addMonitor(obj, 'w');
+  }
+
+  if ('children' in obj && 'length' in obj.children) {
+    folder.addMonitor(obj.children, 'length');
+  }
+
+  folder.addButton({ title: 'Destroy' }).on('click', () => { obj.destroy(); });
+
+  obj.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
+
+  return folder;
+}
+
+export function AddGroup (group, pane, options = { title: `${group.type} ${group.name}` }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(group.getChildren(), 'length', { view: 'graph', min: 0, max: group.maxSize === -1 ? 100 : group.maxSize });
+  folder.addMonitor(group, 'maxSize');
+
+  folder.addButton({ title: 'Clear' }).on('click', () => { console.info('Clear group'); group.clear(); });
+  folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy group'); group.destroy(); });
+  folder.addButton({ title: 'Destroy group members' }).on('click', () => { console.info('Destroy group members'); group.clear(true, true); });
+
+  group.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
+
+  return folder;
+}
+
+export function AddParticleEmitter (emitter, pane, options = { title: 'Particle Emitter' }) {
+  const folder = pane.addFolder(options);
+
+  const max = emitter.maxParticles || 100;
+
+  folder.addMonitor(emitter, 'active');
+  folder.addMonitor(emitter, 'on');
+  folder.addInput(emitter, 'visible');
+  folder.addInput(emitter, 'blendMode', { options: BlendModes });
+  folder.addInput(emitter, 'frequency', { min: -1, max: 1000 });
+  folder.addMonitor(emitter.alive, 'length', { view: 'graph', min: 0, max: max, label: 'alive' });
+  folder.addMonitor(emitter.dead, 'length', { view: 'graph', min: 0, max: max, label: 'dead' });
+  folder.addInput(emitter, 'collideBottom');
+  folder.addInput(emitter, 'collideLeft');
+  folder.addInput(emitter, 'collideRight');
+  folder.addInput(emitter, 'collideTop');
+  folder.addMonitor(emitter, 'currentFrame');
+  folder.addMonitor(emitter, 'maxParticles');
+  folder.addInput(emitter, 'moveTo');
+  folder.addInput(emitter, 'particleBringToTop');
+  folder.addInput(emitter, 'radial');
+  folder.addInput(emitter, 'randomFrame');
+  folder.addInput(emitter, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
+
+  folder.addButton({ title: 'Start' }).on('click', () => { emitter.start(); });
+  folder.addButton({ title: 'Stop' }).on('click', () => { emitter.stop(); });
+  folder.addButton({ title: 'Pause' }).on('click', () => { emitter.pause(); });
+  folder.addButton({ title: 'Resume' }).on('click', () => { emitter.resume(); });
+  folder.addButton({ title: 'Print JSON' }).on('click', () => { console.log(JSON.stringify(emitter.toJSON())); });
+
+  emitter.manager.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
+
+  return folder;
+}
+
+export function AddTween (tween, pane, options = { title: 'Tween' }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(tween, 'countdown');
+  folder.addMonitor(tween, 'duration');
+  folder.addMonitor(tween, 'elapsed');
+  folder.addMonitor(tween, 'loop');
+  folder.addMonitor(tween, 'loopCounter');
+  folder.addMonitor(tween, 'state');
+  folder.addMonitor(tween, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
+  folder.addMonitor(tween, 'totalData');
+  folder.addMonitor(tween, 'totalDuration');
+  folder.addMonitor(tween, 'totalElapsed');
+  folder.addMonitor(tween, 'totalProgress', { view: 'graph', min: 0, max: 1 });
+
+  for (const dat of tween.data) {
+    // `start` and `end` not set yet :(
+
+    folder.addMonitor(dat, 'progress', { view: 'graph', min: 0, max: 1, label: `${dat.key} progress` });
+    folder.addMonitor(dat, 'current', { label: `${dat.key} current` });
+    // folder.addMonitor(dat, 'start', { label: `${dat.key} start` });
+    // folder.addMonitor(dat, 'end', { label: `${dat.key} end` });
+  }
+
+  folder.addButton({ title: 'Play' }).on('click', () => { console.info('Play tween'); tween.play(); });
+  folder.addButton({ title: 'Pause' }).on('click', () => { console.info('Pause tween'); tween.pause(); });
+  folder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume tween'); tween.resume(); });
+  folder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop tween'); tween.stop(); });
+  folder.addButton({ title: 'Restart' }).on('click', () => { console.info('Restart tween'); tween.restart(); });
+  folder.addButton({ title: 'Remove' }).on('click', () => { console.info('Remove tween'); tween.remove(); });
+
+  return folder;
+}
+
+export function AddTimeline (timeline, pane, options = { title: 'Timeline' }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(timeline, 'duration');
+  folder.addMonitor(timeline, 'elapsed');
+  folder.addMonitor(timeline, 'state');
+  folder.addMonitor(timeline, 'totalData');
+  folder.addMonitor(timeline, 'totalDuration');
+  folder.addMonitor(timeline, 'totalElapsed');
+  folder.addMonitor(timeline, 'totalProgress', { view: 'graph', min: 0, max: 1 });
+
+  // TODO
+
+  return folder;
+}
+
+export function AddTimerEvent (timer, pane, options = { title: 'Timer Event' }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(timer, 'elapsed', { view: 'graph', min: 0, max: timer.delay });
+  folder.addMonitor(timer, 'elapsed');
+  folder.addMonitor(timer, 'hasDispatched');
+  folder.addMonitor(timer, 'loop');
+  folder.addMonitor(timer, 'paused');
+  folder.addMonitor(timer, 'repeat');
+  folder.addMonitor(timer, 'repeatCount');
+
+  folder.addButton({ title: 'Remove' }).on('click', () => { timer.remove(); });
+  folder.addButton({ title: 'Reset' }).on('click', () => { timer.reset(); });
+
+  return folder;
+}
+
+export function AddInput (input, pane, options = { title: 'Input' }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(input, 'alwaysEnabled');
+  folder.addMonitor(input, 'cursor');
+  folder.addMonitor(input, 'customHitArea');
+  folder.addMonitor(input, 'draggable');
+  folder.addMonitor(input, 'dragStartX');
+  folder.addMonitor(input, 'dragStartXGlobal');
+  folder.addMonitor(input, 'dragStartY');
+  folder.addMonitor(input, 'dragStartYGlobal');
+  folder.addMonitor(input, 'dragState');
+  folder.addMonitor(input, 'dragX');
+  folder.addMonitor(input, 'dragY');
+  folder.addMonitor(input, 'dropZone');
+  folder.addMonitor(input, 'enabled');
+  folder.addMonitor(input, 'localX');
+  folder.addMonitor(input, 'localY');
+
+  input.gameObject.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
+
+  return folder;
+}
+
+export function AddArcadeBody (body, pane, options = { title: `Body (${body.gameObject.type})` }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(body, 'enable');
+  folder.addInput(body, 'debugShowBody');
+  folder.addInput(body, 'debugShowVelocity');
+  folder.addInput(body, 'debugBodyColor', { view: 'color' });
+  folder.addMonitor(body.velocity, 'x', { label: 'velocity x' });
+  folder.addMonitor(body.velocity, 'y', { label: 'velocity y' });
+  folder.addMonitor(body, 'speed');
+  folder.addMonitor(body, 'angle');
+  folder.addMonitor(body, '_dx', { label: 'deltaX' });
+  folder.addMonitor(body, '_dy', { label: 'deltaY' });
+  folder.addMonitor(body, '_tx', { label: 'deltaXFinal' });
+  folder.addMonitor(body, '_ty', { label: 'deltaYFinal' });
+
+  body.gameObject.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
+
+  return folder;
+}
+
+export function AddAnimationState (anim, pane, options = { title: `Animation (${anim.parent.type} “${anim.parent.name}”)` }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(anim, 'delay');
+  folder.addMonitor(anim, 'duration');
+  folder.addMonitor(anim, 'forward');
+  folder.addMonitor(anim, 'frameRate');
+  folder.addMonitor(anim, 'hasStarted');
+  folder.addMonitor(anim, 'isPaused');
+  folder.addMonitor(anim, 'isPlaying');
+  folder.addMonitor(anim, 'msPerFrame');
+  folder.addMonitor(anim, 'repeat');
+  folder.addMonitor(anim, 'repeatCounter');
+  folder.addMonitor(anim, 'repeatDelay');
+  folder.addMonitor(anim, 'timeScale');
+  folder.addMonitor(anim, 'timeScale');
+  folder.addMonitor(anim, 'yoyo');
+
+  folder.addButton({ title: 'Play' }).on('click', () => { console.info('Play animation'); anim.play(); });
+  folder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop animation'); anim.stop(); });
+  folder.addButton({ title: 'Pause' }).on('click', () => { console.info('Pause animation'); anim.pause(); });
+  folder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume animation'); anim.resume(); });
+  folder.addButton({ title: 'Restart' }).on('click', () => { console.info('Restart animation'); anim.restart(); });
+
+  anim.parent.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
 
   return folder;
 }
