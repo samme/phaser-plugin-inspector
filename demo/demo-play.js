@@ -4,7 +4,7 @@
 console.info(PhaserPluginInspector);
 // console.info('{ %s }', Object.keys(PhaserPluginInspector).sort().join(', '));
 
-const { AddArcadeBody, AddGameObject, AddGroup, AddInput, AddParticleEmitter, AddTimerEvent, AddTween } = PhaserPluginInspector;
+const { AddArcadeBody, AddGameObject, AddParticleEmitter } = PhaserPluginInspector;
 
 function preload () {
   this.load.image('sky', 'assets/skies/space3.png');
@@ -15,11 +15,7 @@ function preload () {
 function create () {
   const sky = this.add.image(400, 300, 'sky')
     .setName('sky')
-    .setState('dark')
-    .setInteractive({ cursor: 'grab', draggable: true })
-    .on('drag', function (pointer, dragX, dragY) { this.setPosition(dragX, dragY); });
-
-  sky.setInteractive({ draggable: true }).on('drag', function (pointer, x, y) { this.setPosition(x, y); });
+    .setState('dark');
 
   const particles = this.add.particles('red');
 
@@ -45,28 +41,13 @@ function create () {
 
   emitter.startFollow(logo);
 
-  const group = this.add.group([sky, logo]).setName('sky and logo');
+  const { pane } = this.inspectorScene;
 
-  const tween = this.tweens.add({
-    targets: logo,
-    props: { alpha: { from: 1, to: 0.5, repeat: 9, yoyo: true, ease: 'Quad.easeInOut' }, angle: { from: 0, to: 360, duration: 20000 } }
-  });
-
-  const timer = this.time.delayedCall(10000, () => { emitter.stop(); });
-
-  emitter.startFollow(logo);
-
-  const { folder } = this.inspectorScene;
-
-  AddTimerEvent(timer, folder);
-  AddTween(tween, folder);
-  AddGroup(group, folder);
-  AddGameObject(sky, folder);
-  AddInput(sky.input, folder);
-  AddGameObject(logo, folder);
-  AddArcadeBody(logo.body, folder);
-  AddGameObject(particles, folder);
-  AddParticleEmitter(emitter, folder);
+  AddGameObject(sky, pane);
+  AddGameObject(logo, pane);
+  AddArcadeBody(logo.body, pane);
+  AddGameObject(particles, pane);
+  AddParticleEmitter(emitter, pane);
 }
 
 // eslint-disable-next-line no-new
