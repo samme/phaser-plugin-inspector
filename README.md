@@ -21,7 +21,7 @@ Include Phaser, Tweakpane, and the plugin UMD script in this order.
 ```html
 <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.0.5/dist/tweakpane.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.2.0/dist/phaser-plugin-inspector.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.3.0/dist/phaser-plugin-inspector.umd.js"></script>
 ```
 
 If this is the only plugin you're using then you can use the "default" configuration:
@@ -102,7 +102,7 @@ import { AddGameObject } from 'phaser-plugin-inspector';
 function preload() {
   this.load.scripts('inspector', [
     'https://cdn.jsdelivr.net/npm/tweakpane@3.0.5/dist/tweakpane.js',
-    'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.2.0/dist/phaser-plugin-inspector.umd.js',
+    'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.3.0/dist/phaser-plugin-inspector.umd.js',
   ]);
   this.load.once('complete', () => {
     PhaserPluginInspector.Install(this.plugins);
@@ -119,7 +119,7 @@ const scene = game.scene.getScenes(true)[0];
 
 scene.load.scripts('inspector', [
   'https://cdn.jsdelivr.net/npm/tweakpane@3.0.5/dist/tweakpane.js',
-  'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.2.0/dist/phaser-plugin-inspector.umd.js',
+  'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.3.0/dist/phaser-plugin-inspector.umd.js',
 ]);
 scene.load.once('complete', () => {
   PhaserPluginInspector.Install(this.plugins);
