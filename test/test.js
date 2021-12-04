@@ -53,6 +53,8 @@ for (
     'AddGameObject',
     'AddGroup',
     'AddInput',
+    'AddKey',
+    'AddKeys',
     'AddMatterPhysicsWorld',
     'AddParticleEmitter',
     'AddPointer',
@@ -199,7 +201,7 @@ describe('new Game', function () {
 });
 
 describe('new Game, no install', function () {
-  const { AddAnimationState, AddArcadeBody, AddGameObject, AddGroup, AddInput, AddParticleEmitter, AddTimeline, AddTimerEvent, AddTween } = PhaserPluginInspector;
+  const { AddAnimationState, AddArcadeBody, AddGameObject, AddGroup, AddKey, AddKeys, AddInput, AddParticleEmitter, AddTimeline, AddTimerEvent, AddTween } = PhaserPluginInspector;
 
   let pane = new Tweakpane.Pane();
   let game;
@@ -369,6 +371,18 @@ describe('new Game, no install', function () {
   describe('AddInput(sprite.input)', function () {
     it('does not error', function () {
       AddInput(scene.add.sprite(0, 0, '__DEFAULT').setInteractive().input, pane);
+    });
+  });
+
+  describe('AddKey(key)', function () {
+    it('does not error', function () {
+      AddKey(scene.input.keyboard.addKey('SPACE'), pane);
+    });
+  });
+
+  describe('AddKeys(key)', function () {
+    it('does not error', function () {
+      AddKeys(scene.input.keyboard.addKeys('W,A,S,D'), pane);
     });
   });
 

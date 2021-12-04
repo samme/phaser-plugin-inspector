@@ -556,3 +556,33 @@ export function AddAnimationState (anim, pane, options = { title: `Animation (${
 
   return folder;
 }
+
+export function AddKey (key, pane, options = { title: `Key (${key.keyCode})` }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(key, 'duration');
+  folder.addInput(key, 'emitOnRepeat');
+  folder.addInput(key, 'enabled');
+  folder.addMonitor(key, 'isDown');
+  folder.addMonitor(key, 'isUp');
+  folder.addMonitor(key, 'location');
+  folder.addMonitor(key, 'repeats');
+  folder.addMonitor(key, 'timeDown');
+  folder.addMonitor(key, 'timeUp');
+
+  folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy key'); key.destroy(); folder.dispose(); });
+
+  return folder;
+}
+
+export function AddKeys (keys, pane, options = { title: 'Keys' }) {
+  const folder = pane.addFolder(options);
+
+  for (const name in keys) {
+    const key = keys[name];
+
+    folder.addMonitor(key, 'isDown', { label: `${name} isDown` });
+  }
+
+  return folder;
+}
