@@ -49,7 +49,15 @@ new Phaser.Game({
 });
 ```
 
-You can use any mapping, or `{ start: true }` for no mapping.
+You can use any mapping, or `{ start: true }` for no mapping. If you don't want to add any controls, you don't need any mapping.
+
+The helper functions are on the same namespace:
+
+```js
+/* global PhaserPluginInspector */
+
+const { AddGameObject } = PhaserPluginInspector
+```
 
 ### Module
 
@@ -80,6 +88,12 @@ new Phaser.Game({
     scene: [{ key: 'InspectorScenePlugin', plugin: InspectorScenePlugin, mapping: 'inspectorScene' }]
   }
 });
+```
+
+You can import the helper functions as well:
+
+```js
+import { AddGameObject } from 'phaser-plugin-inspector';
 ```
 
 ### Quick load
@@ -117,10 +131,42 @@ Use
 
 All of the “Print” buttons use `console.info()` or `console.table()`.
 
-You can add your own controls like so:
+Beware that Tweakpane inputs (checkboxes, sliders, etc.) do not update their values automatically; use the pane's **Refresh** button.
+
+Tweakpane monitors are updated automatically 5 times per second. For more precise work you may want to pause a scene or its systems.
+
+Helper functions
+----------------
+
+These create a set of controls for common Phaser objects.
+
+You can use these functions with or without the plugins.
+
+- AddAnimationState(animationState, pane, options?) → folder
+- AddArcadeBody(body, pane, options?) → folder
+- AddGameObject(obj, pane, options?) → folder
+- AddGroup(group, pane, options?) → folder
+- AddInput(interactiveObject, pane, options?) → folder
+- AddKey(key, pane, options?) → folder
+- AddKeys(keys, pane, options?) → folder
+- AddParticleEmitter(emitter, pane, options?) → folder
+- AddSound(sound, pane, options?) → folder
+- AddTimeline(timeline, pane, options?) → folder
+- AddTimerEvent(timerEvent, pane, options?) → folder
+- AddTween(tween, pane, options?) → folder
+
+The `pane` argument is the Tweakpane pane or a folder in it.
+
+If you've installed the plugins, `this.inspectorGame.pane` or `this.inspectorScene.pane` is the main pane, `this.inspectorGame.folder` is the “Game” folder, and `this.inspectorScene.folder` is the current scene's folder. See the [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) example.
+
+If you're not using the plugins, then you should create a pane yourself:
 
 ```js
-const sprite = this.add.sprite(/*…*/);
+const pane = new Tweakpane.Pane();
+```
 
-this.inspectorScene.folder.addInput(sprite, 'alpha');
+You should remove any key, timeline, timer event, or tween folders yourself when done with those objects or stopping the scene:
+
+```js
+folder.dispose();
 ```
