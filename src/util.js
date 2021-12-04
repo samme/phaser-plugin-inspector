@@ -366,7 +366,7 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
   return folder;
 }
 
-export function AddGroup (group, pane, options = { title: `${group.type} ${group.name}` }) {
+export function AddGroup (group, pane, options = { title: `${group.type} “${group.name}”` }) {
   const folder = pane.addFolder(options);
 
   folder.addMonitor(group.getChildren(), 'length', { view: 'graph', min: 0, max: group.maxSize === -1 ? 100 : group.maxSize });
