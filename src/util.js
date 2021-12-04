@@ -240,7 +240,8 @@ export function AddArcadePhysicsWorld (world, pane) {
   folder.addMonitor(world.bodies, 'size', { label: 'bodies' });
   folder.addInput(world, 'fixedStep');
   folder.addInput(world, 'forceX');
-  folder.addMonitor(world, 'fps');
+  folder.addInput(world, 'fps', { min: 5, max: 300, step: 5 }).on('change', ({ value }) => { world.setFPS(value); });
+  folder.addMonitor(world, '_frameTimeMS');
   folder.addInput(world, 'gravity', { x: { min: -1000, max: 1000 }, y: { min: -1000, max: 1000 } });
   folder.addInput(world, 'isPaused');
   folder.addInput(world, 'OVERLAP_BIAS', { label: 'overlap bias', min: 0, max: 32, step: 1 });
