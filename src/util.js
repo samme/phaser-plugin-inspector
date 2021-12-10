@@ -392,8 +392,19 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
 
 export function AddGroup (group, pane, options = { title: `${group.type} “${group.name}”` }) {
   const folder = pane.addFolder(options);
+  const graphOptions = { view: 'graph', min: 0, max: group.maxSize === -1 ? 100 : group.maxSize };
 
-  folder.addMonitor(group.getChildren(), 'length', { view: 'graph', min: 0, max: group.maxSize === -1 ? 100 : group.maxSize });
+  folder.addMonitor(group.getChildren(), 'length', graphOptions);
+
+  const proxy = {
+    get active () { return group.countActive(true); },
+    get inactive () { return group.countActive(false); },
+    get free () { return group.getTotalFree(); }
+  };
+
+  folder.addMonitor(proxy, 'active', graphOptions);
+  folder.addMonitor(proxy, 'inactive', graphOptions);
+  if (group.maxSize > -1) { folder.addMonitor(proxy, 'free', graphOptions); }
   folder.addMonitor(group, 'maxSize');
 
   folder.addButton({ title: 'Clear' }).on('click', () => { console.info('Clear group'); group.clear(); });
