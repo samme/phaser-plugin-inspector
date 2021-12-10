@@ -508,7 +508,7 @@ export function AddTimerEvent (timer, pane, options = { title: 'Timer Event' }) 
   folder.addMonitor(timer, 'elapsed');
   folder.addMonitor(timer, 'hasDispatched');
   folder.addMonitor(timer, 'loop');
-  folder.addMonitor(timer, 'paused');
+  folder.addInput(timer, 'paused');
   folder.addMonitor(timer, 'repeat');
   folder.addMonitor(timer, 'repeatCount');
 
