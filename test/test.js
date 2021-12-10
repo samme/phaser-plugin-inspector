@@ -237,6 +237,33 @@ describe('new Game, no install', function () {
     });
   });
 
+  describe('AddAnimationState() with chained key', function () {
+    it('does not error', function () {
+      scene.anims.create('anim1', { frames: [{ key: '__DEFAULT', frame: '__BASE' }] });
+      const sprite = scene.add.sprite(0, 0, '__DEFAULT');
+      sprite.anims.chain('anim1');
+      AddAnimationState(sprite.anims, pane);
+    });
+  });
+
+  describe('AddAnimationState() with chained anim', function () {
+    it('does not error', function () {
+      const anim = scene.anims.create('anim2', { frames: [{ key: '__DEFAULT', frame: '__BASE' }] });
+      const sprite = scene.add.sprite(0, 0, '__DEFAULT');
+      sprite.anims.chain(anim);
+      AddAnimationState(sprite.anims, pane);
+    });
+  });
+
+  describe('AddAnimationState() with chained play config', function () {
+    it('does not error', function () {
+      scene.anims.create('anim3', { frames: [{ key: '__DEFAULT', frame: '__BASE' }] });
+      const sprite = scene.add.sprite(0, 0, '__DEFAULT');
+      sprite.anims.chain({ key: 'anim3' });
+      AddAnimationState(sprite.anims, pane);
+    });
+  });
+
   describe('AddArcadeBody(body)', function () {
     it('does not error', function () {
       AddArcadeBody(scene.physics.add.image(0, 0, '__DEFAULT').body, pane);
@@ -353,6 +380,12 @@ describe('new Game, no install', function () {
   describe('AddGroup(group)', function () {
     it('does not error', function () {
       AddGroup(scene.add.group(), pane);
+    });
+  });
+
+  describe('AddGroup(group with maxSize)', function () {
+    it('does not error', function () {
+      AddGroup(scene.add.group({ maxSize: 1 }), pane);
     });
   });
 
