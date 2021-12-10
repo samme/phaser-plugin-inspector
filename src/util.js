@@ -293,6 +293,26 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
   folder.addMonitor(obj, 'cameraFilter');
   folder.addMonitor(obj, 'state');
 
+  if ('texture' in obj && obj.texture && obj.texture.key) {
+    const proxy = {
+      get 'texture.key' () { return obj.texture.key; },
+      get 'frame.name' () { return obj.frame.name; }
+    };
+
+    folder.addMonitor(proxy, 'texture.key');
+    folder.addMonitor(proxy, 'frame.name');
+  }
+
+  if ('displayTexture' in obj) {
+    const proxy = {
+      get 'displayTexture.key' () { return obj.displayTexture.key; },
+      get 'displayFrame.name' () { return obj.displayFrame.name; }
+    };
+
+    folder.addMonitor(proxy, 'displayTexture.key');
+    folder.addMonitor(proxy, 'displayFrame.name');
+  }
+
   if ('alpha' in obj) {
     folder.addInput(obj, 'alpha', { min: 0, max: 1, step: 0.05 });
   }
