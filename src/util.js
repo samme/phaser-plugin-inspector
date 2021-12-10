@@ -563,44 +563,44 @@ export function AddArcadeBody (body, pane, options = { title: `Body (${body.game
   return folder;
 }
 
-export function AddAnimationState (anim, pane, options = { title: `Animation (${anim.parent.type} “${anim.parent.name}”)` }) {
+export function AddAnimationState (state, pane, options = { title: `Animation (${state.parent.type} “${state.parent.name}”)` }) {
   const folder = pane.addFolder(options);
 
   const proxy = {
-    get 'currentAnim.key' () { return anim.getName(); },
-    get 'currentFrame.name' () { return anim.getFrameName(); },
-    get nextAnim () { return anim.nextAnim ? (anim.nextAnim.key || anim.nextAnim) : ''; }
+    get 'currentAnim.key' () { return state.getName(); },
+    get 'currentFrame.name' () { return state.getFrameName(); },
+    get nextAnim () { return state.nextAnim ? (state.nextAnim.key || state.nextAnim) : ''; }
   };
 
   folder.addMonitor(proxy, 'currentAnim.key');
   folder.addMonitor(proxy, 'currentFrame.name');
-  folder.addMonitor(anim, 'delay');
-  folder.addMonitor(anim, 'delayCounter');
-  folder.addMonitor(anim, 'duration');
-  folder.addMonitor(anim, 'forward');
-  folder.addMonitor(anim, 'frameRate');
-  folder.addMonitor(anim, 'hasStarted');
-  folder.addMonitor(anim, 'isPaused');
-  folder.addMonitor(anim, 'isPlaying');
-  folder.addMonitor(anim, 'msPerFrame');
+  folder.addMonitor(state, 'delay');
+  folder.addMonitor(state, 'delayCounter');
+  folder.addMonitor(state, 'duration');
+  folder.addMonitor(state, 'forward');
+  folder.addMonitor(state, 'frameRate');
+  folder.addMonitor(state, 'hasStarted');
+  folder.addMonitor(state, 'isPaused');
+  folder.addMonitor(state, 'isPlaying');
+  folder.addMonitor(state, 'msPerFrame');
   folder.addMonitor(proxy, 'nextAnim', { label: 'nextAnim (key)' });
-  folder.addMonitor(anim.nextAnimsQueue, 'length', { label: 'nextAnimsQueue (length)' });
-  folder.addMonitor(anim, 'repeat');
-  folder.addMonitor(anim, 'repeatCounter');
-  folder.addMonitor(anim, 'repeatDelay');
-  folder.addInput(anim, 'skipMissedFrames');
-  folder.addInput(anim, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
-  folder.addMonitor(anim, 'yoyo');
+  folder.addMonitor(state.nextAnimsQueue, 'length', { label: 'nextAnimsQueue (length)' });
+  folder.addMonitor(state, 'repeat');
+  folder.addMonitor(state, 'repeatCounter');
+  folder.addMonitor(state, 'repeatDelay');
+  folder.addInput(state, 'skipMissedFrames');
+  folder.addInput(state, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
+  folder.addMonitor(state, 'yoyo');
 
-  folder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop animation'); anim.stop(); });
-  folder.addButton({ title: 'Pause' }).on('click', () => { console.info('Pause animation'); anim.pause(); });
-  folder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume animation'); anim.resume(); });
-  folder.addButton({ title: 'Restart' }).on('click', () => { console.info('Restart animation'); anim.restart(); });
-  folder.addButton({ title: 'Reverse' }).on('click', () => { console.info('Reverse animation'); anim.reverse(); });
-  folder.addButton({ title: 'Next frame' }).on('click', () => { console.info('Next animation frame'); anim.nextFrame(); });
-  folder.addButton({ title: 'Previous frame' }).on('click', () => { console.info('Previous animation frame'); anim.previousFrame(); });
+  folder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop animation'); state.stop(); });
+  folder.addButton({ title: 'Pause' }).on('click', () => { console.info('Pause animation'); state.pause(); });
+  folder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume animation'); state.resume(); });
+  folder.addButton({ title: 'Restart' }).on('click', () => { console.info('Restart animation'); state.restart(); });
+  folder.addButton({ title: 'Reverse' }).on('click', () => { console.info('Reverse animation'); state.reverse(); });
+  folder.addButton({ title: 'Next frame' }).on('click', () => { console.info('Next animation frame'); state.nextFrame(); });
+  folder.addButton({ title: 'Previous frame' }).on('click', () => { console.info('Previous animation frame'); state.previousFrame(); });
 
-  anim.parent.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
+  state.parent.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
 
   return folder;
 }
