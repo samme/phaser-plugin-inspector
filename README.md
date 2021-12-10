@@ -7,16 +7,19 @@ Demos
 -----
 
 - [Games](http://phaser-plugin-inspector.surge.sh/index.html?dir=games/) — early version of the plugin, many game features
-- [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) — simple game
+- [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) — simple game, helper functions
+- [All the demos](https://codepen.io/collection/LPeVMY)
 
 Install
 -------
+
+The plugins add controls for the game and scene systems. If you don't need these, you can skip this step and use the [helper functions](#helper-functions) only.
 
 ### Browser / UMD
 
 [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) shows this setup.
 
-Include Phaser, Tweakpane, and the plugin UMD script in this order. 
+Include Phaser, Tweakpane, and the plugin UMD script in this order. You can download the scripts or use the CDN links.
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
@@ -155,9 +158,15 @@ You can use these functions with or without the plugins.
 - AddTimerEvent(timerEvent, pane, options?) → folder
 - AddTween(tween, pane, options?) → folder
 
-The `pane` argument is the Tweakpane pane or a folder in it.
+Each function creates a [folder](https://cocopon.github.io/tweakpane/ui-components.html#folder). `pane` is the Tweakpane pane or a folder in it and `options` is the folder options.
 
-If you've installed the plugins, `this.inspectorGame.pane` or `this.inspectorScene.pane` is the main pane, `this.inspectorGame.folder` is the “Game” folder, and `this.inspectorScene.folder` is the current scene's folder. See the [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) example.
+If you've installed the plugins, then
+
+- `this.inspectorGame.pane` or `this.inspectorScene.pane` is the main pane 
+- `this.inspectorGame.folder` is the “Game” folder
+- `this.inspectorScene.folder` is the current scene's folder
+
+See the [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) demo for this setup.
 
 If you're not using the plugins, then you should create a pane yourself:
 
