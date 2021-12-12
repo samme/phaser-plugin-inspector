@@ -9,9 +9,7 @@ function preload () {
 
 function create () {
   const music = this.sound.add('music');
-  music.addMarker({ name: 'part1', start: 0, duration: 10 });
-  music.addMarker({ name: 'part2', start: 10, duration: 10 });
-  music.play('part2');
+  music.play();
 
   const { pane } = this.inspectorScene;
 
