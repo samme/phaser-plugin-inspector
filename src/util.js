@@ -399,13 +399,15 @@ export function AddGroup (group, pane, options = { title: `${group.type} “${gr
   const proxy = {
     get active () { return group.countActive(true); },
     get inactive () { return group.countActive(false); },
-    get free () { return group.getTotalFree(); }
+    get free () { return group.getTotalFree(); },
+    get full () { return group.isFull(); }
   };
 
   folder.addMonitor(proxy, 'active', graphOptions);
   folder.addMonitor(proxy, 'inactive', graphOptions);
   if (group.maxSize > -1) { folder.addMonitor(proxy, 'free', graphOptions); }
   folder.addMonitor(group, 'maxSize');
+  folder.addMonitor(proxy, 'full');
 
   folder.addButton({ title: 'Clear' }).on('click', () => { console.info('Clear group'); group.clear(); });
   folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy group'); group.destroy(); });
