@@ -469,12 +469,11 @@ export function AddTween (tween, pane, options = { title: 'Tween' }) {
   folder.addMonitor(tween, 'totalProgress', { view: 'graph', min: 0, max: 1 });
 
   for (const dat of tween.data) {
-    // `start` and `end` not set yet :(
-
     folder.addMonitor(dat, 'progress', { view: 'graph', min: 0, max: 1, label: `${dat.key} progress` });
+  }
+
+  for (const dat of tween.data) {
     folder.addMonitor(dat, 'current', { label: `${dat.key} current` });
-    // folder.addMonitor(dat, 'start', { label: `${dat.key} start` });
-    // folder.addMonitor(dat, 'end', { label: `${dat.key} end` });
   }
 
   folder.addButton({ title: 'Play' }).on('click', () => { console.info('Play tween'); tween.play(); });
