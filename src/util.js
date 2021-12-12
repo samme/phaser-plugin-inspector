@@ -490,13 +490,20 @@ export function AddTimeline (timeline, pane, options = { title: 'Timeline' }) {
 
   folder.addMonitor(timeline, 'duration');
   folder.addMonitor(timeline, 'elapsed');
+  folder.addMonitor(timeline, 'loop');
+  folder.addMonitor(timeline, 'loopCounter');
   folder.addMonitor(timeline, 'state');
+  folder.addInput(timeline, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
   folder.addMonitor(timeline, 'totalData');
   folder.addMonitor(timeline, 'totalDuration');
   folder.addMonitor(timeline, 'totalElapsed');
   folder.addMonitor(timeline, 'totalProgress', { view: 'graph', min: 0, max: 1 });
 
-  // TODO
+  folder.addButton({ title: 'Play' }).on('click', () => { console.info('Play timeline'); timeline.play(); });
+  folder.addButton({ title: 'Pause' }).on('click', () => { console.info('Pause timeline'); timeline.pause(); });
+  folder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume timeline'); timeline.resume(); });
+  folder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop timeline'); timeline.stop(); });
+  folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy timeline'); timeline.destroy(); folder.dispose(); });
 
   return folder;
 }
