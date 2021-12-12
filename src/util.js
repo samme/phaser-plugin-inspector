@@ -132,7 +132,7 @@ export function AddSound (sound, pane) {
   folder.addMonitor(sound, 'seek');
   folder.addMonitor(sound, 'totalDuration');
 
-  folder.addInput(sound, 'loop');
+  folder.addMonitor(sound, 'loop');
   folder.addInput(sound, 'mute');
   folder.addInput(sound, 'volume', { min: 0, max: 1 });
 
