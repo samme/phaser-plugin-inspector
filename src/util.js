@@ -462,7 +462,7 @@ export function AddTween (tween, pane, options = { title: 'Tween' }) {
   folder.addMonitor(tween, 'loop');
   folder.addMonitor(tween, 'loopCounter');
   folder.addMonitor(tween, 'state');
-  folder.addMonitor(tween, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
+  folder.addInput(tween, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
   folder.addMonitor(tween, 'totalData');
   folder.addMonitor(tween, 'totalDuration');
   folder.addMonitor(tween, 'totalElapsed');
