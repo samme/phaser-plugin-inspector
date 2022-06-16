@@ -125,7 +125,7 @@ scene.load.scripts('inspector', [
   'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.5.0/dist/phaser-plugin-inspector.umd.js',
 ]);
 scene.load.once('complete', () => {
-  PhaserPluginInspector.Install(this.plugins);
+  PhaserPluginInspector.Install(game.plugins);
 }).start();
 ```
 
