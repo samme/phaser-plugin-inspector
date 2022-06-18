@@ -418,7 +418,7 @@ export function AddGroup (group, pane, options = { title: `${group.type} “${gr
   return folder;
 }
 
-export function AddParticleEmitter (emitter, pane, options = { title: 'Particle Emitter' }) {
+export function AddParticleEmitter (emitter, pane, options = { title: `Particle Emitter “${emitter.name}”` }) {
   const folder = pane.addFolder(options);
 
   const max = emitter.maxParticles || 100;
