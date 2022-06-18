@@ -5,11 +5,6 @@ const { AddSound } = PhaserPluginInspector;
 
 function preload () {
   this.load.image('bg', 'assets/pics/cougar-dragonsun.png');
-
-  this.load.spritesheet('button', 'assets/ui/flixel-button.png', { frameWidth: 80, frameHeight: 20 });
-
-  this.load.bitmapFont('nokia', 'assets/fonts/bitmap/nokia16black.png', 'assets/fonts/bitmap/nokia16black.xml');
-
   this.load.audio('sfx', [
     'assets/audio/SoundEffects/magical_horror_audiosprite.ogg',
     'assets/audio/SoundEffects/magical_horror_audiosprite.mp3'

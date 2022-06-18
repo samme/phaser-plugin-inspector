@@ -45,14 +45,8 @@ function create () {
   });
 }
 
-function update () {
-}
-
 // eslint-disable-next-line no-new
 new Phaser.Game({
-  scene: { preload, create, update },
-  plugins: PhaserPluginInspector.DefaultPluginsConfig,
-  audio: {
-    disableWebAudio: true
-  }
+  scene: { preload, create },
+  plugins: PhaserPluginInspector.DefaultPluginsConfig
 });
