@@ -6,6 +6,7 @@ const CameraEvents = Phaser.Cameras.Scene2D.Events;
 const SceneEvents = Phaser.Scenes.Events;
 const GameObjectEvents = Phaser.GameObjects.Events;
 const { BlendModes } = Phaser;
+const { GetFirst } = Phaser.Utils.Array;
 
 export function animToPrint ({ key, delay, duration, frameRate, repeat, repeatDelay }) {
   return { key, delay, duration, frameRate, repeat, repeatDelay };
@@ -641,4 +642,54 @@ export function AddKeys (keys, pane, options = { title: 'Keys' }) {
   }
 
   return folder;
+}
+
+export function InspectByName (name, gameObjects, pane) {
+  if (name === null) return;
+
+  const gameObject = GetFirst(gameObjects, 'name', name);
+
+  if (!gameObject) {
+    console.info('No game object found with name "%s"', name);
+
+    return;
+  }
+
+  const newPane = AddGameObject(gameObject, pane);
+
+  console.info('Added folder %s to folder %s', newPane.title, pane.title);
+}
+
+export function InspectByType (type, gameObjects, pane) {
+  if (!type) return;
+
+  const gameObject = GetFirst(gameObjects, 'type', type);
+
+  if (!gameObject) {
+    console.info('No game object found with type "%s"', type);
+
+    return;
+  }
+
+  const newPane = AddGameObject(gameObject, pane);
+
+  console.info('Added folder %s to folder %s', newPane.title, pane.title);
+}
+
+export function InspectByIndex (index, gameObjects, pane) {
+  if (index === null || index < 0) return;
+
+  index = Number(index);
+
+  const gameObject = gameObjects[index];
+
+  if (!gameObject) {
+    console.info('No game object found at index %s', index);
+
+    return;
+  }
+
+  const newPane = AddGameObject(gameObject, pane);
+
+  console.info('Added folder %s to folder %s', newPane.title, pane.title);
 }

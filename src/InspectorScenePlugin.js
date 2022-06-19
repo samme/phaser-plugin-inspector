@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { GLOBAL_PLUGIN_KEY } from './const';
-import { AddArcadePhysicsWorld, AddCamera, AddMatterPhysicsWorld, cameraToPrint, displayListItemToPrint, keyToPrint, lightToPrint, timerEventToPrint, tweenToPrint, updateListItemToPrint } from './util';
+import { AddArcadePhysicsWorld, AddCamera, AddMatterPhysicsWorld, cameraToPrint, displayListItemToPrint, InspectByIndex, InspectByName, InspectByType, keyToPrint, lightToPrint, timerEventToPrint, tweenToPrint, updateListItemToPrint } from './util';
 
 const {
   CREATE,
@@ -54,6 +54,9 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     const displayListFolder = this.folder.addFolder({ title: 'Display List', expanded: false });
     displayListFolder.addMonitor(displayList, 'length');
     displayListFolder.addButton({ title: 'Print display list' }).on('click', () => { console.info('Display list:'); console.table(displayList.getChildren().map(displayListItemToPrint)); });
+    displayListFolder.addButton({ title: 'Inspect by name …' }).on('click', () => { InspectByName(prompt('Inspect first game object on display list with name:'), displayList.getChildren(), this.folder); });
+    displayListFolder.addButton({ title: 'Inspect by type …' }).on('click', () => { InspectByType(prompt('Inspect first game object on display list with type:'), displayList.getChildren(), this.folder); });
+    displayListFolder.addButton({ title: 'Inspect by index …' }).on('click', () => { InspectByIndex(prompt(`Inspect game object on display list at index (0 to ${displayList.length - 1}):`), displayList.getChildren(), this.folder); });
 
     if (input) {
       const { gamepad, keyboard } = input;
@@ -134,6 +137,9 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     const updateListFolder = this.folder.addFolder({ title: 'Update List', expanded: false });
     updateListFolder.addMonitor(updateList, 'length');
     updateListFolder.addButton({ title: 'Print update list' }).on('click', () => { console.info('Update list:'); console.table(updateList.getActive().map(updateListItemToPrint)); });
+    updateListFolder.addButton({ title: 'Inspect by name …' }).on('click', () => { InspectByName(prompt('Inspect first game object on update list with name:'), updateList.getActive(), this.folder); });
+    updateListFolder.addButton({ title: 'Inspect by type …' }).on('click', () => { InspectByType(prompt('Inspect first game object on update list with type:'), updateList.getActive(), this.folder); });
+    updateListFolder.addButton({ title: 'Inspect by index …' }).on('click', () => { InspectByIndex(prompt(`Inspect game object on update list at index (0 to ${updateList.length - 1}):`), updateList.getActive(), this.folder); });
 
     events.on(CREATE, () => {
       for (const cam of cameras.cameras) { AddCamera(cam, camerasFolder); }
