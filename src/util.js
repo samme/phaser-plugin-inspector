@@ -575,13 +575,13 @@ export function AddAnimationState (state, pane, options = { title: `Animation ($
   const folder = pane.addFolder(options);
 
   const proxy = {
-    get 'currentAnim.key' () { return state.getName(); },
-    get 'currentFrame.name' () { return state.getFrameName(); },
+    get 'getName()' () { return state.getName(); },
+    get 'getFrameName()' () { return state.getFrameName(); },
     get nextAnim () { return state.nextAnim ? (state.nextAnim.key || state.nextAnim) : ''; }
   };
 
-  folder.addMonitor(proxy, 'currentAnim.key');
-  folder.addMonitor(proxy, 'currentFrame.name');
+  folder.addMonitor(proxy, 'getName()');
+  folder.addMonitor(proxy, 'getFrameName()');
   folder.addMonitor(state, 'delay');
   folder.addMonitor(state, 'delayCounter');
   folder.addMonitor(state, 'duration');
