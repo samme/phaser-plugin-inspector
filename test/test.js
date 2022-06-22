@@ -270,7 +270,7 @@ describe('new Game, no install', function () {
     });
   });
 
-  describe('AddGameObject(bitmap text', function () {
+  describe('AddGameObject(bitmap text)', function () {
     it('does not error', function () {
       scene.cache.bitmapFont.add('bitmapFont', Phaser.GameObjects.RetroFont.Parse(scene, {
         image: '__DEFAULT',
