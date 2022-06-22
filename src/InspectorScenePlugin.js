@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { GLOBAL_PLUGIN_KEY } from './const';
-import { AddArcadePhysicsWorld, AddCamera, AddMatterPhysicsWorld, cameraToPrint, displayListItemToPrint, keyToPrint, lightToPrint, timerEventToPrint, tweenToPrint, updateListItemToPrint } from './util';
+import { AddArcadePhysicsWorld, AddCamera, AddMatterPhysicsWorld, cameraToPrint, displayListItemToPrint, FormatLength, keyToPrint, lightToPrint, timerEventToPrint, tweenToPrint, updateListItemToPrint } from './util';
 
 const {
   CREATE,
@@ -52,7 +52,7 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     }
 
     const displayListFolder = this.folder.addFolder({ title: 'Display List', expanded: false });
-    displayListFolder.addMonitor(displayList, 'length');
+    displayListFolder.addMonitor(displayList, 'length', { format: FormatLength });
     displayListFolder.addButton({ title: 'Print display list' }).on('click', () => { console.info('Display list:'); console.table(displayList.getChildren().map(displayListItemToPrint)); });
 
     if (input) {
@@ -116,7 +116,7 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
 
     if (time) {
       const timeFolder = this.folder.addFolder({ title: 'Time', expanded: false });
-      timeFolder.addMonitor(time._active, 'length', { label: 'events' });
+      timeFolder.addMonitor(time._active, 'length', { label: 'events (length)', format: FormatLength });
       timeFolder.addMonitor(time, 'now');
       timeFolder.addInput(time, 'paused');
       timeFolder.addButton({ title: 'Print timer events' }).on('click', () => { console.info('Timer events:'); console.table(time._active.map(timerEventToPrint)); });
@@ -132,7 +132,7 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     }
 
     const updateListFolder = this.folder.addFolder({ title: 'Update List', expanded: false });
-    updateListFolder.addMonitor(updateList, 'length');
+    updateListFolder.addMonitor(updateList, 'length', { format: FormatLength });
     updateListFolder.addButton({ title: 'Print update list' }).on('click', () => { console.info('Update list:'); console.table(updateList.getActive().map(updateListItemToPrint)); });
 
     events.on(CREATE, () => {

@@ -381,11 +381,11 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
   }
 
   if ('children' in obj && 'length' in obj.children) {
-    folder.addMonitor(obj.children, 'length', { label: 'children' });
+    folder.addMonitor(obj.children, 'length', { label: 'children (length)', format: FormatLength });
   }
 
   if ('emitters' in obj) {
-    folder.addMonitor(obj.emitters, 'length', { label: 'emitters' });
+    folder.addMonitor(obj.emitters, 'length', { label: 'emitters (length)', format: FormatLength });
   }
 
   folder.addButton({ title: 'Destroy' }).on('click', () => { obj.destroy(); });
@@ -433,8 +433,8 @@ export function AddParticleEmitter (emitter, pane, options = { title: `Particle 
   folder.addInput(emitter, 'visible');
   folder.addInput(emitter, 'blendMode', { options: BlendModes });
   folder.addInput(emitter, 'frequency', { min: -1, max: 1000 });
-  folder.addMonitor(emitter.alive, 'length', { view: 'graph', min: 0, max: max, label: 'alive' });
-  folder.addMonitor(emitter.dead, 'length', { view: 'graph', min: 0, max: max, label: 'dead' });
+  folder.addMonitor(emitter.alive, 'length', { view: 'graph', min: 0, max: max, label: 'alive (length)', format: FormatLength });
+  folder.addMonitor(emitter.dead, 'length', { view: 'graph', min: 0, max: max, label: 'dead (length)', format: FormatLength });
   folder.addInput(emitter, 'collideBottom');
   folder.addInput(emitter, 'collideLeft');
   folder.addInput(emitter, 'collideRight');
@@ -597,7 +597,7 @@ export function AddAnimationState (state, pane, options = { title: `Animation ($
   folder.addMonitor(state, 'isPlaying');
   folder.addMonitor(state, 'msPerFrame');
   folder.addMonitor(proxy, 'nextAnim', { label: 'nextAnim (key)' });
-  folder.addMonitor(state.nextAnimsQueue, 'length', { label: 'nextAnimsQueue (length)' });
+  folder.addMonitor(state.nextAnimsQueue, 'length', { label: 'nextAnimsQueue (length)', format: FormatLength });
   folder.addMonitor(state, 'repeat');
   folder.addMonitor(state, 'repeatCounter');
   folder.addMonitor(state, 'repeatDelay');
@@ -646,4 +646,8 @@ export function AddKeys (keys, pane, options = { title: 'Keys' }) {
   }
 
   return folder;
+}
+
+export function FormatLength (len) {
+  return len.toFixed(0);
 }
