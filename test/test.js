@@ -344,6 +344,12 @@ describe('new Game, no install', function () {
     });
   });
 
+  describe('AddGameObject(shader)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.shader(new Phaser.Display.BaseShader('test'), 0, 0, 1, 1), pane);
+    });
+  });
+
   describe('AddGameObject(sprite)', function () {
     it('does not error', function () {
       AddGameObject(scene.add.sprite(0, 0, '__DEFAULT'), pane);
