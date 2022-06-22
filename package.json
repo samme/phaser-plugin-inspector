@@ -30,7 +30,7 @@
   },
   "peerDependencies": {
     "phaser": "^3.55.2",
-    "tweakpane": "^3.0.5"
+    "tweakpane": "^3.1.0"
   },
   "scripts": {
     "build": "rollup -c",
