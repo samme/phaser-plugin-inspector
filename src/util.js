@@ -375,6 +375,11 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(obj, 'w');
   }
 
+  if ('pipeline' in obj) {
+    folder.addMonitor(obj.pipeline, 'name', { label: 'pipeline.name' });
+    folder.addMonitor(obj, 'hasPostPipeline');
+  }
+
   if ('children' in obj && 'length' in obj.children) {
     folder.addMonitor(obj.children, 'length', { label: 'children' });
   }
