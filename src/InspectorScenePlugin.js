@@ -87,7 +87,7 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     if (lights) {
       const lightsFolder = this.folder.addFolder({ title: 'Lights', expanded: false });
       lightsFolder.addInput(lights, 'active');
-      lightsFolder.addInput(lights, 'ambientColor');
+      lightsFolder.addInput(lights, 'ambientColor', { color: { type: 'float' } });
       lightsFolder.addMonitor(lights, 'visibleLights');
       lightsFolder.addButton({ title: 'Print lights' }).on('click', () => { console.info('Lights:'); console.table(lights.lights.map(lightToPrint)); });
     }
