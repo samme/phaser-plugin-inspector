@@ -431,8 +431,8 @@ export function AddLight (light, pane, options = { title: 'Light' }) {
   folder.addInput(light, 'intensity', { min: 0, max: 10, step: 0.1 });
   folder.addInput(light, 'radius', { min: 0, max: 1024, step: 8 });
   folder.addInput(light, 'visible');
-  folder.addInput(light, 'x');
-  folder.addInput(light, 'y');
+  folder.addMonitor(light, 'x');
+  folder.addMonitor(light, 'y');
 
   return folder;
 }
