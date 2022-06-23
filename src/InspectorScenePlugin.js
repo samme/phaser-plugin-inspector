@@ -42,6 +42,7 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
 
   add () {
     const { arcadePhysics, cameras, data, displayList, events, input, load, lights, matterPhysics, scenePlugin, time, tweens, updateList } = this.systems;
+    const sceneKey = scenePlugin.settings.key;
 
     const camerasFolder = this.folder.addFolder({ title: 'Cameras', expanded: false });
     camerasFolder.addButton({ title: 'Print cameras' }).on('click', () => { console.info('Cameras:'); console.table(cameras.cameras.map(cameraToPrint)); });
@@ -53,7 +54,8 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
 
     const displayListFolder = this.folder.addFolder({ title: 'Display List', expanded: false });
     displayListFolder.addMonitor(displayList, 'length');
-    displayListFolder.addButton({ title: 'Print display list' }).on('click', () => { console.info('Display list:'); console.table(displayList.getChildren().map(displayListItemToPrint)); });
+    displayListFolder.addButton({ title: 'Print' }).on('click', () => { console.info('Display list:'); console.table(displayList.getChildren().map(displayListItemToPrint)); });
+    displayListFolder.addButton({ title: 'Save JSON' }).on('click', () => { load.saveJSON(displayList.getChildren(), `${sceneKey} displayList.json`); });
     displayListFolder.addButton({ title: 'Inspect by name …' }).on('click', () => { InspectByName(prompt('Inspect first game object on display list with name:'), displayList.getChildren(), this.folder); });
     displayListFolder.addButton({ title: 'Inspect by type …' }).on('click', () => { InspectByType(prompt('Inspect first game object on display list with type:'), displayList.getChildren(), this.folder); });
     displayListFolder.addButton({ title: 'Inspect by index …' }).on('click', () => { InspectByIndex(prompt(`Inspect game object on display list at index (0 to ${displayList.length - 1}):`), displayList.getChildren(), this.folder); });
@@ -104,7 +106,6 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     }
 
     const scenePluginFolder = this.folder.addFolder({ title: 'Scene', expanded: false });
-    const sceneKey = scenePlugin.settings.key;
     scenePluginFolder.addMonitor(scenePlugin.settings, 'active');
     scenePluginFolder.addMonitor(scenePlugin.settings, 'visible');
     scenePluginFolder.addMonitor(scenePlugin.settings, 'status');
@@ -136,7 +137,8 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
 
     const updateListFolder = this.folder.addFolder({ title: 'Update List', expanded: false });
     updateListFolder.addMonitor(updateList, 'length');
-    updateListFolder.addButton({ title: 'Print update list' }).on('click', () => { console.info('Update list:'); console.table(updateList.getActive().map(updateListItemToPrint)); });
+    updateListFolder.addButton({ title: 'Print' }).on('click', () => { console.info('Update list:'); console.table(updateList.getActive().map(updateListItemToPrint)); });
+    updateListFolder.addButton({ title: 'Save JSON' }).on('click', () => { load.saveJSON(updateList.getActive(), `${sceneKey} updateList.json`); });
     updateListFolder.addButton({ title: 'Inspect by name …' }).on('click', () => { InspectByName(prompt('Inspect first game object on update list with name:'), updateList.getActive(), this.folder); });
     updateListFolder.addButton({ title: 'Inspect by type …' }).on('click', () => { InspectByType(prompt('Inspect first game object on update list with type:'), updateList.getActive(), this.folder); });
     updateListFolder.addButton({ title: 'Inspect by index …' }).on('click', () => { InspectByIndex(prompt(`Inspect game object on update list at index (0 to ${updateList.length - 1}):`), updateList.getActive(), this.folder); });
