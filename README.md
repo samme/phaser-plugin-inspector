@@ -10,6 +10,8 @@ Demos
 - [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) — simple game, helper functions
 - [All the demos](https://codepen.io/collection/LPeVMY)
 
+You can also paste the [Quick load](#quick-load) snippet into any of the [labs examples](https://labs.phaser.io).
+
 Install
 -------
 
@@ -138,6 +140,8 @@ Beware that Tweakpane inputs (checkboxes, sliders, etc.) do not update their val
 
 Tweakpane monitors are updated automatically 5 times per second. For more precise work you may want to pause a scene or its systems.
 
+You can inspect game objects using the “Inspect” buttons in the scene “Display List” and ”Update List” folders. The new folder is added to the end of the same scene folder. Look in the console to confirm.
+
 Helper functions
 ----------------
 
@@ -159,7 +163,9 @@ You can use these functions with or without the plugins.
 - AddTimerEvent(timerEvent, pane, options?) → folder
 - AddTween(tween, pane, options?) → folder
 
-Each function creates a [folder](https://cocopon.github.io/tweakpane/ui-components.html#folder). `pane` is the Tweakpane pane or a folder in it and `options` is the folder options.
+Each function creates a [folder](https://cocopon.github.io/tweakpane/ui-components.html#folder) and returns it. 
+
+`pane` is the Tweakpane pane or a folder in it and `options` is the folder options.
 
 If you've installed the plugins, then
 
