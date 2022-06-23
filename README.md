@@ -152,6 +152,7 @@ You can use these functions with or without the plugins.
 - AddInput(interactiveObject, pane, options?) → folder
 - AddKey(key, pane, options?) → folder
 - AddKeys(keys, pane, options?) → folder
+- AddLight(light, pane, options?) → folder
 - AddParticleEmitter(emitter, pane, options?) → folder
 - AddSound(sound, pane, options?) → folder
 - AddTimeline(timeline, pane, options?) → folder

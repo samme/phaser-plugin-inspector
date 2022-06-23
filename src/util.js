@@ -423,6 +423,19 @@ export function AddGroup (group, pane, options = { title: `${group.type} “${gr
   return folder;
 }
 
+export function AddLight (light, pane, options = { title: 'Light' }) {
+  const folder = pane.addFolder(options);
+
+  folder.addInput(light, 'color', { color: { type: 'float' } });
+  folder.addInput(light, 'intensity', { min: 0, max: 10, step: 0.1 });
+  folder.addInput(light, 'radius', { min: 0, max: 1024, step: 8 });
+  folder.addInput(light, 'visible');
+  folder.addInput(light, 'x');
+  folder.addInput(light, 'y');
+
+  return folder;
+}
+
 export function AddParticleEmitter (emitter, pane, options = { title: `Particle Emitter “${emitter.name}”` }) {
   const folder = pane.addFolder(options);
 
