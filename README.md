@@ -134,7 +134,7 @@ scene.load.once('complete', () => {
 Use
 ---
 
-All of the “Print” buttons use `console.info()` or `console.table()`.
+All of the “Print” buttons call `console.info()` or `console.table()`.
 
 Beware that Tweakpane inputs (checkboxes, sliders, etc.) do not update their values automatically; use the pane's **Refresh** button.
 
@@ -163,9 +163,9 @@ You can use these functions with or without the plugins.
 - AddTimerEvent(timerEvent, pane, options?) → folder
 - AddTween(tween, pane, options?) → folder
 
-Each function creates a [folder](https://cocopon.github.io/tweakpane/ui-components.html#folder) and returns it. 
+The `pane` argument is the Tweakpane pane or a folder in it. The `options` argument is options for the folder.
 
-`pane` is the Tweakpane pane or a folder in it and `options` is the folder options.
+Each function creates a [folder](https://cocopon.github.io/tweakpane/ui-components.html#folder) and returns it. 
 
 If you've installed the plugins, then
 
