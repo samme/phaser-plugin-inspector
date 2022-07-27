@@ -170,8 +170,8 @@ export function keyToPrint ({ duration, emitOnRepeat, enabled, isDown, isUp, loc
   return { duration, emitOnRepeat, enabled, isDown, isUp, location, repeats, timeDown, timeUp };
 }
 
-export function cameraToPrint ({ name, x, y, width, height, visible, alpha }) {
-  return { name, x, y, width, height, visible, alpha };
+export function cameraToPrint ({ name, id, x, y, width, height, visible, alpha }) {
+  return { name, id, x, y, width, height, visible, alpha };
 }
 
 export function lightToPrint ({ x, y, radius, color, intensity, visible }) {
