@@ -15,19 +15,17 @@ describe('Phaser', function () {
 });
 
 describe('new Game', function () {
-  let n = 1;
-
-  beforeEach(function () {
-    console.group('test ' + n++);
-  });
+  let game;
 
   afterEach(function () {
-    console.groupEnd();
+    game.destroy(true);
+    game.runDestroy();
+    game = null;
   });
 
   describe('Load script and install', function () {
     it('should not error', function (done) {
-      new Phaser.Game({
+      game = new Phaser.Game({
         type: Phaser.AUTO,
         audio: { noAudio: true },
         scene: [
