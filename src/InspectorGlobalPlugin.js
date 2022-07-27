@@ -85,9 +85,18 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
       touchFolder.addInput(touch, 'enabled');
     }
 
+    const loopProxy = {
+      get 'getDuration()' () { return loop.getDuration(); }
+    };
     const loopFolder = folder.addFolder({ title: 'Loop', expanded: false });
     loopFolder.addMonitor(loop, 'actualFps', { view: 'graph', min: 0, max: 120 });
     loopFolder.addMonitor(loop, 'delta', { view: 'graph', min: 0, max: 50 });
+    loopFolder.addMonitor(loopProxy, 'getDuration()');
+    loopFolder.addMonitor(loop, 'now');
+    loopFolder.addMonitor(loop, 'rawDelta');
+    loopFolder.addMonitor(loop, 'running');
+    loopFolder.addMonitor(loop, 'startTime');
+    loopFolder.addMonitor(loop, 'time');
     loopFolder.addButton({ title: 'Sleep' }).on('click', () => { console.info('Sleep game loop'); loop.sleep(); });
     loopFolder.addButton({ title: 'Wake' }).on('click', () => { console.info('Wake game loop'); loop.wake(); });
 
