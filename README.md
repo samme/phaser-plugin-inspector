@@ -140,7 +140,7 @@ Beware that Tweakpane inputs (checkboxes, sliders, etc.) do not update their val
 
 Tweakpane monitors are updated automatically 5 times per second. For more precise work you may want to pause a scene or its systems.
 
-You can inspect game objects using the “Inspect” buttons in the scene “Display List” and ”Update List” folders. The new folder is added to the end of the same scene folder. Look in the console to confirm.
+You can inspect game objects using the **Display List: Inspect** and **Update List: Inspect** buttons in each scene. The new folder is added to the end of the same scene folder. Look in the console to confirm.
 
 Helper functions
 ----------------
