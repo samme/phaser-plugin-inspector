@@ -301,7 +301,7 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     };
 
     folder.addMonitor(proxy, 'texture.key');
-    folder.addMonitor(proxy, 'frame.name');
+    folder.addMonitor(proxy, 'frame.name', { format: String });
   }
 
   if ('displayTexture' in obj) {
@@ -311,7 +311,7 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     };
 
     folder.addMonitor(proxy, 'displayTexture.key');
-    folder.addMonitor(proxy, 'displayFrame.name');
+    folder.addMonitor(proxy, 'displayFrame.name', { format: String });
   }
 
   if ('alpha' in obj) {
