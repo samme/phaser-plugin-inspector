@@ -49,6 +49,7 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
     const folder = pane.addFolder({ title: 'Game', expanded: false });
 
     folder.addMonitor(this.game, 'hasFocus');
+    folder.addButton({ title: 'Step' }).on('click', () => { const t = performance.now(); const dt = loop._target; console.info('step', t, dt); this.game.step(t, dt); });
     folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy game'); this.game.destroy(true); });
 
     const animsFolder = folder.addFolder({ title: 'Animations', expanded: false });
