@@ -167,11 +167,11 @@ You can use these functions with or without the plugins.
 
 The `pane` argument is the Tweakpane pane or a folder in it. The `options` argument is options for the folder.
 
-Each function creates a [folder](https://cocopon.github.io/tweakpane/ui-components.html#folder) and returns it. 
+Each function creates a [folder](https://cocopon.github.io/tweakpane/ui-components.html#folder) and returns it.
 
 If you've installed the plugins, then
 
-- `this.inspectorGame.pane` or `this.inspectorScene.pane` is the main pane 
+- `this.inspectorGame.pane` or `this.inspectorScene.pane` is the main pane
 - `this.inspectorGame.folder` is the “Game” folder
 - `this.inspectorScene.folder` is the current scene's folder
 
