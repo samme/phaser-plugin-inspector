@@ -161,7 +161,6 @@ You can use these functions with or without the plugins.
 - AddLight(light, pane, options?) → folder
 - AddParticleEmitter(emitter, pane, options?) → folder
 - AddSound(sound, pane, options?) → folder
-- AddTimeline(timeline, pane, options?) → folder
 - AddTimerEvent(timerEvent, pane, options?) → folder
 - AddTween(tween, pane, options?) → folder
 
