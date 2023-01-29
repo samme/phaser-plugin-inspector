@@ -443,37 +443,94 @@ export function AddParticleEmitter (emitter, pane, options = { title: `Particle 
   const max = emitter.maxParticles || 100;
 
   folder.addMonitor(emitter, 'active');
-  folder.addMonitor(emitter, 'on');
-  folder.addInput(emitter, 'visible');
+  folder.addMonitor(emitter, 'animQuantity');
+  folder.addMonitor(emitter, 'delay');
+  folder.addMonitor(emitter, 'duration');
+  folder.addMonitor(emitter, 'emitting');
+  folder.addMonitor(emitter, 'frameQuantity');
+  folder.addMonitor(emitter, 'maxAliveParticles');
+  folder.addMonitor(emitter, 'maxParticles');
+  folder.addMonitor(emitter, 'quantity');
+  folder.addMonitor(emitter, 'stopAfter');
+
   folder.addInput(emitter, 'blendMode', { options: BlendModes });
-  folder.addInput(emitter, 'frequency', { min: -1, max: 1000 });
-  folder.addMonitor(emitter.alive, 'length', { view: 'graph', min: 0, max: max, label: 'alive (length)', format: FormatLength });
-  folder.addMonitor(emitter.dead, 'length', { view: 'graph', min: 0, max: max, label: 'dead (length)', format: FormatLength });
   folder.addInput(emitter, 'collideBottom');
   folder.addInput(emitter, 'collideLeft');
   folder.addInput(emitter, 'collideRight');
   folder.addInput(emitter, 'collideTop');
-  folder.addMonitor(emitter, 'currentFrame');
-  folder.addMonitor(emitter, 'maxParticles');
+  folder.addInput(emitter, 'frequency', { min: -1, max: 1000 });
   folder.addInput(emitter, 'moveTo');
   folder.addInput(emitter, 'particleBringToTop');
   folder.addInput(emitter, 'radial');
   folder.addInput(emitter, 'randomFrame');
   folder.addInput(emitter, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
+  folder.addInput(emitter, 'visible');
+
+  const graphsFolder = folder.addFolder({ title: 'Counters', expanded: false });
+
+  graphsFolder.addMonitor(emitter.alive, 'length', { view: 'graph', min: 0, max: max, label: 'alive (length)', format: FormatLength });
+  graphsFolder.addMonitor(emitter.dead, 'length', { view: 'graph', min: 0, max: max, label: 'dead (length)', format: FormatLength });
+
+  if (emitter.frequency > 0) {
+    graphsFolder.addMonitor(emitter, 'flowCounter', { view: 'graph', min: 0, max: emitter.frequency });
+  }
+
+  if (emitter.frameQuantity > 1) {
+    graphsFolder.addMonitor(emitter, 'frameCounter', { view: 'graph', min: 0, max: emitter.frameQuantity });
+  }
+
+  if (emitter.animQuantity > 1) {
+    graphsFolder.addMonitor(emitter, 'animCounter', { view: 'graph', min: 0, max: emitter.animQuantity });
+  }
+
+  if (emitter.duration > 0) {
+    graphsFolder.addMonitor(emitter, 'elapsed', { view: 'graph', min: 0, max: emitter.duration });
+  }
+
+  if (emitter.stopAfter > 0) {
+    graphsFolder.addMonitor(emitter, 'stopCounter', { view: 'graph', min: 0, max: emitter.stopAfter });
+  }
+
+  if (emitter.emitZones.length > 1) {
+    graphsFolder.addMonitor(emitter, 'zoneIndex', { view: 'graph', min: 0, max: emitter.emitZones.length });
+  }
+
+  if (emitter.frames.length > 1) {
+    graphsFolder.addMonitor(emitter, 'currentFrame', { view: 'graph', min: 0, max: emitter.frames.length });
+  }
+
+  if (emitter.anims.length > 1) {
+    graphsFolder.addMonitor(emitter, 'currentAnim', { view: 'graph', min: 0, max: emitter.anims.length });
+  }
+
+  const { processors } = emitter;
+
+  if (processors.length > 0) {
+    const processorsFolder = folder.addFolder({ title: 'Processors' });
+
+    for (const processor of processors.list) {
+      processorsFolder.addInput(processor, 'active', { label: `${processor.name || 'Processor'} active` });
+    }
+  }
 
   folder.addButton({ title: 'Start' }).on('click', () => { emitter.start(); });
   folder.addButton({ title: 'Stop' }).on('click', () => { emitter.stop(); });
   folder.addButton({ title: 'Pause' }).on('click', () => { emitter.pause(); });
   folder.addButton({ title: 'Resume' }).on('click', () => { emitter.resume(); });
+  folder.addButton({ title: 'Kill all' }).on('click', () => { emitter.killAll(); });
   folder.addButton({ title: 'Print JSON' }).on('click', () => { console.log(JSON.stringify(emitter.toJSON())); });
 
-  emitter.manager.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
+  emitter.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
 
   return folder;
 }
 
 export function AddTween (tween, pane, options = { title: 'Tween' }) {
   const folder = pane.addFolder(options);
+
+  // > When creating a Tween, you can no longer pass a function for the following properties:
+  // > duration, hold, repeat and repeatDelay.
+  // > These should be numbers only. You can, however, still provide a function for delay, to keep it compatible with the StaggerBuilder.
 
   folder.addMonitor(tween, 'countdown');
   folder.addMonitor(tween, 'duration');
@@ -505,29 +562,6 @@ export function AddTween (tween, pane, options = { title: 'Tween' }) {
   return folder;
 }
 
-export function AddTimeline (timeline, pane, options = { title: 'Timeline' }) {
-  const folder = pane.addFolder(options);
-
-  folder.addMonitor(timeline, 'duration');
-  folder.addMonitor(timeline, 'elapsed');
-  folder.addMonitor(timeline, 'loop');
-  folder.addMonitor(timeline, 'loopCounter');
-  folder.addMonitor(timeline, 'state');
-  folder.addInput(timeline, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
-  folder.addMonitor(timeline, 'totalData');
-  folder.addMonitor(timeline, 'totalDuration');
-  folder.addMonitor(timeline, 'totalElapsed');
-  folder.addMonitor(timeline, 'totalProgress', { view: 'graph', min: 0, max: 1 });
-
-  folder.addButton({ title: 'Play' }).on('click', () => { console.info('Play timeline'); timeline.play(); });
-  folder.addButton({ title: 'Pause' }).on('click', () => { console.info('Pause timeline'); timeline.pause(); });
-  folder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume timeline'); timeline.resume(); });
-  folder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop timeline'); timeline.stop(); });
-  folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy timeline'); timeline.destroy(); folder.dispose(); });
-
-  return folder;
-}
-
 export function AddTimerEvent (timer, pane, options = { title: 'Timer Event' }) {
   const folder = pane.addFolder(options);
 
@@ -548,7 +582,6 @@ export function AddTimerEvent (timer, pane, options = { title: 'Timer Event' }) 
 export function AddInput (input, pane, options = { title: `Input (${input.gameObject.type} “${input.gameObject.name}”)` }) {
   const folder = pane.addFolder(options);
 
-  folder.addMonitor(input, 'alwaysEnabled');
   folder.addMonitor(input, 'cursor');
   folder.addMonitor(input, 'customHitArea');
   folder.addMonitor(input, 'draggable');

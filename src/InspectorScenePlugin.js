@@ -132,7 +132,7 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
       tweensFolder.addButton({ title: 'Pause all' }).on('click', () => { console.info('Pause all tweens'); tweens.pauseAll(); });
       tweensFolder.addButton({ title: 'Resume all' }).on('click', () => { console.info('Resume all tweens'); tweens.resumeAll(); });
       tweensFolder.addButton({ title: 'Stop all' }).on('click', () => { console.info('Stop all tweens'); tweens.killAll(); });
-      tweensFolder.addButton({ title: 'Print tweens' }).on('click', () => { console.info('Tweens:'); console.table(tweens.getAllTweens().map(tweenToPrint)); });
+      tweensFolder.addButton({ title: 'Print tweens' }).on('click', () => { console.info('Tweens:'); console.table(tweens.getTweens().map(tweenToPrint)); });
     }
 
     const updateListFolder = this.folder.addFolder({ title: 'Update List', expanded: false });
