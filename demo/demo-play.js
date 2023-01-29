@@ -19,9 +19,8 @@ function create () {
     .setOrigin(0, 0)
     .setName('sky');
 
-  const particles = this.add.particles('red');
-
-  const emitter = particles.createEmitter({
+  const emitter = this.add.particles(0, 0, 'red', {
+    name: 'red flares',
     frequency: 25,
     speed: 100,
     scale: { start: 1, end: 0 },
@@ -48,7 +47,7 @@ function create () {
   AddGameObject(sky, pane);
   AddGameObject(logo, pane);
   AddArcadeBody(logo.body, pane);
-  AddGameObject(particles, pane);
+  AddGameObject(emitter, pane);
   AddParticleEmitter(emitter, pane);
 }
 
