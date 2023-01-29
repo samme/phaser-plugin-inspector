@@ -2,15 +2,15 @@
 
 const { assert } = chai;
 
-mocha.setup('bdd');
+mocha.setup({ allowUncaught: false, ui: 'bdd' });
 
 describe('Phaser', function () {
   it('is an object', function () {
     assert.isObject(Phaser);
   });
 
-  it('is v3.55.2', function () {
-    assert.propertyVal(Phaser, 'VERSION', '3.55.2');
+  it('is version 3.60.0-beta.18', function () {
+    assert.propertyVal(Phaser, 'VERSION', '3.60.0-beta.18');
   });
 });
 
@@ -60,7 +60,6 @@ for (
     'AddParticleEmitter',
     'AddPointer',
     'AddSound',
-    'AddTimeline',
     'AddTimerEvent',
     'AddTween'
   ]
@@ -79,9 +78,13 @@ describe('new Game', function () {
   });
 
   afterEach(function () {
+    console.log('Destroy InspectorGlobalPlugin …');
     game.plugins.get('InspectorGlobalPlugin').destroy();
+    console.log('Remove InspectorGlobalPlugin …');
     game.plugins.removeGlobalPlugin('InspectorGlobalPlugin');
+    console.log('Remove InspectorScenePlugin …');
     game.plugins.removeScenePlugin('InspectorScenePlugin');
+    console.log('Destroy game …');
     game.destroy(true);
     game.runDestroy();
     game = null;
@@ -90,8 +93,33 @@ describe('new Game', function () {
   describe('Install with DefaultPluginsConfig', function () {
     it('should not error', function (done) {
       game = new Phaser.Game({
-        type: Phaser.AUTO,
-        audio: { noAudio: true },
+        input: { activePointers: 0 },
+        plugins: PhaserPluginInspector.DefaultPluginsConfig,
+        callbacks: {
+          postBoot: function (game) {
+            assert.isObject(game.plugins.getEntry('InspectorGlobalPlugin'));
+            assert.include(game.plugins.getDefaultScenePlugins(), 'InspectorScenePlugin');
+            done();
+          }
+        },
+        scene: {
+          map: {},
+          physics: { arcade: {}, matter: {} },
+          init: function () {
+            assert.property(this, 'inspectorGame');
+            assert.property(this, 'inspectorScene');
+            assert.notProperty(this.sys, 'inspectorGame');
+            assert.property(this.sys, 'inspectorScene');
+          }
+        }
+      });
+    });
+  });
+
+  describe('Install with DefaultPluginsConfig, Canvas renderer', function () {
+    it('should not error', function (done) {
+      game = new Phaser.Game({
+        type: Phaser.CANVAS,
         input: { activePointers: 0 },
         plugins: PhaserPluginInspector.DefaultPluginsConfig,
         callbacks: {
@@ -110,6 +138,108 @@ describe('new Game', function () {
             assert.property(this, 'inspectorScene');
             assert.notProperty(this.sys, 'inspectorGame');
             assert.property(this.sys, 'inspectorScene');
+          }
+        }
+      });
+    });
+  });
+
+  describe('Install with DefaultPluginsConfig, disable Web Audio', function () {
+    it('should not error', function (done) {
+      game = new Phaser.Game({
+        audio: { disableWebAudio: true },
+        input: { activePointers: 0 },
+        plugins: PhaserPluginInspector.DefaultPluginsConfig,
+        callbacks: {
+          postBoot: function (game) {
+            assert.isObject(game.plugins.getEntry('InspectorGlobalPlugin'));
+            assert.include(game.plugins.getDefaultScenePlugins(), 'InspectorScenePlugin');
+            done();
+          }
+        },
+        scene: {
+          map: {},
+          physics: { arcade: {}, matter: {} },
+          init: function () {
+            assert.property(this, 'inspectorGame');
+            assert.property(this, 'inspectorScene');
+            assert.notProperty(this.sys, 'inspectorGame');
+            assert.property(this.sys, 'inspectorScene');
+          }
+        }
+      });
+    });
+  });
+
+  describe('Install with DefaultPluginsConfig, disable audio', function () {
+    it('should not error', function (done) {
+      game = new Phaser.Game({
+        audio: { disableAudio: true },
+        input: { activePointers: 0 },
+        plugins: PhaserPluginInspector.DefaultPluginsConfig,
+        callbacks: {
+          postBoot: function (game) {
+            assert.isObject(game.plugins.getEntry('InspectorGlobalPlugin'));
+            assert.include(game.plugins.getDefaultScenePlugins(), 'InspectorScenePlugin');
+            done();
+          }
+        },
+        scene: {
+          map: {},
+          physics: { arcade: {}, matter: {} },
+          init: function () {
+            assert.property(this, 'inspectorGame');
+            assert.property(this, 'inspectorScene');
+            assert.notProperty(this.sys, 'inspectorGame');
+            assert.property(this.sys, 'inspectorScene');
+          }
+        }
+      });
+    });
+  });
+
+  describe('Install with DefaultPluginsConfig, click buttons', function () {
+    it.skip('should not error', function (done) {
+      game = new Phaser.Game({
+        input: { activePointers: 0 },
+        plugins: PhaserPluginInspector.DefaultPluginsConfig,
+        callbacks: {
+          postBoot: function (game) {
+            assert.isObject(game.plugins.getEntry('InspectorGlobalPlugin'));
+            assert.include(game.plugins.getDefaultScenePlugins(), 'InspectorScenePlugin');
+          }
+        },
+        scene: {
+          map: {},
+          physics: { arcade: {}, matter: {} },
+          create: function () {
+            assert.property(this, 'inspectorGame');
+
+            console.warn('Clicking buttons has side effects');
+
+            const skipExpr = /(Destroy|Remove|…)/;
+
+            for (const button of this.inspectorGame.pane.containerElem_.querySelectorAll('.tp-btnv_b')) {
+              const { innerText } = button;
+
+              if (skipExpr.test(innerText)) {
+                console.log('Skipping button', innerText);
+
+                continue;
+              }
+
+              console.log('Click?', button.innerText);
+
+              // button.click();
+            }
+
+            console.log('Wait for 0.4s');
+
+            setTimeout(() => {
+              console.log('Done waiting');
+
+              done();
+            }, 400);
           }
         }
       });
@@ -202,7 +332,7 @@ describe('new Game', function () {
 });
 
 describe('new Game, no install', function () {
-  const { AddAnimationState, AddArcadeBody, AddGameObject, AddGroup, AddKey, AddKeys, AddInput, AddLight, AddParticleEmitter, AddTimeline, AddTimerEvent, AddTween } = PhaserPluginInspector;
+  const { AddAnimationState, AddArcadeBody, AddGameObject, AddGroup, AddKey, AddKeys, AddInput, AddLight, AddParticleEmitter, AddTimerEvent, AddTween } = PhaserPluginInspector;
 
   let pane = new Tweakpane.Pane();
   let game;
@@ -321,9 +451,9 @@ describe('new Game, no install', function () {
     });
   });
 
-  describe('AddGameObject(particle manager)', function () {
+  describe('AddGameObject(nineslice)', function () {
     it('does not error', function () {
-      AddGameObject(scene.add.particles('__DEFAULT'), pane);
+      AddGameObject(scene.add.nineslice(0, 0, '__DEFAULT'), pane);
     });
   });
 
@@ -434,15 +564,9 @@ describe('new Game, no install', function () {
 
   describe('AddParticleEmitter(particle emitter)', function () {
     it('does not error', function () {
-      const particles = scene.add.particles('__DEFAULT');
+      const particles = scene.add.particles(0, 0, '__DEFAULT');
 
-      AddParticleEmitter(particles.createEmitter(), pane);
-    });
-  });
-
-  describe('AddTimeline(timeline)', function () {
-    it('does not error', function () {
-      AddTimeline(scene.tweens.timeline(), pane);
+      AddParticleEmitter(particles, pane);
     });
   });
 
