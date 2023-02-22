@@ -28,7 +28,7 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
   }
 
   start () {
-    this.pane = new Tweakpane.Pane();
+    this.pane = new Tweakpane.Pane({ title: 'Inspector' });
     this.pane.containerElem_.style.width = '320px';
     this.add();
   }
