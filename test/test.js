@@ -9,8 +9,8 @@ describe('Phaser', function () {
     assert.isObject(Phaser);
   });
 
-  it('is version 3.60.0-beta.18', function () {
-    assert.propertyVal(Phaser, 'VERSION', '3.60.0-beta.18');
+  it('is the required version', function () {
+    assert.propertyVal(Phaser, 'VERSION', '3.60.0-beta.19');
   });
 });
 
