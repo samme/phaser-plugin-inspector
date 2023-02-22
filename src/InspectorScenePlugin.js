@@ -56,9 +56,9 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     displayListFolder.addMonitor(displayList, 'length', { format: FormatLength });
     displayListFolder.addButton({ title: 'Print' }).on('click', () => { console.info('Display list:'); console.table(displayList.getChildren().map(displayListItemToPrint)); });
     displayListFolder.addButton({ title: 'Save JSON' }).on('click', () => { load.saveJSON(displayList.getChildren(), `${sceneKey} displayList.json`); });
-    displayListFolder.addButton({ title: 'Inspect by name …' }).on('click', () => { InspectByName(prompt('Inspect first game object on display list with name:'), displayList.getChildren(), this.folder); });
-    displayListFolder.addButton({ title: 'Inspect by type …' }).on('click', () => { InspectByType(prompt('Inspect first game object on display list with type:'), displayList.getChildren(), this.folder); });
-    displayListFolder.addButton({ title: 'Inspect by index …' }).on('click', () => { InspectByIndex(prompt(`Inspect game object on display list at index (0 to ${displayList.length - 1}):`), displayList.getChildren(), this.folder); });
+    displayListFolder.addButton({ title: 'Inspect by name …' }).on('click', () => { InspectByName(prompt('Inspect first game object on display list with name:'), displayList.getChildren(), this.pane); });
+    displayListFolder.addButton({ title: 'Inspect by type …' }).on('click', () => { InspectByType(prompt('Inspect first game object on display list with type:'), displayList.getChildren(), this.pane); });
+    displayListFolder.addButton({ title: 'Inspect by index …' }).on('click', () => { InspectByIndex(prompt(`Inspect game object on display list at index (0 to ${displayList.length - 1}):`), displayList.getChildren(), this.pane); });
 
     if (input) {
       const { gamepad, keyboard } = input;
@@ -139,9 +139,9 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     updateListFolder.addMonitor(updateList, 'length', { format: FormatLength });
     updateListFolder.addButton({ title: 'Print' }).on('click', () => { console.info('Update list:'); console.table(updateList.getActive().map(updateListItemToPrint)); });
     updateListFolder.addButton({ title: 'Save JSON' }).on('click', () => { load.saveJSON(updateList.getActive(), `${sceneKey} updateList.json`); });
-    updateListFolder.addButton({ title: 'Inspect by name …' }).on('click', () => { InspectByName(prompt('Inspect first game object on update list with name:'), updateList.getActive(), this.folder); });
-    updateListFolder.addButton({ title: 'Inspect by type …' }).on('click', () => { InspectByType(prompt('Inspect first game object on update list with type:'), updateList.getActive(), this.folder); });
-    updateListFolder.addButton({ title: 'Inspect by index …' }).on('click', () => { InspectByIndex(prompt(`Inspect game object on update list at index (0 to ${updateList.length - 1}):`), updateList.getActive(), this.folder); });
+    updateListFolder.addButton({ title: 'Inspect by name …' }).on('click', () => { InspectByName(prompt('Inspect first game object on update list with name:'), updateList.getActive(), this.pane); });
+    updateListFolder.addButton({ title: 'Inspect by type …' }).on('click', () => { InspectByType(prompt('Inspect first game object on update list with type:'), updateList.getActive(), this.pane); });
+    updateListFolder.addButton({ title: 'Inspect by index …' }).on('click', () => { InspectByIndex(prompt(`Inspect game object on update list at index (0 to ${updateList.length - 1}):`), updateList.getActive(), this.pane); });
 
     events.on(CREATE, () => {
       for (const cam of cameras.cameras) { AddCamera(cam, camerasFolder); }
