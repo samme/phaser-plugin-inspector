@@ -449,10 +449,6 @@ export function AddParticleEmitter (emitter, pane, options = { title: `Particle 
   folder.addMonitor(emitter, 'stopAfter');
 
   folder.addInput(emitter, 'blendMode', { options: BlendModes });
-  folder.addInput(emitter, 'collideBottom');
-  folder.addInput(emitter, 'collideLeft');
-  folder.addInput(emitter, 'collideRight');
-  folder.addInput(emitter, 'collideTop');
   folder.addInput(emitter, 'frequency', { min: -1, max: 1000 });
   folder.addInput(emitter, 'moveTo');
   folder.addInput(emitter, 'particleBringToTop');
