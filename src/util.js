@@ -385,10 +385,6 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(obj.children, 'length', { label: 'children (length)', format: FormatLength });
   }
 
-  if ('emitters' in obj) {
-    folder.addMonitor(obj.emitters, 'length', { label: 'emitters (length)', format: FormatLength });
-  }
-
   folder.addButton({ title: 'Destroy' }).on('click', () => { obj.destroy(); });
 
   obj.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
