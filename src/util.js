@@ -376,6 +376,24 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(obj, 'w');
   }
 
+  if ('modelPosition' in obj) {
+    folder.addInput(obj, 'modelPosition');
+    folder.addInput(obj, 'modelScale');
+    folder.addInput(obj, 'modelRotation');
+  }
+
+  if ('faces' in obj && 'length' in obj.faces) {
+    folder.addMonitor(obj.faces, 'length', { label: 'faces.length', format: FormatLength });
+  }
+
+  if ('vertices' in obj && 'length' in obj.vertices) {
+    folder.addMonitor(obj.vertices, 'length', { label: 'vertices.length', format: FormatLength });
+  }
+
+  if ('totalRendered' in obj) {
+    folder.addMonitor(obj, 'totalRendered', { format: FormatLength });
+  }
+
   if ('pipeline' in obj) {
     folder.addMonitor(obj.pipeline, 'name', { label: 'pipeline.name' });
   }
