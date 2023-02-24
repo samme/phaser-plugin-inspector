@@ -428,9 +428,9 @@ export function AddGroup (group, pane, options = { title: `${group.type} “${gr
   folder.addMonitor(group, 'maxSize');
   folder.addMonitor(proxy, 'full');
 
-  folder.addButton({ title: 'Clear' }).on('click', () => { console.info('Clear group'); group.clear(); });
-  folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy group'); group.destroy(); });
-  folder.addButton({ title: 'Destroy group members' }).on('click', () => { console.info('Destroy group members'); group.clear(true, true); });
+  folder.addButton({ title: 'Clear' }).on('click', () => { console.info('Clear group', group.name); group.clear(); });
+  folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy group', group.name); group.destroy(); });
+  folder.addButton({ title: 'Destroy group members' }).on('click', () => { console.info('Destroy group members', group.name); group.clear(true, true); });
 
   group.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
 
