@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { FXMap } from './FXMap';
 
 const TAU = 2 * Math.PI;
 const CacheNames = ['audio', 'binary', 'bitmapFont', 'html', 'json', 'obj', 'physics', 'shader', 'text', 'tilemap', 'video', 'xml'];
@@ -221,11 +222,16 @@ export function AddCamera (camera, pane) {
     folder.addMonitor(deadzone, 'height', { label: 'deadzone height' });
   }
 
+  if (camera.hasPostPipeline) {
+    AddPipelines(camera.postPipelines, folder, { title: 'Post Pipelines' });
+  }
+
   folder.addButton({ title: 'Fade in' }).on('click', () => { camera.fadeIn(); });
   folder.addButton({ title: 'Fade out' }).on('click', () => { camera.fadeOut(); });
   folder.addButton({ title: 'Flash' }).on('click', () => { camera.flash(); });
-  folder.addButton({ title: 'Reset effects' }).on('click', () => { camera.resetFX(); });
   folder.addButton({ title: 'Shake' }).on('click', () => { camera.shake(); });
+  folder.addButton({ title: 'Reset effects' }).on('click', () => { camera.resetFX(); });
+  folder.addButton({ title: 'Reset post pipeline' }).on('click', () => { camera.resetPostPipeline(); });
 
   camera.on(CameraEvents.DESTROY, () => {
     folder.dispose();
@@ -382,6 +388,10 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addInput(obj, 'modelRotation');
   }
 
+  if ('fov' in obj) {
+    folder.addMonitor(obj, 'fov');
+  }
+
   if ('faces' in obj && 'length' in obj.faces) {
     folder.addMonitor(obj.faces, 'length', { label: 'faces.length', format: FormatLength });
   }
@@ -398,11 +408,33 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(obj.pipeline, 'name', { label: 'pipeline.name' });
   }
 
+  if ('hasPostPipeline' in obj) {
+    folder.addMonitor(obj, 'hasPostPipeline');
+  }
+
+  if ('preFX' in obj && obj.preFX && obj.preFX.list.length > 0) {
+    AddFXComponent(obj.preFX, folder);
+  }
+
+  if (obj.hasPostPipeline) {
+    AddPipelines(obj.postPipelines, folder, { title: 'Post Pipelines' });
+  }
+
   if ('children' in obj && 'length' in obj.children) {
     folder.addMonitor(obj.children, 'length', { label: 'children (length)', format: FormatLength });
   }
 
-  folder.addButton({ title: 'Destroy' }).on('click', () => { obj.destroy(); });
+  // The `postFX` controller doesn't seem to show any relevant state.
+
+  if ('resetPipeline' in obj) {
+    folder.addButton({ title: 'Reset Pipeline' }).on('click', () => { console.info('Reset pipeline', obj.type, obj.name); obj.resetPipeline(); });
+  }
+
+  if ('resetPostPipeline' in obj) {
+    folder.addButton({ title: 'Reset Post Pipeline' }).on('click', () => { console.info('Reset post pipeline', obj.type, obj.name); obj.resetPostPipeline(); });
+  }
+
+  folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy', obj.type, obj.name); obj.destroy(); });
 
   obj.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
 
@@ -700,6 +732,109 @@ export function AddKeys (keys, pane, options = { title: 'Keys' }) {
 
     folder.addMonitor(key, 'isDown', { label: `${name} isDown` });
   }
+
+  return folder;
+}
+
+export function AddFXComponent (comp, pane, options = { title: `${comp.isPost ? 'Post' : 'Pre'} FX` }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(comp, 'enabled');
+
+  folder.addInput(comp, 'padding');
+
+  folder.addButton({ title: 'Clear' }).on('click', () => { comp.clear(); });
+  folder.addButton({ title: 'Disable' }).on('click', () => { comp.disable(); });
+  folder.addButton({ title: 'Enable' }).on('click', () => { comp.enable(); });
+
+  for (const ctrl of comp.list) {
+    AddFXController(ctrl, folder);
+  }
+
+  return folder;
+}
+
+export function AddFXController (ctrl, pane, options = { title: `FX ${FXMap[ctrl.type]}` }) {
+  const folder = pane.addFolder(options);
+
+  for (const key in ctrl) {
+    if (key.startsWith('_')) continue;
+
+    if (key === 'type') continue;
+
+    const val = ctrl[key];
+    const typ = typeof val;
+
+    if (typ !== 'number' && typ !== 'boolean') continue;
+
+    if (key === 'alpha') {
+      folder.addInput(ctrl, key, { min: 0, max: 1 });
+
+      continue;
+    }
+
+    if (key === 'axis' || key === 'direction') {
+      folder.addInput(ctrl, key, { min: 0, max: 1, step: 1 });
+
+      continue;
+    }
+
+    if (key === 'color' || key === 'color1' || key === 'color2' || key === 'backgroundColor') {
+      folder.addInput(ctrl, key, { view: 'color' });
+
+      continue;
+    }
+
+    if (key === 'progress') {
+      folder.addInput(ctrl, key, { min: 0, max: 1 });
+
+      continue;
+    }
+
+    if (key === 'quality') {
+      folder.addInput(ctrl, key, { options: { low: 0, medium: 1, high: 2 } });
+
+      continue;
+    }
+
+    if (key === 'samples') {
+      folder.addInput(ctrl, key, { min: 1, max: 12, step: 1 });
+
+      continue;
+    }
+
+    if (key === 'steps') {
+      folder.addInput(ctrl, key, { min: 1, max: 10, step: 1 });
+
+      continue;
+    }
+
+    folder.addInput(ctrl, key);
+  }
+
+  return folder;
+}
+
+export function AddPipelines (pipelines, pane, options = { title: 'Pipelines' }) {
+  const folder = pane.addFolder(options);
+
+  for (const pipeline of pipelines) {
+    folder.addInput(pipeline, 'active', { label: `${pipeline.name} active` });
+  }
+
+  return folder;
+}
+
+export function AddPipeline (pipeline, pane, options = { title: `Pipeline “${pipeline.name}”` }) {
+  const folder = pane.addFolder(options);
+
+  folder.addInput(pipeline, 'active');
+  folder.addMonitor(pipeline, 'width');
+  folder.addMonitor(pipeline, 'height');
+  folder.addMonitor(pipeline, 'projectionWidth');
+  folder.addMonitor(pipeline, 'projectionHeight');
+  folder.addMonitor(pipeline, 'vertexCapacity');
+  folder.addMonitor(pipeline, 'vertexCount');
 
   return folder;
 }
