@@ -29,7 +29,7 @@
     "rollup": "^2.23.0"
   },
   "peerDependencies": {
-    "phaser": "^3.60.0-beta.18",
+    "phaser": "^3.60.0-beta.19",
     "tweakpane": "^3.1.0"
   },
   "scripts": {
