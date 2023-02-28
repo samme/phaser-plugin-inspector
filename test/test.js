@@ -2,7 +2,7 @@
 
 const { assert } = chai;
 
-mocha.setup({ allowUncaught: false, ui: 'bdd' });
+mocha.setup({ allowUncaught: true, ui: 'bdd' });
 
 describe('Phaser', function () {
   it('is an object', function () {
@@ -52,6 +52,8 @@ for (
     'AddCamera',
     'AddGameObject',
     'AddGroup',
+    'AddFXComponent',
+    'AddFXController',
     'AddInput',
     'AddKey',
     'AddKeys',
@@ -215,7 +217,7 @@ describe('new Game', function () {
           create: function () {
             assert.property(this, 'inspectorGame');
 
-            console.warn('Clicking buttons has side effects');
+            console.warn('Will click a lot of buttons. These have side effects.');
 
             const skipExpr = /(Destroy|Remove|…)/;
 
@@ -223,14 +225,14 @@ describe('new Game', function () {
               const { innerText } = button;
 
               if (skipExpr.test(innerText)) {
-                console.log('Skipping button', innerText);
+                console.log('Skipping button because it matches the exclude pattern', innerText);
 
                 continue;
               }
 
-              console.log('Click?', button.innerText);
+              console.log('Click', button.innerText);
 
-              // button.click();
+              button.click();
             }
 
             console.log('Wait for 0.4s');
@@ -332,7 +334,7 @@ describe('new Game', function () {
 });
 
 describe('new Game, no install', function () {
-  const { AddAnimationState, AddArcadeBody, AddGameObject, AddGroup, AddKey, AddKeys, AddInput, AddLight, AddParticleEmitter, AddTimerEvent, AddTween } = PhaserPluginInspector;
+  const { AddAnimationState, AddArcadeBody, AddCamera, AddFXController, AddGameObject, AddGroup, AddKey, AddKeys, AddInput, AddLight, AddParticleEmitter, AddTimerEvent, AddTween } = PhaserPluginInspector;
 
   let pane = new Tweakpane.Pane();
   let game;
@@ -346,7 +348,7 @@ describe('new Game, no install', function () {
         physics: { arcade: { debug: true }, matter: {} },
         init: function () {
           scene = this;
-          this.scene.pause();
+          this.scene.sleep();
           done();
         }
       }
@@ -360,6 +362,11 @@ describe('new Game, no install', function () {
     game = null;
     pane = null;
     scene = null;
+  });
+
+  afterEach(function () {
+    console.log('Clear display list?', scene.sys.displayList.length);
+    scene.sys.displayList.shutdown();
   });
 
   describe('AddAnimationState(sprite.anims)', function () {
@@ -398,6 +405,28 @@ describe('new Game, no install', function () {
   describe('AddArcadeBody(body)', function () {
     it('does not error', function () {
       AddArcadeBody(scene.physics.add.image(0, 0, '__DEFAULT').body, pane);
+    });
+  });
+
+  describe('AddCamera()', function () {
+    it('does not error', function () {
+      const cam = scene.cameras.add();
+
+      AddCamera(cam, pane);
+
+      scene.cameras.remove(cam);
+    });
+  });
+
+  // this.cameras.main.setPostPipeline(Phaser.FX.BLUR);
+
+  describe('AddCamera(), setPostPipeline()', function () {
+    it('does not error', function () {
+      const cam = scene.cameras.add().setPostPipeline(Phaser.FX.BLUR);
+
+      AddCamera(cam, pane);
+
+      scene.cameras.remove(cam);
     });
   });
 
@@ -511,6 +540,159 @@ describe('new Game, no install', function () {
   describe('AddGameObject(tilesprite)', function () {
     it('does not error', function () {
       AddGameObject(scene.add.tileSprite(0, 0, 32, 32, '__DEFAULT'), pane);
+    });
+  });
+
+  describe('AddGameObject(mesh)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.mesh(0, 0, '__DEFAULT').addVertices([-1, 1, 1, 1, -1, -1, 1, -1], [0, 0, 1, 0, 0, 1, 1, 1], [0, 2, 1, 2, 3, 1]), pane);
+    });
+  });
+
+  describe('AddGameObject(plane)', function () {
+    it('does not error', function () {
+      AddGameObject(scene.add.plane(400, 300, '__DEFAULT', null, 8, 8, true), pane);
+    });
+  });
+
+  describe('AddGameObject(image), preFX.addShadow()', function () {
+    it('does not error', function () {
+      const img = scene.add.image(0, 0, '__DEFAULT');
+
+      img.preFX.addShadow(0, 0, 0.006, 2, 0x333333, 10);
+
+      AddGameObject(img, pane);
+    });
+  });
+
+  describe('AddGameObject(image), postFX.addShine()', function () {
+    it('does not error', function () {
+      const img = scene.add.image(0, 0, '__DEFAULT');
+
+      img.postFX.addShine(1, 0.2, 5);
+
+      AddGameObject(img, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addBarrel())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addBarrel();
+
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addBloom())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addBloom();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addBlur())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addBlur();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addBokeh())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addBokeh();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addCircle())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addCircle();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addColorMatrix())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addColorMatrix();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addDisplacement())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addDisplacement();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addGlow())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addGlow();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addGradient())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addGradient();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addPixelate())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addPixelate();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addReveal())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addReveal();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addShadow())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addShadow();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addShine())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addShine();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addTiltShift())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addTiltShift();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addVignette())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addVignette();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(preFX.addWipe())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addWipe();
+      AddFXController(fx, pane);
+    });
+  });
+
+  describe('AddFXController(postFX.addBarrel())', function () {
+    it('does not error', function () {
+      const fx = scene.add.image(0, 0, '__DEFAULT').postFX.addBarrel();
+
+      AddFXController(fx, pane);
     });
   });
 
