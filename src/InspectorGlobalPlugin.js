@@ -22,6 +22,7 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
     super(pluginManager);
 
     this.pane = null;
+    this.style = null;
   }
 
   init (data) {
@@ -29,11 +30,17 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
 
   start () {
     this.pane = new Tweakpane.Pane({ title: 'Inspector' });
-    this.pane.containerElem_.style.width = '320px';
+
     this.add();
+
+    this.style = document.createElement('style');
+    this.style.innerText = '.tp-dfwv { top: 8px; bottom: 8px; width: 320px; overflow: auto; }';
+    document.head.appendChild(this.style);
   }
 
   stop () {
+    document.head.removeChild(this.style);
+    this.style = null;
     this.pane.dispose();
     this.pane = null;
   }
