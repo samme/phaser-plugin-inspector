@@ -827,16 +827,11 @@ export function AddPipelines (pipelines, pane, options = { title: 'Pipelines' })
   return folder;
 }
 
-export function AddPipeline (pipeline, pane, options = { title: `Pipeline “${pipeline.name}”` }) {
+export function AddPipeline (pipeline, pane, options = { title: `${pipeline.isPost ? 'Post Pipeline' : 'Pipeline'} “${pipeline.name}”` }) {
   const folder = pane.addFolder(options);
 
   folder.addInput(pipeline, 'active');
-  folder.addMonitor(pipeline, 'width');
-  folder.addMonitor(pipeline, 'height');
-  folder.addMonitor(pipeline, 'projectionWidth');
-  folder.addMonitor(pipeline, 'projectionHeight');
-  folder.addMonitor(pipeline, 'vertexCapacity');
-  folder.addMonitor(pipeline, 'vertexCount');
+  // What else?
 
   return folder;
 }
