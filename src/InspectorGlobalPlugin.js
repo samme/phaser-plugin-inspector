@@ -15,6 +15,10 @@ import {
 
 export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
   constructor (pluginManager) {
+    if (Phaser.VERSION.split('.')[1] > 55) {
+      throw new Error('This version of the plugin requires Phaser v3.55 or earlier');
+    }
+
     super(pluginManager);
 
     this.pane = null;
