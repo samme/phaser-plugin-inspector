@@ -404,8 +404,10 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(obj, 'totalRendered', { format: FormatLength });
   }
 
-  if ('pipeline' in obj) {
-    folder.addMonitor(obj.pipeline, 'name', { label: 'pipeline.name' });
+  if ('getPipelineName' in obj) {
+    const proxy = { get 'getPipelineName()' () { return obj.getPipelineName(); } };
+
+    folder.addMonitor(proxy, 'getPipelineName()', { label: 'getPipelineName()' });
   }
 
   if ('hasPostPipeline' in obj) {
