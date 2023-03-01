@@ -70,7 +70,7 @@ const { AddGameObject } = PhaserPluginInspector
 npm install phaser-plugin-inspector tweakpane
 ```
 
-This package has an [ES module](dist/phaser-plugin-inspector.esm.js) (marked as `module`) and a [CommonJS-compatible UMD module](dist/phaser-plugin-inspector.umd.js) (marked as `browser`). You should use the ES module, but some bundlers may pick the UMD module by default. Configure your bundler to use the `module` field, or add an alias to the ES module file, or import the ES module file directly.
+This package has an ES module (`phaser-plugin-inspector.esm.js`, marked as `module`) and a CommonJS-compatible UMD module(`phaser-plugin-inspector.umd.js`, marked as `browser`). You should use the ES module, but some bundlers may pick the UMD module by default. Configure your bundler to use the `module` field, or add an alias to the ES module file, or import the ES module file directly.
 
 If this is the only plugin you're using then you can use the "default" configuration:
 
