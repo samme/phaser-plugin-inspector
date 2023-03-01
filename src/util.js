@@ -743,7 +743,7 @@ export function AddFXComponent (comp, pane, options = { title: `${comp.isPost ? 
 
   folder.addMonitor(comp, 'enabled');
 
-  folder.addInput(comp, 'padding');
+  folder.addInput(comp, 'padding', { min: 0, max: 32, step: 1 });
 
   folder.addButton({ title: 'Clear' }).on('click', () => { comp.clear(); });
   folder.addButton({ title: 'Disable' }).on('click', () => { comp.disable(); });
