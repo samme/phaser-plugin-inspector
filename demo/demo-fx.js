@@ -43,6 +43,7 @@ class Example extends Phaser.Scene {
 
     for (const m of preMethods) {
       const cake = this.add.image(0, 0, 'cake').setName(`cake ${m}`);
+      cake.preFX.setPadding(8);
       const fx = cake.preFX[m]();
       AddFXController(fx, preFXFolder, { title: m });
       cakes.push(cake);
@@ -51,7 +52,9 @@ class Example extends Phaser.Scene {
     Phaser.Actions.GridAlign(cakes, { width: 6, cellWidth: 120, cellHeight: 150 });
 
     const lollipop = this.add.image(400, 400, 'lollipop').setName('lollipop');
+    lollipop.preFX.setPadding(8);
     lollipop.preFX.addColorMatrix().grayscale();
+    lollipop.preFX.addShadow();
 
     AddGameObject(lollipop, goFolder);
   }
