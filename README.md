@@ -153,6 +153,8 @@ You can use these functions with or without the plugins.
 
 - AddAnimationState(animationState, pane, options?) → folder
 - AddArcadeBody(body, pane, options?) → folder
+- AddFXComponent (component, pane, options?) → folder
+- AddFXController (controller, pane, options?) → folder
 - AddGameObject(obj, pane, options?) → folder
 - AddGroup(group, pane, options?) → folder
 - AddInput(interactiveObject, pane, options?) → folder
