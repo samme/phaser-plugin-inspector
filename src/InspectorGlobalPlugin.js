@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Tweakpane from 'tweakpane';
+import { Pane } from 'tweakpane';
 import {
   AddPointer,
   copyToSafeObj,
@@ -28,7 +28,7 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
   }
 
   start () {
-    this.pane = new Tweakpane.Pane();
+    this.pane = new Pane();
     this.pane.containerElem_.style.width = '320px';
     this.add();
   }
