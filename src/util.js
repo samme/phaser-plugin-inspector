@@ -687,7 +687,7 @@ export function AddAnimationState (state, pane, options = { title: `Animation ($
   folder.addMonitor(state, 'isPlaying');
   folder.addMonitor(state, 'msPerFrame');
   folder.addMonitor(proxy, 'nextAnim', { label: 'nextAnim (key)' });
-  folder.addMonitor(state.nextAnimsQueue, 'length', { label: 'nextAnimsQueue (length)', format: FormatLength });
+  folder.addMonitor(state.nextAnimsQueue, 'length', { label: 'nextAnimsQueue.length', format: FormatLength });
   folder.addMonitor(state, 'repeat');
   folder.addMonitor(state, 'repeatCounter');
   folder.addMonitor(state, 'repeatDelay');
