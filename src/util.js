@@ -836,6 +836,46 @@ export function AddPipeline (pipeline, pane, options = { title: `${pipeline.isPo
   return folder;
 }
 
+export function AddActive (items, pane, options = { title: 'Active' }) {
+  const folder = pane.addFolder(options);
+
+  for (const item of items) {
+    folder.addInput(item, 'active', { min: 0, max: 1, label: item.name || item.type || '(Unnamed)' });
+  }
+
+  return folder;
+}
+
+export function AddAlpha (items, pane, options = { title: 'Alpha' }) {
+  const folder = pane.addFolder(options);
+
+  for (const item of items) {
+    folder.addInput(item, 'alpha', { min: 0, max: 1, label: item.name || item.type || '(Unnamed)' });
+  }
+
+  return folder;
+}
+
+export function AddVisible (items, pane, options = { title: 'Visible' }) {
+  const folder = pane.addFolder(options);
+
+  for (const item of items) {
+    folder.addInput(item, 'visible', { label: item.name || item.type || '(Unnamed)' });
+  }
+
+  return folder;
+}
+
+export function AddScenes (scenes, pane, options = { title: 'Scenes Visible' }) {
+  const folder = pane.addFolder(options);
+
+  for (const scene of scenes) {
+    folder.addInput(scene.sys.settings, 'visible', { label: scene.sys.settings.key });
+  }
+
+  return folder;
+}
+
 export function FormatLength (len) {
   return len.toFixed(0);
 }

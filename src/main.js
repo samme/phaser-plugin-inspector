@@ -3,6 +3,8 @@ export { InspectorScenePlugin } from './InspectorScenePlugin';
 export { DefaultPluginsConfig } from './DefaultPluginsConfig';
 export { Install } from './Install';
 export {
+  AddActive,
+  AddAlpha,
   AddAnimationState,
   AddArcadeBody,
   AddArcadePhysicsWorld,
@@ -19,7 +21,9 @@ export {
   AddParticleEmitter,
   AddPipeline,
   AddPointer,
+  AddScenes,
   AddSound,
   AddTimerEvent,
-  AddTween
+  AddTween,
+  AddVisible
 } from './util';

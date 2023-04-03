@@ -46,6 +46,8 @@ describe('PhaserPluginInspector.InspectorScenePlugin', function () {
 
 for (
   const name of [
+    'AddActive',
+    'AddAlpha',
     'AddAnimationState',
     'AddArcadeBody',
     'AddArcadePhysicsWorld',
@@ -61,9 +63,11 @@ for (
     'AddMatterPhysicsWorld',
     'AddParticleEmitter',
     'AddPointer',
+    'AddScenes',
     'AddSound',
     'AddTimerEvent',
-    'AddTween'
+    'AddTween',
+    'AddVisible'
   ]
 ) {
   describe(`PhaserPluginInspector.${name}`, function () {
@@ -334,7 +338,25 @@ describe('new Game', function () {
 });
 
 describe('new Game, no install', function () {
-  const { AddAnimationState, AddArcadeBody, AddCamera, AddFXController, AddGameObject, AddGroup, AddKey, AddKeys, AddInput, AddLight, AddParticleEmitter, AddTimerEvent, AddTween } = PhaserPluginInspector;
+  const {
+    AddActive,
+    AddAlpha,
+    AddAnimationState,
+    AddArcadeBody,
+    AddCamera,
+    AddFXController,
+    AddGameObject,
+    AddGroup,
+    AddKey,
+    AddKeys,
+    AddInput,
+    AddLight,
+    AddParticleEmitter,
+    AddScenes,
+    AddTimerEvent,
+    AddTween,
+    AddVisible
+  } = PhaserPluginInspector;
 
   let pane = new Tweakpane.Pane();
   let game;
@@ -367,6 +389,24 @@ describe('new Game, no install', function () {
   afterEach(function () {
     console.log('Clear display list?', scene.sys.displayList.length);
     scene.sys.displayList.shutdown();
+  });
+
+  describe('AddActive()', function () {
+    it('does not error', function () {
+      AddActive(
+        [{ name: '1', active: true }, { name: '2', active: false }],
+        pane
+      );
+    });
+  });
+
+  describe('AddAlpha()', function () {
+    it('does not error', function () {
+      AddAlpha(
+        [{ name: '1', alpha: 1 }, { name: '2', alpha: 0 }],
+        pane
+      );
+    });
   });
 
   describe('AddAnimationState(sprite.anims)', function () {
@@ -752,6 +792,15 @@ describe('new Game, no install', function () {
     });
   });
 
+  describe('AddScenes()', function () {
+    it('does not error', function () {
+      AddScenes(
+        [new Phaser.Scene('1'), new Phaser.Scene('2')],
+        pane
+      );
+    });
+  });
+
   describe('AddTimerEvent(timer event)', function () {
     it('does not error', function () {
       AddTimerEvent(scene.time.addEvent({ delay: 1000 }), pane);
@@ -767,6 +816,15 @@ describe('new Game, no install', function () {
   describe('AddTween(counter tween)', function () {
     it('does not error', function () {
       AddTween(scene.tweens.addCounter({ from: 1, to: 10 }), pane);
+    });
+  });
+
+  describe('AddVisible()', function () {
+    it('does not error', function () {
+      AddVisible(
+        [{ name: '1', visible: true }, { name: '2', visible: false }],
+        pane
+      );
     });
   });
 });
