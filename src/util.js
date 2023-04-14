@@ -648,6 +648,8 @@ export function AddInput (input, pane, options = { title: `Input (${input.gameOb
 export function AddArcadeBody (body, pane, options = { title: `Body (${body.gameObject.type} “${body.gameObject.name}”)` }) {
   const folder = pane.addFolder(options);
 
+  // body.physicsType === Phaser.Physics.Arcade.DYNAMIC_BODY
+
   folder.addMonitor(body, 'enable');
   folder.addInput(body, 'debugShowBody');
   folder.addInput(body, 'debugShowVelocity');
@@ -656,10 +658,16 @@ export function AddArcadeBody (body, pane, options = { title: `Body (${body.game
   folder.addMonitor(body.velocity, 'y', { label: 'velocity y' });
   folder.addMonitor(body, 'speed');
   folder.addMonitor(body, 'angle');
-  folder.addMonitor(body, '_dx', { label: 'deltaX' });
-  folder.addMonitor(body, '_dy', { label: 'deltaY' });
-  folder.addMonitor(body, '_tx', { label: 'deltaXFinal' });
-  folder.addMonitor(body, '_ty', { label: 'deltaYFinal' });
+  folder.addMonitor(body, '_dx', { label: 'deltaX()' });
+  folder.addMonitor(body, '_dy', { label: 'deltaY()' });
+  folder.addMonitor(body, '_tx', { label: 'deltaXFinal()' });
+  folder.addMonitor(body, '_ty', { label: 'deltaYFinal()' });
+  folder.addMonitor(body, 'left');
+  folder.addMonitor(body, 'top');
+  folder.addMonitor(body, 'right');
+  folder.addMonitor(body, 'bottom');
+  folder.addMonitor(body.center, 'x', { label: 'center.x' });
+  folder.addMonitor(body.center, 'y', { label: 'center.y' });
 
   body.gameObject.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
 
