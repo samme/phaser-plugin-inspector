@@ -275,7 +275,6 @@ export function AddMatterPhysicsWorld (world, pane) {
   const { events } = world.scene.sys;
   const folder = pane.addFolder({ title: 'Matter Physics', expanded: false });
   folder.addInput(world, 'autoUpdate');
-  folder.addInput(world, 'correction', { min: 0.1, max: 1, step: 0.05 });
   folder.addInput(world, 'enabled');
   folder.addInput(world.localWorld, 'gravity');
   folder.addInput(world.localWorld.gravity, 'scale', { label: 'gravity scale', min: 0, max: 0.1, step: 0.001 });
