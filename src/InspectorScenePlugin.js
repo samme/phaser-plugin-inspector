@@ -80,13 +80,15 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
         gamepadFolder.addMonitor(gamepad, 'total');
       }
 
-      const keyboardFolder = this.folder.addFolder({ title: 'Keyboard', expanded: false });
-      keyboardFolder.addInput(keyboard, 'enabled');
-      keyboardFolder.addButton({ title: 'Clear captures' }).on('click', () => { console.info('Clear key captures'); keyboard.clearCaptures(); });
-      keyboardFolder.addButton({ title: 'Remove all keys' }).on('click', () => { console.info('Remove all keys'); keyboard.removeAllKeys(); });
-      keyboardFolder.addButton({ title: 'Reset keys' }).on('click', () => { console.info('Reset keys'); keyboard.resetKeys(); });
-      keyboardFolder.addButton({ title: 'Print captures' }).on('click', () => { console.info('Key captures:'); console.table(keyboard.getCaptures()); });
-      keyboardFolder.addButton({ title: 'Print keys' }).on('click', () => { console.info('Keys:'); console.table(keyboard.keys.map(keyToPrint)); });
+      if (keyboard) {
+        const keyboardFolder = this.folder.addFolder({ title: 'Keyboard', expanded: false });
+        keyboardFolder.addInput(keyboard, 'enabled');
+        keyboardFolder.addButton({ title: 'Clear captures' }).on('click', () => { console.info('Clear key captures'); keyboard.clearCaptures(); });
+        keyboardFolder.addButton({ title: 'Remove all keys' }).on('click', () => { console.info('Remove all keys'); keyboard.removeAllKeys(); });
+        keyboardFolder.addButton({ title: 'Reset keys' }).on('click', () => { console.info('Reset keys'); keyboard.resetKeys(); });
+        keyboardFolder.addButton({ title: 'Print captures' }).on('click', () => { console.info('Key captures:'); console.table(keyboard.getCaptures()); });
+        keyboardFolder.addButton({ title: 'Print keys' }).on('click', () => { console.info('Keys:'); console.table(keyboard.keys.map(keyToPrint)); });
+      }
     }
 
     if (lights) {

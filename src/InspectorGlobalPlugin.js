@@ -90,9 +90,11 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
       AddPointer(pointer, inputFolder);
     }
 
-    const keyboardFolder = folder.addFolder({ title: 'Keyboard', expanded: false });
-    keyboardFolder.addInput(keyboard, 'enabled');
-    keyboardFolder.addMonitor(keyboard, 'preventDefault');
+    if (keyboard) {
+      const keyboardFolder = folder.addFolder({ title: 'Keyboard', expanded: false });
+      keyboardFolder.addInput(keyboard, 'enabled');
+      keyboardFolder.addMonitor(keyboard, 'preventDefault');
+    }
 
     if (touch) {
       const touchFolder = folder.addFolder({ title: 'Touch', expanded: false });
