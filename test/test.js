@@ -204,6 +204,33 @@ describe('new Game', function () {
     });
   });
 
+  describe('Install with DefaultPluginsConfig, disable input', function () {
+    it('should not error', function (done) {
+      game = new Phaser.Game({
+        audio: { disableAudio: true },
+        input: { gamepad: false, keyboard: false, mouse: false, touch: false, wheel: false },
+        plugins: PhaserPluginInspector.DefaultPluginsConfig,
+        callbacks: {
+          postBoot: function (game) {
+            assert.isObject(game.plugins.getEntry('InspectorGlobalPlugin'));
+            assert.include(game.plugins.getDefaultScenePlugins(), 'InspectorScenePlugin');
+            done();
+          }
+        },
+        scene: {
+          map: {},
+          physics: { arcade: {}, matter: {} },
+          init: function () {
+            assert.property(this, 'inspectorGame');
+            assert.property(this, 'inspectorScene');
+            assert.notProperty(this.sys, 'inspectorGame');
+            assert.property(this.sys, 'inspectorScene');
+          }
+        }
+      });
+    });
+  });
+
   describe('Install with DefaultPluginsConfig, click buttons', function () {
     it.skip('should not error', function (done) {
       game = new Phaser.Game({
