@@ -28,11 +28,11 @@ export function textureToPrint ({ key, firstFrame, frameTotal }) {
 }
 
 export function copyToSafeObj (obj) {
-  var out = {};
+  const out = {};
 
-  for (var key in obj) {
-    var val = obj[key];
-    var typ = typeof val;
+  for (const key in obj) {
+    const val = obj[key];
+    const typ = typeof val;
 
     if (!val || typ === 'boolean' || typ === 'number' || typ === 'string') {
       out[key] = val;
@@ -43,10 +43,10 @@ export function copyToSafeObj (obj) {
 }
 
 export function copyToSafeTable (obj) {
-  var out = {};
+  const out = {};
 
-  for (var key in obj) {
-    var val = obj[key];
+  for (const key in obj) {
+    const val = obj[key];
 
     out[key] = typeof val === 'object' ? copyToSafeObj(obj[key]) : val;
   }
