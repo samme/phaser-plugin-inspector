@@ -24,7 +24,7 @@ The plugins add controls for the game and scene systems. If you don't need these
 Include Phaser, Tweakpane, and the plugin UMD script in this order. You can download the scripts or use the CDN links.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.0/dist/tweakpane.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@2.0.0-3/dist/phaser-plugin-inspector.umd.js"></script>
 ```
