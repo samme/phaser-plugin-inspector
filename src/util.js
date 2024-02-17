@@ -488,8 +488,14 @@ export function AddParticleEmitter (emitter, pane, options = { title: `Particle 
 
   const max = emitter.maxParticles || 100;
 
+  const proxy = {
+    get 'atLimit()' () { return emitter.atLimit(); },
+    get 'getParticleCount()' () { return emitter.getParticleCount(); }
+  };
+
   folder.addMonitor(emitter, 'active');
   folder.addMonitor(emitter, 'animQuantity');
+  folder.addMonitor(proxy, 'atLimit()');
   folder.addMonitor(emitter, 'delay');
   folder.addMonitor(emitter, 'duration');
   folder.addMonitor(emitter, 'emitting');
@@ -510,8 +516,9 @@ export function AddParticleEmitter (emitter, pane, options = { title: `Particle 
 
   const graphsFolder = folder.addFolder({ title: 'Counters', expanded: false });
 
-  graphsFolder.addMonitor(emitter.alive, 'length', { view: 'graph', min: 0, max: max, label: 'alive (length)', format: FormatLength });
-  graphsFolder.addMonitor(emitter.dead, 'length', { view: 'graph', min: 0, max: max, label: 'dead (length)', format: FormatLength });
+  graphsFolder.addMonitor(emitter.alive, 'length', { view: 'graph', min: 0, max: max, label: 'getAliveParticleCount()', format: FormatLength });
+  graphsFolder.addMonitor(emitter.dead, 'length', { view: 'graph', min: 0, max: max, label: 'getDeadParticleCount()', format: FormatLength });
+  graphsFolder.addMonitor(proxy, 'getParticleCount()', { view: 'graph', min: 0, max: max, format: FormatLength });
 
   if (emitter.frequency > 0) {
     graphsFolder.addMonitor(emitter, 'flowCounter', { view: 'graph', min: 0, max: emitter.frequency });
