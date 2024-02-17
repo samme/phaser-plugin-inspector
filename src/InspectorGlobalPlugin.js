@@ -16,7 +16,7 @@ import {
 export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
   constructor (pluginManager) {
     if (Phaser.VERSION.split('.')[1] < 60) {
-      throw new Error('Phaser v3.60 is required');
+      throw new Error('Phaser v3.60 or later is required');
     }
 
     super(pluginManager);
