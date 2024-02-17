@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { FXMap } from './FXMap';
 
 const TAU = 2 * Math.PI;
 const CacheNames = ['audio', 'binary', 'bitmapFont', 'html', 'json', 'obj', 'physics', 'shader', 'text', 'tilemap', 'video', 'xml'];
@@ -27,11 +28,11 @@ export function textureToPrint ({ key, firstFrame, frameTotal }) {
 }
 
 export function copyToSafeObj (obj) {
-  var out = {};
+  const out = {};
 
-  for (var key in obj) {
-    var val = obj[key];
-    var typ = typeof val;
+  for (const key in obj) {
+    const val = obj[key];
+    const typ = typeof val;
 
     if (!val || typ === 'boolean' || typ === 'number' || typ === 'string') {
       out[key] = val;
@@ -42,10 +43,10 @@ export function copyToSafeObj (obj) {
 }
 
 export function copyToSafeTable (obj) {
-  var out = {};
+  const out = {};
 
-  for (var key in obj) {
-    var val = obj[key];
+  for (const key in obj) {
+    const val = obj[key];
 
     out[key] = typeof val === 'object' ? copyToSafeObj(obj[key]) : val;
   }
@@ -221,11 +222,16 @@ export function AddCamera (camera, pane) {
     folder.addMonitor(deadzone, 'height', { label: 'deadzone height' });
   }
 
+  if (camera.hasPostPipeline) {
+    AddPipelines(camera.postPipelines, folder, { title: 'Post Pipelines' });
+  }
+
   folder.addButton({ title: 'Fade in' }).on('click', () => { camera.fadeIn(); });
   folder.addButton({ title: 'Fade out' }).on('click', () => { camera.fadeOut(); });
   folder.addButton({ title: 'Flash' }).on('click', () => { camera.flash(); });
-  folder.addButton({ title: 'Reset effects' }).on('click', () => { camera.resetFX(); });
   folder.addButton({ title: 'Shake' }).on('click', () => { camera.shake(); });
+  folder.addButton({ title: 'Reset effects' }).on('click', () => { camera.resetFX(); });
+  folder.addButton({ title: 'Reset post pipeline' }).on('click', () => { camera.resetPostPipeline(); });
 
   camera.on(CameraEvents.DESTROY, () => {
     folder.dispose();
@@ -269,7 +275,6 @@ export function AddMatterPhysicsWorld (world, pane) {
   const { events } = world.scene.sys;
   const folder = pane.addFolder({ title: 'Matter Physics', expanded: false });
   folder.addInput(world, 'autoUpdate');
-  folder.addInput(world, 'correction', { min: 0.1, max: 1, step: 0.05 });
   folder.addInput(world, 'enabled');
   folder.addInput(world.localWorld, 'gravity');
   folder.addInput(world.localWorld.gravity, 'scale', { label: 'gravity scale', min: 0, max: 0.1, step: 0.001 });
@@ -376,20 +381,61 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(obj, 'w');
   }
 
-  if ('pipeline' in obj) {
-    folder.addMonitor(obj.pipeline, 'name', { label: 'pipeline.name' });
+  if ('modelPosition' in obj) {
+    folder.addInput(obj, 'modelPosition');
+    folder.addInput(obj, 'modelScale');
+    folder.addInput(obj, 'modelRotation');
+  }
+
+  if ('fov' in obj) {
+    folder.addMonitor(obj, 'fov');
+  }
+
+  if ('faces' in obj && 'length' in obj.faces) {
+    folder.addMonitor(obj.faces, 'length', { label: 'faces.length', format: FormatLength });
+  }
+
+  if ('vertices' in obj && 'length' in obj.vertices) {
+    folder.addMonitor(obj.vertices, 'length', { label: 'vertices.length', format: FormatLength });
+  }
+
+  if ('totalRendered' in obj) {
+    folder.addMonitor(obj, 'totalRendered', { format: FormatLength });
+  }
+
+  if ('getPipelineName' in obj) {
+    const proxy = { get 'getPipelineName()' () { return obj.getPipelineName(); } };
+
+    folder.addMonitor(proxy, 'getPipelineName()', { label: 'getPipelineName()' });
+  }
+
+  if ('hasPostPipeline' in obj) {
     folder.addMonitor(obj, 'hasPostPipeline');
+  }
+
+  if ('preFX' in obj && obj.preFX && obj.preFX.list.length > 0) {
+    AddFXComponent(obj.preFX, folder);
+  }
+
+  if (obj.hasPostPipeline) {
+    AddPipelines(obj.postPipelines, folder, { title: 'Post Pipelines' });
   }
 
   if ('children' in obj && 'length' in obj.children) {
     folder.addMonitor(obj.children, 'length', { label: 'children (length)', format: FormatLength });
   }
 
-  if ('emitters' in obj) {
-    folder.addMonitor(obj.emitters, 'length', { label: 'emitters (length)', format: FormatLength });
+  // The `postFX` controller doesn't seem to show any relevant state.
+
+  if ('resetPipeline' in obj) {
+    folder.addButton({ title: 'Reset Pipeline' }).on('click', () => { console.info('Reset pipeline', obj.type, obj.name); obj.resetPipeline(); });
   }
 
-  folder.addButton({ title: 'Destroy' }).on('click', () => { obj.destroy(); });
+  if ('resetPostPipeline' in obj) {
+    folder.addButton({ title: 'Reset Post Pipeline' }).on('click', () => { console.info('Reset post pipeline', obj.type, obj.name); obj.resetPostPipeline(); });
+  }
+
+  folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy', obj.type, obj.name); obj.destroy(); });
 
   obj.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
 
@@ -415,9 +461,9 @@ export function AddGroup (group, pane, options = { title: `${group.type} “${gr
   folder.addMonitor(group, 'maxSize');
   folder.addMonitor(proxy, 'full');
 
-  folder.addButton({ title: 'Clear' }).on('click', () => { console.info('Clear group'); group.clear(); });
-  folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy group'); group.destroy(); });
-  folder.addButton({ title: 'Destroy group members' }).on('click', () => { console.info('Destroy group members'); group.clear(true, true); });
+  folder.addButton({ title: 'Clear' }).on('click', () => { console.info('Clear group', group.name); group.clear(); });
+  folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy group', group.name); group.destroy(); });
+  folder.addButton({ title: 'Destroy group members' }).on('click', () => { console.info('Destroy group members', group.name); group.clear(true, true); });
 
   group.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
 
@@ -442,38 +488,98 @@ export function AddParticleEmitter (emitter, pane, options = { title: `Particle 
 
   const max = emitter.maxParticles || 100;
 
+  const proxy = {
+    get 'atLimit()' () { return emitter.atLimit(); },
+    get 'getParticleCount()' () { return emitter.getParticleCount(); }
+  };
+
   folder.addMonitor(emitter, 'active');
-  folder.addMonitor(emitter, 'on');
-  folder.addInput(emitter, 'visible');
+  folder.addMonitor(emitter, 'animQuantity');
+  folder.addMonitor(proxy, 'atLimit()');
+  folder.addMonitor(emitter, 'delay');
+  folder.addMonitor(emitter, 'duration');
+  folder.addMonitor(emitter, 'emitting');
+  folder.addMonitor(emitter, 'frameQuantity');
+  folder.addMonitor(emitter, 'maxAliveParticles');
+  folder.addMonitor(emitter, 'maxParticles');
+  folder.addMonitor(emitter, 'quantity');
+  folder.addMonitor(emitter, 'stopAfter');
+
   folder.addInput(emitter, 'blendMode', { options: BlendModes });
   folder.addInput(emitter, 'frequency', { min: -1, max: 1000 });
-  folder.addMonitor(emitter.alive, 'length', { view: 'graph', min: 0, max: max, label: 'alive (length)', format: FormatLength });
-  folder.addMonitor(emitter.dead, 'length', { view: 'graph', min: 0, max: max, label: 'dead (length)', format: FormatLength });
-  folder.addInput(emitter, 'collideBottom');
-  folder.addInput(emitter, 'collideLeft');
-  folder.addInput(emitter, 'collideRight');
-  folder.addInput(emitter, 'collideTop');
-  folder.addMonitor(emitter, 'currentFrame');
-  folder.addMonitor(emitter, 'maxParticles');
   folder.addInput(emitter, 'moveTo');
   folder.addInput(emitter, 'particleBringToTop');
   folder.addInput(emitter, 'radial');
   folder.addInput(emitter, 'randomFrame');
   folder.addInput(emitter, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
+  folder.addInput(emitter, 'visible');
+
+  const graphsFolder = folder.addFolder({ title: 'Counters', expanded: false });
+
+  graphsFolder.addMonitor(emitter.alive, 'length', { view: 'graph', min: 0, max: max, label: 'getAliveParticleCount()', format: FormatLength });
+  graphsFolder.addMonitor(emitter.dead, 'length', { view: 'graph', min: 0, max: max, label: 'getDeadParticleCount()', format: FormatLength });
+  graphsFolder.addMonitor(proxy, 'getParticleCount()', { view: 'graph', min: 0, max: max, format: FormatLength });
+
+  if (emitter.frequency > 0) {
+    graphsFolder.addMonitor(emitter, 'flowCounter', { view: 'graph', min: 0, max: emitter.frequency });
+  }
+
+  if (emitter.frameQuantity > 1) {
+    graphsFolder.addMonitor(emitter, 'frameCounter', { view: 'graph', min: 0, max: emitter.frameQuantity });
+  }
+
+  if (emitter.animQuantity > 1) {
+    graphsFolder.addMonitor(emitter, 'animCounter', { view: 'graph', min: 0, max: emitter.animQuantity });
+  }
+
+  if (emitter.duration > 0) {
+    graphsFolder.addMonitor(emitter, 'elapsed', { view: 'graph', min: 0, max: emitter.duration });
+  }
+
+  if (emitter.stopAfter > 0) {
+    graphsFolder.addMonitor(emitter, 'stopCounter', { view: 'graph', min: 0, max: emitter.stopAfter });
+  }
+
+  if (emitter.emitZones.length > 1) {
+    graphsFolder.addMonitor(emitter, 'zoneIndex', { view: 'graph', min: 0, max: emitter.emitZones.length });
+  }
+
+  if (emitter.frames.length > 1) {
+    graphsFolder.addMonitor(emitter, 'currentFrame', { view: 'graph', min: 0, max: emitter.frames.length });
+  }
+
+  if (emitter.anims.length > 1) {
+    graphsFolder.addMonitor(emitter, 'currentAnim', { view: 'graph', min: 0, max: emitter.anims.length });
+  }
+
+  const { processors } = emitter;
+
+  if (processors.length > 0) {
+    const processorsFolder = folder.addFolder({ title: 'Processors' });
+
+    for (const processor of processors.list) {
+      processorsFolder.addInput(processor, 'active', { label: `${processor.name || 'Processor'} active` });
+    }
+  }
 
   folder.addButton({ title: 'Start' }).on('click', () => { emitter.start(); });
   folder.addButton({ title: 'Stop' }).on('click', () => { emitter.stop(); });
   folder.addButton({ title: 'Pause' }).on('click', () => { emitter.pause(); });
   folder.addButton({ title: 'Resume' }).on('click', () => { emitter.resume(); });
+  folder.addButton({ title: 'Kill all' }).on('click', () => { emitter.killAll(); });
   folder.addButton({ title: 'Print JSON' }).on('click', () => { console.log(JSON.stringify(emitter.toJSON())); });
 
-  emitter.manager.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
+  emitter.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
 
   return folder;
 }
 
 export function AddTween (tween, pane, options = { title: 'Tween' }) {
   const folder = pane.addFolder(options);
+
+  // > When creating a Tween, you can no longer pass a function for the following properties:
+  // > duration, hold, repeat and repeatDelay.
+  // > These should be numbers only. You can, however, still provide a function for delay, to keep it compatible with the StaggerBuilder.
 
   folder.addMonitor(tween, 'countdown');
   folder.addMonitor(tween, 'duration');
@@ -505,29 +611,6 @@ export function AddTween (tween, pane, options = { title: 'Tween' }) {
   return folder;
 }
 
-export function AddTimeline (timeline, pane, options = { title: 'Timeline' }) {
-  const folder = pane.addFolder(options);
-
-  folder.addMonitor(timeline, 'duration');
-  folder.addMonitor(timeline, 'elapsed');
-  folder.addMonitor(timeline, 'loop');
-  folder.addMonitor(timeline, 'loopCounter');
-  folder.addMonitor(timeline, 'state');
-  folder.addInput(timeline, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
-  folder.addMonitor(timeline, 'totalData');
-  folder.addMonitor(timeline, 'totalDuration');
-  folder.addMonitor(timeline, 'totalElapsed');
-  folder.addMonitor(timeline, 'totalProgress', { view: 'graph', min: 0, max: 1 });
-
-  folder.addButton({ title: 'Play' }).on('click', () => { console.info('Play timeline'); timeline.play(); });
-  folder.addButton({ title: 'Pause' }).on('click', () => { console.info('Pause timeline'); timeline.pause(); });
-  folder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume timeline'); timeline.resume(); });
-  folder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop timeline'); timeline.stop(); });
-  folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy timeline'); timeline.destroy(); folder.dispose(); });
-
-  return folder;
-}
-
 export function AddTimerEvent (timer, pane, options = { title: 'Timer Event' }) {
   const folder = pane.addFolder(options);
 
@@ -548,7 +631,6 @@ export function AddTimerEvent (timer, pane, options = { title: 'Timer Event' }) 
 export function AddInput (input, pane, options = { title: `Input (${input.gameObject.type} “${input.gameObject.name}”)` }) {
   const folder = pane.addFolder(options);
 
-  folder.addMonitor(input, 'alwaysEnabled');
   folder.addMonitor(input, 'cursor');
   folder.addMonitor(input, 'customHitArea');
   folder.addMonitor(input, 'draggable');
@@ -572,6 +654,8 @@ export function AddInput (input, pane, options = { title: `Input (${input.gameOb
 export function AddArcadeBody (body, pane, options = { title: `Body (${body.gameObject.type} “${body.gameObject.name}”)` }) {
   const folder = pane.addFolder(options);
 
+  // body.physicsType === Phaser.Physics.Arcade.DYNAMIC_BODY
+
   folder.addMonitor(body, 'enable');
   folder.addInput(body, 'debugShowBody');
   folder.addInput(body, 'debugShowVelocity');
@@ -580,10 +664,16 @@ export function AddArcadeBody (body, pane, options = { title: `Body (${body.game
   folder.addMonitor(body.velocity, 'y', { label: 'velocity y' });
   folder.addMonitor(body, 'speed');
   folder.addMonitor(body, 'angle');
-  folder.addMonitor(body, '_dx', { label: 'deltaX' });
-  folder.addMonitor(body, '_dy', { label: 'deltaY' });
-  folder.addMonitor(body, '_tx', { label: 'deltaXFinal' });
-  folder.addMonitor(body, '_ty', { label: 'deltaYFinal' });
+  folder.addMonitor(body, '_dx', { label: 'deltaX()' });
+  folder.addMonitor(body, '_dy', { label: 'deltaY()' });
+  folder.addMonitor(body, '_tx', { label: 'deltaXFinal()' });
+  folder.addMonitor(body, '_ty', { label: 'deltaYFinal()' });
+  folder.addMonitor(body, 'left');
+  folder.addMonitor(body, 'top');
+  folder.addMonitor(body, 'right');
+  folder.addMonitor(body, 'bottom');
+  folder.addMonitor(body.center, 'x', { label: 'center.x' });
+  folder.addMonitor(body.center, 'y', { label: 'center.y' });
 
   body.gameObject.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
 
@@ -611,7 +701,7 @@ export function AddAnimationState (state, pane, options = { title: `Animation ($
   folder.addMonitor(state, 'isPlaying');
   folder.addMonitor(state, 'msPerFrame');
   folder.addMonitor(proxy, 'nextAnim', { label: 'nextAnim (key)' });
-  folder.addMonitor(state.nextAnimsQueue, 'length', { label: 'nextAnimsQueue (length)', format: FormatLength });
+  folder.addMonitor(state.nextAnimsQueue, 'length', { label: 'nextAnimsQueue.length', format: FormatLength });
   folder.addMonitor(state, 'repeat');
   folder.addMonitor(state, 'repeatCounter');
   folder.addMonitor(state, 'repeatDelay');
@@ -657,6 +747,144 @@ export function AddKeys (keys, pane, options = { title: 'Keys' }) {
     const key = keys[name];
 
     folder.addMonitor(key, 'isDown', { label: `${name} isDown` });
+  }
+
+  return folder;
+}
+
+export function AddFXComponent (comp, pane, options = { title: `${comp.isPost ? 'Post' : 'Pre'} FX` }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(comp, 'enabled');
+
+  folder.addInput(comp, 'padding', { min: 0, max: 32, step: 1 });
+
+  folder.addButton({ title: 'Clear' }).on('click', () => { comp.clear(); });
+  folder.addButton({ title: 'Disable' }).on('click', () => { comp.disable(); });
+  folder.addButton({ title: 'Enable' }).on('click', () => { comp.enable(); });
+
+  for (const ctrl of comp.list) {
+    AddFXController(ctrl, folder);
+  }
+
+  return folder;
+}
+
+export function AddFXController (ctrl, pane, options = { title: `FX ${FXMap[ctrl.type]}` }) {
+  const folder = pane.addFolder(options);
+
+  for (const key in ctrl) {
+    if (key.startsWith('_')) continue;
+
+    if (key === 'type') continue;
+
+    const val = ctrl[key];
+    const typ = typeof val;
+
+    if (typ !== 'number' && typ !== 'boolean') continue;
+
+    if (key === 'alpha') {
+      folder.addInput(ctrl, key, { min: 0, max: 1 });
+
+      continue;
+    }
+
+    if (key === 'axis' || key === 'direction') {
+      folder.addInput(ctrl, key, { min: 0, max: 1, step: 1 });
+
+      continue;
+    }
+
+    if (key === 'color' || key === 'color1' || key === 'color2' || key === 'backgroundColor') {
+      folder.addInput(ctrl, key, { view: 'color' });
+
+      continue;
+    }
+
+    if (key === 'progress') {
+      folder.addInput(ctrl, key, { min: 0, max: 1 });
+
+      continue;
+    }
+
+    if (key === 'quality') {
+      folder.addInput(ctrl, key, { options: { low: 0, medium: 1, high: 2 } });
+
+      continue;
+    }
+
+    if (key === 'samples') {
+      folder.addInput(ctrl, key, { min: 1, max: 12, step: 1 });
+
+      continue;
+    }
+
+    if (key === 'steps') {
+      folder.addInput(ctrl, key, { min: 1, max: 10, step: 1 });
+
+      continue;
+    }
+
+    folder.addInput(ctrl, key);
+  }
+
+  return folder;
+}
+
+export function AddPipelines (pipelines, pane, options = { title: 'Pipelines' }) {
+  const folder = pane.addFolder(options);
+
+  for (const pipeline of pipelines) {
+    folder.addInput(pipeline, 'active', { label: `${pipeline.name} active` });
+  }
+
+  return folder;
+}
+
+export function AddPipeline (pipeline, pane, options = { title: `${pipeline.isPost ? 'Post Pipeline' : 'Pipeline'} “${pipeline.name}”` }) {
+  const folder = pane.addFolder(options);
+
+  folder.addInput(pipeline, 'active');
+  // What else?
+
+  return folder;
+}
+
+export function AddActive (items, pane, options = { title: 'Active' }) {
+  const folder = pane.addFolder(options);
+
+  for (const item of items) {
+    folder.addInput(item, 'active', { min: 0, max: 1, label: item.name || item.type || '(Unnamed)' });
+  }
+
+  return folder;
+}
+
+export function AddAlpha (items, pane, options = { title: 'Alpha' }) {
+  const folder = pane.addFolder(options);
+
+  for (const item of items) {
+    folder.addInput(item, 'alpha', { min: 0, max: 1, label: item.name || item.type || '(Unnamed)' });
+  }
+
+  return folder;
+}
+
+export function AddVisible (items, pane, options = { title: 'Visible' }) {
+  const folder = pane.addFolder(options);
+
+  for (const item of items) {
+    folder.addInput(item, 'visible', { label: item.name || item.type || '(Unnamed)' });
+  }
+
+  return folder;
+}
+
+export function AddScenes (scenes, pane, options = { title: 'Scenes Visible' }) {
+  const folder = pane.addFolder(options);
+
+  for (const scene of scenes) {
+    folder.addInput(scene.sys.settings, 'visible', { label: scene.sys.settings.key });
   }
 
   return folder;

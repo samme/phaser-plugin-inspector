@@ -24,9 +24,9 @@ The plugins add controls for the game and scene systems. If you don't need these
 Include Phaser, [Tweakpane](https://cdn.jsdelivr.net/npm/tweakpane/), and [the plugin UMD script](https://cdn.jsdelivr.net/npm/phaser-plugin-inspector/) in this order. You can download the scripts or use the CDN links.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.0/dist/tweakpane.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.9.1/dist/phaser-plugin-inspector.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@2.0.0-3/dist/phaser-plugin-inspector.umd.js"></script>
 ```
 
 If this is the only plugin you're using then you can use the "default" configuration:
@@ -107,7 +107,7 @@ import { AddGameObject } from 'phaser-plugin-inspector';
 function preload() {
   this.load.scripts('inspector', [
     'https://cdn.jsdelivr.net/npm/tweakpane@3.1.0/dist/tweakpane.js',
-    'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.9.1/dist/phaser-plugin-inspector.umd.js',
+    'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@2.0.0-3/dist/phaser-plugin-inspector.umd.js',
   ]);
   this.load.once('complete', () => {
     PhaserPluginInspector.Install(this.plugins);
@@ -124,7 +124,7 @@ const scene = game.scene.getScenes(true)[0];
 
 scene.load.scripts('inspector', [
   'https://cdn.jsdelivr.net/npm/tweakpane@3.1.0/dist/tweakpane.js',
-  'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@1.9.1/dist/phaser-plugin-inspector.umd.js',
+  'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@2.0.0-3/dist/phaser-plugin-inspector.umd.js',
 ]);
 scene.load.once('complete', () => {
   PhaserPluginInspector.Install(game.plugins);
@@ -140,7 +140,7 @@ Beware that Tweakpane inputs (checkboxes, sliders, etc.) do not update their val
 
 Tweakpane monitors are updated automatically 5 times per second. For more precise work you may want to pause a scene or its systems.
 
-You can inspect game objects using the **Display List: Inspect** and **Update List: Inspect** buttons in each scene. The new folder is added to the end of the same scene folder. Look in the console to confirm.
+You can inspect game objects using the **Display List: Inspect** and **Update List: Inspect** buttons in each scene. The new folder is added to the end of the inspector pane. Look in the console to confirm.
 
 To step one frame at a time, use **Game: Loop: Sleep**, **Game: Step** (repeat), **Game: Loop: Wake**.
 
@@ -151,25 +151,11 @@ These create a set of controls for common Phaser objects.
 
 You can use these functions with or without the plugins.
 
-- AddAnimationState(animationState, pane, options?) → folder
-- AddArcadeBody(body, pane, options?) → folder
-- AddGameObject(obj, pane, options?) → folder
-- AddGroup(group, pane, options?) → folder
-- AddInput(interactiveObject, pane, options?) → folder
-- AddKey(key, pane, options?) → folder
-- AddKeys(keys, pane, options?) → folder
-- AddLight(light, pane, options?) → folder
-- AddParticleEmitter(emitter, pane, options?) → folder
-- AddSound(sound, pane, options?) → folder
-- AddTimeline(timeline, pane, options?) → folder
-- AddTimerEvent(timerEvent, pane, options?) → folder
-- AddTween(tween, pane, options?) → folder
-
 The `pane` argument is the Tweakpane pane or a folder in it. The `options` argument is options for the folder.
 
 Each function creates a [folder](https://cocopon.github.io/tweakpane/ui-components.html#folder) and returns it.
 
-If you've installed the plugins, then
+If you've installed the plugins, then within a scene context (`this`)
 
 - `this.inspectorGame.pane` or `this.inspectorScene.pane` is the main pane
 - `this.inspectorGame.folder` is the “Game” folder
@@ -183,8 +169,97 @@ If you're not using the plugins, then you should create a pane yourself:
 const pane = new Tweakpane.Pane();
 ```
 
-You should remove any key, timeline, timer event, or tween folders yourself when done with those objects or stopping the scene:
+Some of these folders need to be disposed manually if you destroy the target object or stop the scene it belongs to. Use
 
 ```js
 folder.dispose();
 ```
+
+### AddActive(items, pane, options?) → folder
+
+Adds a set of "active" toggles for any objects with an `active` property, identified by `name`.
+
+### AddAlpha(items, pane, options?) → folder
+
+Adds a set of "alpha" sliders for any objects with an `alpha` property, identified by `name`.
+
+### AddAnimationState(animationState, pane, options?) → folder
+
+Adds a folder for a sprite's animation state, e.g.,
+
+    AddAnimationState(sprite.anims, pane);
+
+### AddArcadeBody(body, pane, options?) → folder
+
+Adds a folder for a game object's Arcade Physics body, e.g.,
+
+    AddArcadeBody(sprite.body, pane);
+
+### AddFXComponent(component, pane, options?) → folder
+
+Adds a folder for a game object's [effects component](https://newdocs.phaser.io/docs/3.60.0/Phaser.GameObjects.Components.FX), e.g.,
+
+    AddFXComponent(sprite.preFX, pane);
+
+### AddFXController(controller, pane, options?) → folder
+
+Adds a folder for a game object's [effect controller](https://newdocs.phaser.io/docs/3.60.0/Phaser.FX.Controller), e.g.,
+
+    const barrelEffect = sprite.preFX.addBarrel();
+
+    AddFXController(barrelEffect, pane);
+
+### AddGameObject(obj, pane, options?) → folder
+
+Adds a folder for a game object (except group).
+
+### AddGroup(group, pane, options?) → folder
+
+Adds a folder for a group.
+
+### AddInput(interactiveObject, pane, options?) → folder
+
+Adds a folder for a game object's [interactive object](https://newdocs.phaser.io/docs/3.60.0/Phaser.Types.Input.InteractiveObject), e.g.,
+
+    AddInput(sprite.input, pane);
+
+### AddKey(key, pane, options?) → folder
+
+Adds a folder for a [keyboard key object](https://newdocs.phaser.io/docs/3.60.0/Phaser.Input.Keyboard.Key).
+
+Dispose this folder if you remove the key.
+
+### AddKeys(keys, pane, options?) → folder
+
+Adds a folder for an object map of [keyboard key objects](https://newdocs.phaser.io/docs/3.60.0/Phaser.Input.Keyboard.Key), such as that returned by [addKeys()](https://newdocs.phaser.io/docs/3.60.0/focus/Phaser.Input.Keyboard.KeyboardPlugin-addKeys).
+
+Dispose this folder if you remove those keys.
+
+### AddLight(light, pane, options?) → folder
+
+Adds a folder for a [light](https://newdocs.phaser.io/docs/3.60.0/Phaser.GameObjects.Light) (not point light).
+
+### AddParticleEmitter(emitter, pane, options?) → folder
+
+Adds a folder for a [particle emitter](https://newdocs.phaser.io/docs/3.60.0/Phaser.GameObjects.Particles.ParticleEmitter).
+
+### AddScenes(scene, pane, options?) → folder
+
+Adds a set of "visible" toggles for the scenes, e.g.,
+
+    AddScenes(this.scene.manager.getScenes(false), pane);
+
+### AddSound(sound, pane, options?) → folder
+
+Adds a folder for a [sound](https://newdocs.phaser.io/docs/3.60.0/Phaser.Sound).
+
+### AddTimerEvent(timerEvent, pane, options?) → folder
+
+Adds a folder for a [timer event](https://newdocs.phaser.io/docs/3.60.0/Phaser.Time.TimerEvent).
+
+Dispose this folder if you remove the timer event.
+
+### AddVisible(items, pane, options?) → folder
+
+Adds a set of "visible" toggles for any objects with an `visible` property, identified by `name`.
+
