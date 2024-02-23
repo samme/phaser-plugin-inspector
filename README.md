@@ -1,7 +1,7 @@
 Phaser 3 Inspector Plugin 🧐
 =========================
 
-View and change game properties, with [Tweakpane](https://cocopon.github.io/tweakpane/).
+View and change game properties, with [Tweakpane](https://github.com/cocopon/tweakpane).
 
 Demos
 -----
