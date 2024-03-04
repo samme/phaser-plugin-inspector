@@ -8,6 +8,10 @@ const {
   START
 } = Phaser.Scenes.Events;
 
+const {
+  START: STATUS_START
+} = Phaser.Scenes;
+
 export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
   constructor (scene, pluginManager) {
     super(scene, pluginManager);
@@ -43,6 +47,7 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
   add () {
     const { arcadePhysics, cameras, data, displayList, events, input, load, lights, matterPhysics, scenePlugin, time, tweens, updateList } = this.systems;
     const sceneKey = scenePlugin.settings.key;
+    const sceneStatus = scenePlugin.settings.status;
 
     const camerasFolder = this.folder.addFolder({ title: 'Cameras', expanded: false });
     camerasFolder.addButton({ title: 'Print cameras' }).on('click', () => { console.info('Cameras:'); console.table(cameras.cameras.map(cameraToPrint)); });
@@ -150,11 +155,19 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     });
 
     if (arcadePhysics) {
-      events.on(START, () => { AddArcadePhysicsWorld(arcadePhysics.world, this.folder); });
+      if (sceneStatus < STATUS_START) {
+        events.on(START, () => { AddArcadePhysicsWorld(arcadePhysics.world, this.folder); });
+      } else {
+        AddArcadePhysicsWorld(arcadePhysics.world, this.folder);
+      }
     }
 
     if (matterPhysics) {
-      events.on(START, () => { AddMatterPhysicsWorld(matterPhysics.world, this.folder); });
+      if (sceneStatus < STATUS_START) {
+        events.on(START, () => { AddMatterPhysicsWorld(matterPhysics.world, this.folder); });
+      } else {
+        AddMatterPhysicsWorld(matterPhysics.world, this.folder);
+      }
     }
   }
 }
