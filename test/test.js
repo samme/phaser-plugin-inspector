@@ -10,7 +10,7 @@ describe('Phaser', function () {
   });
 
   it('is the required version', function () {
-    assert.propertyVal(Phaser, 'VERSION', '3.70.0');
+    assert.propertyVal(Phaser, 'VERSION', '3.80.1');
   });
 });
 
@@ -542,7 +542,7 @@ describe('new Game, no install', function () {
   });
 
   describe('AddGameObject(layer)', function () {
-    it.skip('does not error <https://github.com/phaserjs/phaser/issues/6724>', function () {
+    it('does not error', function () {
       AddGameObject(scene.add.layer(scene.add.sprite(0, 0, '__DEFAULT')), pane);
     });
   });
