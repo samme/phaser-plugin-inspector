@@ -620,12 +620,12 @@ export function AddVideo (video, pane, options = { title: `Video “${video.name
   folder.addButton({ title: 'Pause' }).on('click', () => { console.info('Pause video'); video.pause(); });
   folder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume video'); video.resume(); });
 
-  folder.addButton({ title: 'Change Source …' }).on('click', () => { const src = prompt(`Change source (from '${video.cacheKey}')`); if (src) video.changeSource(src); });
-  folder.addButton({ title: 'Set Current Time …' }).on('click', () => { video.setCurrentTime(prompt(`Set current time (0 to ${video.getDuration()})`)); });
-  folder.addButton({ title: 'Set Loop true' }).on('click', () => { video.setLoop(true); });
-  folder.addButton({ title: 'Set Loop false' }).on('click', () => { video.setLoop(false); });
-  folder.addButton({ title: 'Set Mute true' }).on('click', () => { video.setMute(true); });
-  folder.addButton({ title: 'Set Mute False' }).on('click', () => { video.setMute(false); });
+  folder.addButton({ title: 'Change source …' }).on('click', () => { const src = prompt(`Change source (from '${video.cacheKey}')`); if (src) video.changeSource(src); });
+  folder.addButton({ title: 'Set current time …' }).on('click', () => { video.setCurrentTime(prompt(`Set current time (0 to ${video.getDuration()})`)); });
+  folder.addButton({ title: 'Set loop true' }).on('click', () => { video.setLoop(true); });
+  folder.addButton({ title: 'Set loop false' }).on('click', () => { video.setLoop(false); });
+  folder.addButton({ title: 'Set mute true' }).on('click', () => { video.setMute(true); });
+  folder.addButton({ title: 'Set mute false' }).on('click', () => { video.setMute(false); });
 
   video.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
 
