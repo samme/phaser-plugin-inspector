@@ -25,5 +25,6 @@ export {
   AddSound,
   AddTimerEvent,
   AddTween,
+  AddVideo,
   AddVisible
 } from './util';

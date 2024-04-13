@@ -259,6 +259,10 @@ Adds a folder for a [timer event](https://newdocs.phaser.io/docs/3.60.0/Phaser.T
 
 Dispose this folder if you remove the timer event.
 
+### AddVideo(video, pane, options?) → folder
+
+Adds a folder for a [Video game object](https://newdocs.phaser.io/docs/3.80.0/Phaser.GameObjects.Video).
+
 ### AddVisible(items, pane, options?) → folder
 
 Adds a set of "visible" toggles for any objects with an `visible` property, identified by `name`.

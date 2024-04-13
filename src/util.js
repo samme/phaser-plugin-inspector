@@ -574,6 +574,64 @@ export function AddParticleEmitter (emitter, pane, options = { title: `Particle 
   return folder;
 }
 
+export function AddVideo (video, pane, options = { title: `Video “${video.name}”` }) {
+  const folder = pane.addFolder(options);
+
+  const videoProxy = {
+    get 'getCurrentTime()' () { return video.getCurrentTime(); },
+    get 'getDuration()' () { return video.getDuration(); },
+    get 'getLoop()' () { return video.getLoop(); },
+    get 'getPlaybackRate()' () { return video.getPlaybackRate(); },
+    get 'getProgress()' () { return video.getProgress(); },
+    get 'getVolume()' () { return video.getVolume(); },
+    get 'isMuted()' () { return video.isMuted(); },
+    get 'isPaused()' () { return video.isPaused(); },
+    get 'isPlaying()' () { return video.isPlaying(); },
+
+    get 'seekTo()' () { return video.getProgress(); },
+    set 'seekTo()' (v) { video.seekTo(v); },
+    get 'setPlaybackRate()' () { return video.getPlaybackRate(); },
+    set 'setPlaybackRate()' (v) { video.setPlaybackRate(v); },
+    get 'setVolume()' () { return video.getVolume(); },
+    set 'setVolume()' (v) { video.setVolume(v); }
+  };
+
+  folder.addMonitor(video, 'failedPlayAttempts');
+  folder.addMonitor(video, 'frameReady');
+  folder.addMonitor(videoProxy, 'getCurrentTime()');
+  folder.addMonitor(videoProxy, 'getDuration()');
+  folder.addMonitor(videoProxy, 'getLoop()');
+  folder.addMonitor(videoProxy, 'getPlaybackRate()');
+  folder.addMonitor(videoProxy, 'getProgress()');
+  folder.addMonitor(videoProxy, 'getVolume()');
+  folder.addMonitor(videoProxy, 'isMuted()');
+  folder.addMonitor(videoProxy, 'isPaused()');
+  folder.addMonitor(videoProxy, 'isPlaying()');
+  folder.addMonitor(video, 'isSeeking');
+  folder.addMonitor(video, 'isStalled');
+  folder.addMonitor(video, 'retry');
+  folder.addInput(videoProxy, 'seekTo()', { min: 0, max: 1 });
+  folder.addInput(videoProxy, 'setPlaybackRate()', { min: 0.25, max: 4, step: 0.25 });
+  folder.addInput(videoProxy, 'setVolume()', { min: 0, max: 1 });
+  folder.addMonitor(video, 'touchLocked');
+
+  folder.addButton({ title: 'Play' }).on('click', () => { console.info('Play video'); video.play(); });
+  folder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop video'); video.stop(); });
+  folder.addButton({ title: 'Pause' }).on('click', () => { console.info('Pause video'); video.pause(); });
+  folder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume video'); video.resume(); });
+
+  folder.addButton({ title: 'Change Source …' }).on('click', () => { const src = prompt(`Change source (from '${video.cacheKey}')`); if (src) video.changeSource(src); });
+  folder.addButton({ title: 'Set Current Time …' }).on('click', () => { video.setCurrentTime(prompt(`Set current time (0 to ${video.getDuration()})`)); });
+  folder.addButton({ title: 'Set Loop true' }).on('click', () => { video.setLoop(true); });
+  folder.addButton({ title: 'Set Loop false' }).on('click', () => { video.setLoop(false); });
+  folder.addButton({ title: 'Set Mute true' }).on('click', () => { video.setMute(true); });
+  folder.addButton({ title: 'Set Mute False' }).on('click', () => { video.setMute(false); });
+
+  video.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
+
+  return folder;
+}
+
 export function AddTween (tween, pane, options = { title: 'Tween' }) {
   const folder = pane.addFolder(options);
 
