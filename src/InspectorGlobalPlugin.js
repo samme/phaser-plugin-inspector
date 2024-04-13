@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { Pane } from 'tweakpane';
 import {
   AddPointer,
+  AddScenes,
   copyToSafeObj,
   animToPrint,
   FormatLength,
@@ -141,6 +142,7 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
 
     const sceneFolder = folder.addFolder({ title: 'Scenes', expanded: false });
     sceneFolder.addButton({ title: 'Print scenes' }).on('click', () => { console.info('Scenes:'); console.table(scene.scenes.map(sceneToPrint)); });
+    sceneFolder.addButton({ title: 'Add visible controls' }).on('click', () => { AddScenes(scene.getScenes(false), sceneFolder); });
 
     const soundFolder = folder.addFolder({ title: 'Sound', expanded: false });
     soundFolder.addInput(sound, 'mute');
