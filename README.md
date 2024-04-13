@@ -6,7 +6,6 @@ View and change game properties, with [Tweakpane](https://github.com/cocopon/twe
 Demos
 -----
 
-- [Games](http://phaser-plugin-inspector.surge.sh/index.html?dir=games/) — early version of the plugin, many game features
 - [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) — simple game, helper functions
 - [All the demos](https://codepen.io/collection/LPeVMY)
 
