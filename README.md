@@ -197,13 +197,13 @@ Adds a folder for a game object's Arcade Physics body, e.g.,
 
 ### AddFXComponent(component, pane, options?) → folder
 
-Adds a folder for a game object's [effects component](https://newdocs.phaser.io/docs/3.60.0/Phaser.GameObjects.Components.FX), e.g.,
+Adds a folder for a game object's [effects component](https://newdocs.phaser.io/docs/3.80.0/Phaser.GameObjects.Components.FX), e.g.,
 
     AddFXComponent(sprite.preFX, pane);
 
 ### AddFXController(controller, pane, options?) → folder
 
-Adds a folder for a game object's [effect controller](https://newdocs.phaser.io/docs/3.60.0/Phaser.FX.Controller), e.g.,
+Adds a folder for a game object's [effect controller](https://newdocs.phaser.io/docs/3.80.0/Phaser.FX.Controller), e.g.,
 
     const barrelEffect = sprite.preFX.addBarrel();
 
@@ -219,29 +219,29 @@ Adds a folder for a group.
 
 ### AddInput(interactiveObject, pane, options?) → folder
 
-Adds a folder for a game object's [interactive object](https://newdocs.phaser.io/docs/3.60.0/Phaser.Types.Input.InteractiveObject), e.g.,
+Adds a folder for a game object's [interactive object](https://newdocs.phaser.io/docs/3.80.0/Phaser.Types.Input.InteractiveObject), e.g.,
 
     AddInput(sprite.input, pane);
 
 ### AddKey(key, pane, options?) → folder
 
-Adds a folder for a [keyboard key object](https://newdocs.phaser.io/docs/3.60.0/Phaser.Input.Keyboard.Key).
+Adds a folder for a [keyboard key object](https://newdocs.phaser.io/docs/3.80.0/Phaser.Input.Keyboard.Key).
 
 Dispose this folder if you remove the key.
 
 ### AddKeys(keys, pane, options?) → folder
 
-Adds a folder for an object map of [keyboard key objects](https://newdocs.phaser.io/docs/3.60.0/Phaser.Input.Keyboard.Key), such as that returned by [addKeys()](https://newdocs.phaser.io/docs/3.60.0/focus/Phaser.Input.Keyboard.KeyboardPlugin-addKeys).
+Adds a folder for an object map of [keyboard key objects](https://newdocs.phaser.io/docs/3.80.0/Phaser.Input.Keyboard.Key), such as that returned by [addKeys()](https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.Input.Keyboard.KeyboardPlugin-addKeys).
 
 Dispose this folder if you remove those keys.
 
 ### AddLight(light, pane, options?) → folder
 
-Adds a folder for a [light](https://newdocs.phaser.io/docs/3.60.0/Phaser.GameObjects.Light) (not point light).
+Adds a folder for a [light](https://newdocs.phaser.io/docs/3.80.0/Phaser.GameObjects.Light) (not point light).
 
 ### AddParticleEmitter(emitter, pane, options?) → folder
 
-Adds a folder for a [particle emitter](https://newdocs.phaser.io/docs/3.60.0/Phaser.GameObjects.Particles.ParticleEmitter).
+Adds a folder for a [particle emitter](https://newdocs.phaser.io/docs/3.80.0/Phaser.GameObjects.Particles.ParticleEmitter).
 
 ### AddScenes(scene, pane, options?) → folder
 
@@ -251,11 +251,11 @@ Adds a set of "visible" toggles for the scenes, e.g.,
 
 ### AddSound(sound, pane, options?) → folder
 
-Adds a folder for a [sound](https://newdocs.phaser.io/docs/3.60.0/Phaser.Sound).
+Adds a folder for a [sound](https://newdocs.phaser.io/docs/3.80.0/Phaser.Sound).
 
 ### AddTimerEvent(timerEvent, pane, options?) → folder
 
-Adds a folder for a [timer event](https://newdocs.phaser.io/docs/3.60.0/Phaser.Time.TimerEvent).
+Adds a folder for a [timer event](https://newdocs.phaser.io/docs/3.80.0/Phaser.Time.TimerEvent).
 
 Dispose this folder if you remove the timer event.
 
