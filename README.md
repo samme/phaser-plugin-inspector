@@ -194,6 +194,12 @@ Adds a folder for a game object's Arcade Physics body, e.g.,
 
     AddArcadeBody(sprite.body, pane);
 
+### AddCamera(camera, pane) → folder
+
+Adds a folder for a camera, e.g.,
+
+    AddCamera(this.cameras.main, pane);
+
 ### AddFXComponent(component, pane, options?) → folder
 
 Adds a folder for a game object's [effects component](https://newdocs.phaser.io/docs/3.80.0/Phaser.GameObjects.Components.FX), e.g.,
@@ -257,6 +263,10 @@ Adds a folder for a [sound](https://newdocs.phaser.io/docs/3.80.0/Phaser.Sound).
 Adds a folder for a [timer event](https://newdocs.phaser.io/docs/3.80.0/Phaser.Time.TimerEvent).
 
 Dispose this folder if you remove the timer event.
+
+### AddTween(tween, pane, options?) → folder
+
+Adds a folder for a tween.
 
 ### AddVideo(video, pane, options?) → folder
 
