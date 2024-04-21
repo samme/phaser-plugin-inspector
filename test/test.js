@@ -67,6 +67,7 @@ for (
     'AddSound',
     'AddTimerEvent',
     'AddTween',
+    'AddVideo',
     'AddVisible'
   ]
 ) {
