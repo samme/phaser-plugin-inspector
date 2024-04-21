@@ -669,6 +669,52 @@ export function AddTween (tween, pane, options = { title: 'Tween' }) {
   return folder;
 }
 
+export function AddChain (chain, pane, options = { title: 'Tween Chain' }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(chain, 'currentIndex', { min: 0, max: chain.totalData, view: 'graph' });
+  folder.addMonitor(chain, 'hasStarted');
+  folder.addMonitor(chain, 'loop');
+  folder.addMonitor(chain, 'loopCounter');
+  folder.addMonitor(chain, 'state');
+  folder.addInput(chain, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
+  folder.addMonitor(chain, 'totalData');
+
+  folder.addButton({ title: 'Play' }).on('click', () => { console.info('Play chain'); chain.play(); });
+  folder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop chain'); chain.stop(); });
+  folder.addButton({ title: 'Restart' }).on('click', () => { console.info('Restart chain'); chain.restart(); });
+  folder.addButton({ title: 'Pause' }).on('click', () => { console.info('Pause chain'); chain.pause(); });
+  folder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume chain'); chain.resume(); });
+  folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy chain'); chain.destroy(); });
+
+  return folder;
+}
+
+export function AddTimeline (timeline, pane, options = { title: 'Timeline' }) {
+  const folder = pane.addFolder(options);
+  const proxy = {
+    get 'getProgress()' () { return timeline.getProgress(); },
+    get 'isPlaying()' () { return timeline.isPlaying(); }
+  };
+
+  folder.addMonitor(timeline, 'complete');
+  folder.addMonitor(timeline, 'elapsed');
+  folder.addMonitor(proxy, 'getProgress()', { min: 0, max: 1, view: 'graph' });
+  folder.addMonitor(proxy, 'isPlaying()');
+  folder.addMonitor(timeline, 'paused');
+  folder.addMonitor(timeline, 'totalComplete');
+
+  folder.addButton({ title: 'Clear' }).on('click', () => { console.info('Clear timeline'); timeline.clear(); });
+  folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy timeline'); timeline.destroy(); });
+  folder.addButton({ title: 'Pause' }).on('click', () => { console.info('Pause timeline'); timeline.pause(); });
+  folder.addButton({ title: 'Play' }).on('click', () => { console.info('Play timeline'); timeline.play(); });
+  folder.addButton({ title: 'Reset' }).on('click', () => { console.info('Reset timeline'); timeline.reset(); });
+  folder.addButton({ title: 'Resume' }).on('click', () => { console.info('Resume timeline'); timeline.resume(); });
+  folder.addButton({ title: 'Stop' }).on('click', () => { console.info('Stop timeline'); timeline.stop(); });
+
+  return folder;
+}
+
 export function AddTimerEvent (timer, pane, options = { title: 'Timer Event' }) {
   const folder = pane.addFolder(options);
 

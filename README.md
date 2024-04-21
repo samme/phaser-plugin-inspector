@@ -200,6 +200,12 @@ Adds a folder for a camera, e.g.,
 
     AddCamera(this.cameras.main, pane);
 
+### AddChain(chain, pane, options?) → folder
+
+Adds a folder for a [tween chain](https://newdocs.phaser.io/docs/3.60.0/Phaser.Tweens.TweenChain).
+
+Dispose this folder if you remove the tween chain.
+
 ### AddFXComponent(component, pane, options?) → folder
 
 Adds a folder for a game object's [effects component](https://newdocs.phaser.io/docs/3.80.0/Phaser.GameObjects.Components.FX), e.g.,
@@ -257,6 +263,10 @@ Adds a set of "visible" toggles for the scenes, e.g.,
 ### AddSound(sound, pane, options?) → folder
 
 Adds a folder for a [sound](https://newdocs.phaser.io/docs/3.80.0/Phaser.Sound).
+
+### AddTimeline(timeline, pane, options?) → folder
+
+Adds a folder for a [timeline](https://newdocs.phaser.io/docs/3.60.0/Phaser.Time.Timeline).
 
 ### AddTimerEvent(timerEvent, pane, options?) → folder
 

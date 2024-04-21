@@ -52,6 +52,7 @@ for (
     'AddArcadeBody',
     'AddArcadePhysicsWorld',
     'AddCamera',
+    'AddChain',
     'AddGameObject',
     'AddGroup',
     'AddFXComponent',
@@ -65,6 +66,7 @@ for (
     'AddPointer',
     'AddScenes',
     'AddSound',
+    'AddTimeline',
     'AddTimerEvent',
     'AddTween',
     'AddVideo',
@@ -372,6 +374,7 @@ describe('new Game, no install', function () {
     AddAnimationState,
     AddArcadeBody,
     AddCamera,
+    AddChain,
     AddFXController,
     AddGameObject,
     AddGroup,
@@ -381,6 +384,7 @@ describe('new Game, no install', function () {
     AddLight,
     AddParticleEmitter,
     AddScenes,
+    AddTimeline,
     AddTimerEvent,
     AddTween,
     AddVideo,
@@ -496,6 +500,19 @@ describe('new Game, no install', function () {
       AddCamera(cam, pane);
 
       scene.cameras.remove(cam);
+    });
+  });
+
+  describe('AddChain()', function () {
+    it('does not error', function () {
+      const chain = scene.tweens.chain({
+        targets: { x: 0, y: 0 },
+        tweens: [{ x: 1 }, { y: 1 }]
+      });
+
+      AddChain(chain, pane);
+
+      chain.destroy();
     });
   });
 
@@ -827,6 +844,19 @@ describe('new Game, no install', function () {
         [new Phaser.Scene('1'), new Phaser.Scene('2')],
         pane
       );
+    });
+  });
+
+  describe('AddTimeline()', function () {
+    it('does not error', function () {
+      const timeline = scene.add.timeline([
+        { at: 0 },
+        { at: 1 }
+      ]);
+
+      AddTimeline(timeline, pane);
+
+      timeline.destroy();
     });
   });
 
