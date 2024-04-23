@@ -727,17 +727,27 @@ export function AddTimeline (timeline, pane, options = { title: 'Timeline' }) {
 
 export function AddTimerEvent (timer, pane, options = { title: 'Timer Event' }) {
   const folder = pane.addFolder(options);
-
-  folder.addMonitor(timer, 'elapsed', { view: 'graph', min: 0, max: timer.delay });
+  const proxy = {
+    get 'getOverallProgress()' () { return timer.getOverallProgress(); },
+    get 'getProgress()' () { return timer.getProgress(); },
+    get 'getOverallRemaining()' () { return timer.getOverallRemaining(); },
+    get 'getRemaining()' () { return timer.getRemaining(); }
+  };
   folder.addMonitor(timer, 'elapsed');
   folder.addMonitor(timer, 'hasDispatched');
+  folder.addMonitor(proxy, 'getOverallProgress()', { min: 0, max: 1, view: 'graph' });
+  folder.addMonitor(proxy, 'getProgress()', { min: 0, max: 1, view: 'graph' });
+  folder.addMonitor(proxy, 'getOverallRemaining()');
+  folder.addMonitor(proxy, 'getRemaining()');
   folder.addMonitor(timer, 'loop');
+  folder.addMonitor(timer, 'paused');
   folder.addInput(timer, 'paused');
   folder.addMonitor(timer, 'repeat');
   folder.addMonitor(timer, 'repeatCount');
 
-  folder.addButton({ title: 'Remove' }).on('click', () => { timer.remove(); });
-  folder.addButton({ title: 'Reset' }).on('click', () => { timer.reset(); });
+  folder.addButton({ title: 'Dispatch and remove' }).on('click', () => { console.info('Dispatch and remove timer'); timer.remove(true); });
+  folder.addButton({ title: 'Remove' }).on('click', () => { console.info('Remove timer'); timer.remove(); });
+  folder.addButton({ title: 'Reset with current config' }).on('click', () => { console.info('Reset timer with current config', timer); timer.reset(timer); });
 
   return folder;
 }
