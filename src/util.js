@@ -417,6 +417,8 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     AddFXComponent(obj.preFX, folder);
   }
 
+  // The `postFX` controller doesn't seem to show any relevant state.
+
   if (obj.hasPostPipeline) {
     AddPipelines(obj.postPipelines, folder, { title: 'Post Pipelines' });
   }
@@ -425,7 +427,6 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(obj.children, 'length', { label: 'children (length)', format: FormatLength });
   }
 
-  // The `postFX` controller doesn't seem to show any relevant state.
 
   if ('resetPipeline' in obj) {
     folder.addButton({ title: 'Reset Pipeline' }).on('click', () => { console.info('Reset pipeline', obj.type, obj.name); obj.resetPipeline(); });
