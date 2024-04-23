@@ -427,6 +427,15 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(obj.children, 'length', { label: 'children (length)', format: FormatLength });
   }
 
+  if ('displayList' in obj) {
+    const { displayList } = obj;
+
+    folder.addButton({ title: 'Bring to top' }).on('click', () => { console.info('Bring to top', obj.type, obj.name); displayList.bringToTop(obj); });
+    folder.addButton({ title: 'Move down' }).on('click', () => { console.info('Move down', obj.type, obj.name); displayList.moveDown(obj); });
+    folder.addButton({ title: 'Move to …' }).on('click', () => { const idx = prompt(`Move to index (0 to ${displayList.length - 1}):`); if (!idx) { return; } console.info('Move to index', idx, obj.type, obj.name); displayList.moveTo(obj, idx); });
+    folder.addButton({ title: 'Move up' }).on('click', () => { console.info('Move up', obj.type, obj.name); displayList.moveUp(obj); });
+    folder.addButton({ title: 'Send to back' }).on('click', () => { console.info('Send to back', obj.type, obj.name); displayList.sendToBack(obj); });
+  }
 
   if ('resetPipeline' in obj) {
     folder.addButton({ title: 'Reset pipeline' }).on('click', () => { console.info('Reset pipeline', obj.type, obj.name); obj.resetPipeline(); });
