@@ -429,11 +429,11 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
 
 
   if ('resetPipeline' in obj) {
-    folder.addButton({ title: 'Reset Pipeline' }).on('click', () => { console.info('Reset pipeline', obj.type, obj.name); obj.resetPipeline(); });
+    folder.addButton({ title: 'Reset pipeline' }).on('click', () => { console.info('Reset pipeline', obj.type, obj.name); obj.resetPipeline(); });
   }
 
   if ('resetPostPipeline' in obj) {
-    folder.addButton({ title: 'Reset Post Pipeline' }).on('click', () => { console.info('Reset post pipeline', obj.type, obj.name); obj.resetPostPipeline(); });
+    folder.addButton({ title: 'Reset post pipeline' }).on('click', () => { console.info('Reset post pipeline', obj.type, obj.name); obj.resetPostPipeline(); });
   }
 
   folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy', obj.type, obj.name); obj.destroy(); });
