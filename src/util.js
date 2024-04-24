@@ -781,6 +781,7 @@ export function AddArcadeBody (body, pane, options = { title: `Body (${body.game
   // body.physicsType === Phaser.Physics.Arcade.DYNAMIC_BODY
 
   folder.addMonitor(body, 'enable');
+  folder.addInput(body, 'enable');
   folder.addInput(body, 'debugShowBody');
   folder.addInput(body, 'debugShowVelocity');
   folder.addInput(body, 'debugBodyColor', { view: 'color' });
