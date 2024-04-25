@@ -403,14 +403,30 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(obj, 'totalRendered', { format: FormatLength });
   }
 
-  if ('getPipelineName' in obj) {
-    const proxy = { get 'getPipelineName()' () { return obj.getPipelineName(); } };
+  if (obj.pipeline) {
+    // WebGL only
 
-    folder.addMonitor(proxy, 'getPipelineName()', { label: 'getPipelineName()' });
-  }
+    if ('getPipelineName' in obj) {
+      const proxy = { get 'getPipelineName()' () { return obj.getPipelineName(); } };
 
-  if ('hasPostPipeline' in obj) {
-    folder.addMonitor(obj, 'hasPostPipeline');
+      folder.addMonitor(proxy, 'getPipelineName()', { label: 'getPipelineName()' });
+    }
+
+    if ('hasPostPipeline' in obj) {
+      folder.addMonitor(obj, 'hasPostPipeline');
+
+      if (obj.hasPostPipeline) {
+        AddPipelines(obj.postPipelines, folder, { title: 'Post Pipelines' });
+      }
+    }
+
+    if ('resetPipeline' in obj) {
+      folder.addButton({ title: 'Reset pipeline' }).on('click', () => { console.info('Reset pipeline', obj.type, obj.name); obj.resetPipeline(); });
+    }
+
+    if ('resetPostPipeline' in obj) {
+      folder.addButton({ title: 'Reset post pipeline' }).on('click', () => { console.info('Reset post pipeline', obj.type, obj.name); obj.resetPostPipeline(); });
+    }
   }
 
   if ('preFX' in obj && obj.preFX && obj.preFX.list.length > 0) {
@@ -418,10 +434,6 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
   }
 
   // The `postFX` controller doesn't seem to show any relevant state.
-
-  if (obj.hasPostPipeline) {
-    AddPipelines(obj.postPipelines, folder, { title: 'Post Pipelines' });
-  }
 
   if ('children' in obj && 'length' in obj.children) {
     folder.addMonitor(obj.children, 'length', { label: 'children (length)', format: FormatLength });
@@ -435,14 +447,6 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addButton({ title: 'Move to …' }).on('click', () => { const idx = prompt(`Move to index (0 to ${displayList.length - 1}):`); if (!idx) { return; } console.info('Move to index', idx, obj.type, obj.name); displayList.moveTo(obj, idx); });
     folder.addButton({ title: 'Move up' }).on('click', () => { console.info('Move up', obj.type, obj.name); displayList.moveUp(obj); });
     folder.addButton({ title: 'Send to back' }).on('click', () => { console.info('Send to back', obj.type, obj.name); displayList.sendToBack(obj); });
-  }
-
-  if ('resetPipeline' in obj) {
-    folder.addButton({ title: 'Reset pipeline' }).on('click', () => { console.info('Reset pipeline', obj.type, obj.name); obj.resetPipeline(); });
-  }
-
-  if ('resetPostPipeline' in obj) {
-    folder.addButton({ title: 'Reset post pipeline' }).on('click', () => { console.info('Reset post pipeline', obj.type, obj.name); obj.resetPostPipeline(); });
   }
 
   folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy', obj.type, obj.name); obj.destroy(); });
