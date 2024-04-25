@@ -24,61 +24,61 @@ describe('PhaserPluginInspector', function () {
   it('is an object', function () {
     assert.isObject(PhaserPluginInspector);
   });
-});
 
-describe('PhaserPluginInspector.DefaultPluginsConfig', function () {
-  it('is an object', function () {
-    assert.isObject(PhaserPluginInspector.DefaultPluginsConfig);
-  });
-});
-
-describe('PhaserPluginInspector.InspectorGlobalPlugin', function () {
-  it('is a function', function () {
-    assert.isFunction(PhaserPluginInspector.InspectorGlobalPlugin);
-  });
-});
-
-describe('PhaserPluginInspector.InspectorScenePlugin', function () {
-  it('is a function', function () {
-    assert.isFunction(PhaserPluginInspector.InspectorScenePlugin);
-  });
-});
-
-for (
-  const name of [
-    'AddActive',
-    'AddAlpha',
-    'AddAnimationState',
-    'AddArcadeBody',
-    'AddArcadePhysicsWorld',
-    'AddCamera',
-    'AddChain',
-    'AddGameObject',
-    'AddGroup',
-    'AddFXComponent',
-    'AddFXController',
-    'AddInput',
-    'AddKey',
-    'AddKeys',
-    'AddLight',
-    'AddMatterPhysicsWorld',
-    'AddParticleEmitter',
-    'AddPointer',
-    'AddScenes',
-    'AddSound',
-    'AddTimeline',
-    'AddTimerEvent',
-    'AddTween',
-    'AddVideo',
-    'AddVisible'
-  ]
-) {
-  describe(`PhaserPluginInspector.${name}`, function () {
-    it('is a function', function () {
-      assert.isFunction(PhaserPluginInspector[name]);
+  describe('PhaserPluginInspector.DefaultPluginsConfig', function () {
+    it('is an object', function () {
+      assert.isObject(PhaserPluginInspector.DefaultPluginsConfig);
     });
   });
-}
+
+  describe('PhaserPluginInspector.InspectorGlobalPlugin', function () {
+    it('is a function', function () {
+      assert.isFunction(PhaserPluginInspector.InspectorGlobalPlugin);
+    });
+  });
+
+  describe('PhaserPluginInspector.InspectorScenePlugin', function () {
+    it('is a function', function () {
+      assert.isFunction(PhaserPluginInspector.InspectorScenePlugin);
+    });
+  });
+
+  for (
+    const name of [
+      'AddActive',
+      'AddAlpha',
+      'AddAnimationState',
+      'AddArcadeBody',
+      'AddArcadePhysicsWorld',
+      'AddCamera',
+      'AddChain',
+      'AddGameObject',
+      'AddGroup',
+      'AddFXComponent',
+      'AddFXController',
+      'AddInput',
+      'AddKey',
+      'AddKeys',
+      'AddLight',
+      'AddMatterPhysicsWorld',
+      'AddParticleEmitter',
+      'AddPointer',
+      'AddScenes',
+      'AddSound',
+      'AddTimeline',
+      'AddTimerEvent',
+      'AddTween',
+      'AddVideo',
+      'AddVisible'
+    ]
+  ) {
+    describe(`PhaserPluginInspector.${name}`, function () {
+      it('is a function', function () {
+        assert.isFunction(PhaserPluginInspector[name]);
+      });
+    });
+  }
+});
 
 describe('new Game', function () {
   let game;
