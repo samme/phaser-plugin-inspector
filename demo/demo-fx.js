@@ -62,6 +62,7 @@ class Example extends Phaser.Scene {
 
 // eslint-disable-next-line no-new
 new Phaser.Game({
+  // type: Phaser.CANVAS,
   width: 800,
   height: 600,
   pixelArt: true,
