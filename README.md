@@ -208,17 +208,21 @@ Dispose this folder if you remove the tween chain.
 
 ### AddFXComponent(component, pane, options?) → folder
 
-Adds a folder for a game object's [effects component](https://newdocs.phaser.io/docs/3.80.0/Phaser.GameObjects.Components.FX), e.g.,
+Adds a folder for a game object's [FX component](https://newdocs.phaser.io/docs/3.80.0/Phaser.GameObjects.Components.FX), e.g.,
 
     AddFXComponent(sprite.preFX, pane);
 
+Note that Post FX controllers are always [enabled](https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.GameObjects.Components.FX-enabled).
+
 ### AddFXController(controller, pane, options?) → folder
 
-Adds a folder for a game object's [effect controller](https://newdocs.phaser.io/docs/3.80.0/Phaser.FX.Controller), e.g.,
+Adds a folder for a game object's [FX controller](https://newdocs.phaser.io/docs/3.80.0/Phaser.FX.Controller), e.g.,
 
     const barrelEffect = sprite.preFX.addBarrel();
 
     AddFXController(barrelEffect, pane);
+
+Note that Post FX controllers are always [active](https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.FX.Controller-active).
 
 ### AddGameObject(obj, pane, options?) → folder
 
