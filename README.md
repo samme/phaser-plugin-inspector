@@ -141,7 +141,7 @@ Tweakpane monitors are updated automatically 5 times per second. For more precis
 
 You can inspect game objects using the **Display List: Inspect** and **Update List: Inspect** buttons in each scene. The new folder is added to the end of the inspector pane. Look in the console to confirm.
 
-To step one frame at a time, use **Game: Loop: Sleep**, **Game: Step** (repeat), **Game: Loop: Wake**.
+To step one frame at a time, use **Game → Loop → Sleep**, **Game → Step** (repeat), **Game → Loop → Wake**.
 
 Helper functions
 ----------------
