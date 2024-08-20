@@ -9,7 +9,8 @@ const {
 } = Phaser.Scenes.Events;
 
 const {
-  START: STATUS_START
+  START: STATUS_START,
+  SHUTDOWN: STATUS_SHUTDOWN
 } = Phaser.Scenes;
 
 export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
@@ -157,7 +158,7 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     });
 
     if (arcadePhysics) {
-      if (sceneStatus < STATUS_START) {
+      if (sceneStatus < STATUS_START || sceneStatus === STATUS_SHUTDOWN) {
         events.on(START, () => { AddArcadePhysicsWorld(arcadePhysics.world, this.folder); });
       } else {
         AddArcadePhysicsWorld(arcadePhysics.world, this.folder);
@@ -165,7 +166,7 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     }
 
     if (matterPhysics) {
-      if (sceneStatus < STATUS_START) {
+      if (sceneStatus < STATUS_START || sceneStatus === STATUS_SHUTDOWN) {
         events.on(START, () => { AddMatterPhysicsWorld(matterPhysics.world, this.folder); });
       } else {
         AddMatterPhysicsWorld(matterPhysics.world, this.folder);

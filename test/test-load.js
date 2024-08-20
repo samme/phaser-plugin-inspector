@@ -30,7 +30,28 @@ describe('new Game', function () {
         audio: { noAudio: true },
         scene: [
           {
+            key: 'scene1',
+
             map: {},
+
+            physics: {
+              arcade: {},
+              matter: {}
+            },
+
+            init: function () {
+              this.sys.scenePlugin.start('preload');
+            }
+          },
+          {
+            key: 'preload',
+
+            map: {},
+
+            physics: {
+              arcade: {},
+              matter: {}
+            },
 
             preload: function () {
               this.sys.load.scripts('inspector', ['../vendor/tweakpane.js', '../dist/phaser-plugin-inspector.umd.js']);
@@ -39,10 +60,14 @@ describe('new Game', function () {
                 PhaserPluginInspector.Install(this.sys.plugins);
                 done();
               }, this);
+            },
+
+            create: function () {
+              this.sys.scenePlugin.start('scene2');
             }
           },
-          { key: 'scene2' },
-          { key: 'scene3' }
+          { key: 'scene2', map: {}, physics: { arcade: {}, matter: {} } },
+          { key: 'scene3', map: {}, physics: { arcade: {}, matter: {} } }
         ]
       });
     });
