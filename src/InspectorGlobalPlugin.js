@@ -147,7 +147,7 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
     const soundFolder = folder.addFolder({ title: 'Sound', expanded: false });
     soundFolder.addInput(sound, 'mute');
     soundFolder.addInput(sound, 'pauseOnBlur');
-    soundFolder.addMonitor(sound.sounds, 'length', { label: 'sounds (length)', format: FormatLength });
+    soundFolder.addMonitor(sound.sounds, 'length', { label: 'sounds.length', format: FormatLength });
     soundFolder.addInput(sound, 'volume', { min: 0, max: 1, step: 0.1 });
     soundFolder.addButton({ title: 'Pause all' }).on('click', () => { console.info('Pause all sounds'); sound.pauseAll(); });
     soundFolder.addButton({ title: 'Remove all' }).on('click', () => { console.info('Remove all sounds'); sound.removeAll(); });

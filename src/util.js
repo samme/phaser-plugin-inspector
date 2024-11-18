@@ -244,20 +244,20 @@ export function AddArcadePhysicsWorld (world, pane) {
   const { arcadePhysics, events } = world.scene.sys;
   const folder = pane.addFolder({ title: 'Arcade Physics', expanded: false });
 
-  folder.addMonitor(world.bodies, 'size', { label: 'bodies' });
+  folder.addMonitor(world.bodies, 'size', { label: 'bodies.size' });
   folder.addInput(world, 'fixedStep');
   folder.addInput(world, 'forceX');
   folder.addInput(world, 'fps', { min: 5, max: 300, step: 5 }).on('change', ({ value }) => { world.setFPS(value); });
   folder.addMonitor(world, '_frameTimeMS');
   folder.addInput(world, 'gravity', { x: { min: -1000, max: 1000 }, y: { min: -1000, max: 1000 } });
   folder.addInput(world, 'isPaused');
-  folder.addInput(world, 'OVERLAP_BIAS', { label: 'overlap bias', min: 0, max: 32, step: 1 });
-  folder.addMonitor(world.staticBodies, 'size', { label: 'staticBodies' });
-  folder.addInput(world, 'TILE_BIAS', { label: 'tile bias', min: 0, max: 32, step: 1 });
+  folder.addInput(world, 'OVERLAP_BIAS', { label: 'OVERLAP_BIAS', min: 0, max: 32, step: 1 });
+  folder.addMonitor(world.staticBodies, 'size', { label: 'staticBodies.size' });
+  folder.addInput(world, 'TILE_BIAS', { label: 'TILE_BIAS', min: 0, max: 32, step: 1 });
   folder.addInput(world, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
   folder.addInput(world, 'useTree');
   if (world.debugGraphic) {
-    folder.addInput(world.debugGraphic, 'visible', { label: 'debug' });
+    folder.addInput(world.debugGraphic, 'visible', { label: 'debugGraphic.visible' });
   }
   folder.addButton({ title: 'Enable update' }).on('click', () => { arcadePhysics.enableUpdate(); });
   folder.addButton({ title: 'Disable update' }).on('click', () => { arcadePhysics.disableUpdate(); });
@@ -279,7 +279,7 @@ export function AddMatterPhysicsWorld (world, pane) {
   folder.addInput(world.localWorld, 'gravity');
   folder.addInput(world.localWorld.gravity, 'scale', { label: 'gravity scale', min: 0, max: 0.1, step: 0.001 });
   if (world.debugGraphic) {
-    folder.addInput(world.debugGraphic, 'visible', { label: 'debug' });
+    folder.addInput(world.debugGraphic, 'visible', { label: 'debugGraphic.visible' });
   }
   folder.addButton({ title: 'Pause' }).on('click', () => { world.pause(); });
   folder.addButton({ title: 'Resume' }).on('click', () => { world.resume(); });
@@ -444,7 +444,7 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
   // The `postFX` controller doesn't seem to show any relevant state.
 
   if ('children' in obj && 'length' in obj.children) {
-    folder.addMonitor(obj.children, 'length', { label: 'children (length)', format: FormatLength });
+    folder.addMonitor(obj.children, 'length', { label: 'children.length', format: FormatLength });
   }
 
   if ('displayList' in obj) {
