@@ -23,9 +23,9 @@ The plugins add controls for the game and scene systems. If you don't need these
 Include Phaser, [Tweakpane](https://cdn.jsdelivr.net/npm/tweakpane/), and [the plugin UMD script](https://cdn.jsdelivr.net/npm/phaser-plugin-inspector/) in this order. You can download the scripts or use the CDN links.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.0/dist/tweakpane.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@2.4.1/dist/phaser-plugin-inspector.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.87.0/dist/phaser.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@2.5.0/dist/phaser-plugin-inspector.umd.js"></script>
 ```
 
 If this is the only plugin you're using then you can use the "default" configuration:
@@ -105,8 +105,8 @@ import { AddGameObject } from 'phaser-plugin-inspector';
 ```js
 function preload() {
   this.load.scripts('inspector', [
-    'https://cdn.jsdelivr.net/npm/tweakpane@3.1.0/dist/tweakpane.js',
-    'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@2.4.1/dist/phaser-plugin-inspector.umd.js',
+    'https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.js',
+    'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@2.5.0/dist/phaser-plugin-inspector.umd.js',
   ]);
   this.load.once('complete', () => {
     PhaserPluginInspector.Install(this.plugins);
@@ -122,8 +122,8 @@ Given a `game` variable:
 const scene = game.scene.getScenes(true)[0];
 
 scene.load.scripts('inspector', [
-  'https://cdn.jsdelivr.net/npm/tweakpane@3.1.0/dist/tweakpane.js',
-  'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@2.4.1/dist/phaser-plugin-inspector.umd.js',
+  'https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.js',
+  'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@2.5.0/dist/phaser-plugin-inspector.umd.js',
 ]);
 scene.load.once('complete', () => {
   PhaserPluginInspector.Install(game.plugins);
