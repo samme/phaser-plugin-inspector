@@ -202,27 +202,27 @@ Adds a folder for a camera, e.g.,
 
 ### AddChain(chain, pane, options?) → folder
 
-Adds a folder for a [tween chain](https://newdocs.phaser.io/docs/3.60.0/Phaser.Tweens.TweenChain).
+Adds a folder for a [tween chain](https://docs.phaser.io/api-documentation/class/tweens-tweenchain).
 
 Dispose this folder if you remove the tween chain.
 
 ### AddFXComponent(component, pane, options?) → folder
 
-Adds a folder for a game object's [FX component](https://newdocs.phaser.io/docs/3.80.0/Phaser.GameObjects.Components.FX), e.g.,
+Adds a folder for a game object's [FX component](https://docs.phaser.io/api-documentation/class/gameobjects-components-fx), e.g.,
 
     AddFXComponent(sprite.preFX, pane);
 
-Note that Post FX controllers are always [enabled](https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.GameObjects.Components.FX-enabled).
+Note that Post FX controllers are always [enabled](https://docs.phaser.io/api-documentation/class/gameobjects-components-fx#enabled).
 
 ### AddFXController(controller, pane, options?) → folder
 
-Adds a folder for a game object's [FX controller](https://newdocs.phaser.io/docs/3.80.0/Phaser.FX.Controller), e.g.,
+Adds a folder for a game object's [FX controller](https://docs.phaser.io/api-documentation/class/fx-controller), e.g.,
 
     const barrelEffect = sprite.preFX.addBarrel();
 
     AddFXController(barrelEffect, pane);
 
-Note that Post FX controllers are always [active](https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.FX.Controller-active).
+Note that Post FX controllers are always [active](https://docs.phaser.io/api-documentation/class/fx-controller#active).
 
 ### AddGameObject(obj, pane, options?) → folder
 
@@ -234,29 +234,29 @@ Adds a folder for a group.
 
 ### AddInput(interactiveObject, pane, options?) → folder
 
-Adds a folder for a game object's [interactive object](https://newdocs.phaser.io/docs/3.80.0/Phaser.Types.Input.InteractiveObject), e.g.,
+Adds a folder for a game object's [interactive object](https://docs.phaser.io/api-documentation/typedef/types-input#interactiveobject), e.g.,
 
     AddInput(sprite.input, pane);
 
 ### AddKey(key, pane, options?) → folder
 
-Adds a folder for a [keyboard key object](https://newdocs.phaser.io/docs/3.80.0/Phaser.Input.Keyboard.Key).
+Adds a folder for a [keyboard key object](https://docs.phaser.io/api-documentation/class/input-keyboard-key).
 
 Dispose this folder if you remove the key.
 
 ### AddKeys(keys, pane, options?) → folder
 
-Adds a folder for an object map of [keyboard key objects](https://newdocs.phaser.io/docs/3.80.0/Phaser.Input.Keyboard.Key), such as that returned by [addKeys()](https://newdocs.phaser.io/docs/3.80.0/focus/Phaser.Input.Keyboard.KeyboardPlugin-addKeys).
+Adds a folder for an object map of [keyboard key objects](https://docs.phaser.io/api-documentation/class/input-keyboard-key), such as that returned by [addKeys()](https://docs.phaser.io/api-documentation/class/input-keyboard-keyboardplugin#addkeys).
 
 Dispose this folder if you remove those keys.
 
 ### AddLight(light, pane, options?) → folder
 
-Adds a folder for a [light](https://newdocs.phaser.io/docs/3.80.0/Phaser.GameObjects.Light) (not point light).
+Adds a folder for a [light](https://docs.phaser.io/api-documentation/class/gameobjects-light) (not point light).
 
 ### AddParticleEmitter(emitter, pane, options?) → folder
 
-Adds a folder for a [particle emitter](https://newdocs.phaser.io/docs/3.80.0/Phaser.GameObjects.Particles.ParticleEmitter).
+Adds a folder for a [particle emitter](https://docs.phaser.io/api-documentation/class/gameobjects-particles-particleemitter).
 
 ### AddScenes(scene, pane, options?) → folder
 
@@ -266,25 +266,25 @@ Adds a set of "visible" toggles for the scenes, e.g.,
 
 ### AddSound(sound, pane, options?) → folder
 
-Adds a folder for a [sound](https://newdocs.phaser.io/docs/3.80.0/Phaser.Sound).
+Adds a folder for a [sound](https://docs.phaser.io/api-documentation/class/sound-basesound).
 
 ### AddTimeline(timeline, pane, options?) → folder
 
-Adds a folder for a [timeline](https://newdocs.phaser.io/docs/3.60.0/Phaser.Time.Timeline).
+Adds a folder for a [timeline](https://docs.phaser.io/api-documentation/class/time-timeline).
 
 ### AddTimerEvent(timerEvent, pane, options?) → folder
 
-Adds a folder for a [timer event](https://newdocs.phaser.io/docs/3.80.0/Phaser.Time.TimerEvent).
+Adds a folder for a [timer event](https://docs.phaser.io/api-documentation/class/time-timerevent).
 
 Dispose this folder if you remove the timer event.
 
 ### AddTween(tween, pane, options?) → folder
 
-Adds a folder for a tween.
+Adds a folder for a [tween](https://docs.phaser.io/api-documentation/class/tweens-tween).
 
 ### AddVideo(video, pane, options?) → folder
 
-Adds a folder for a [Video game object](https://newdocs.phaser.io/docs/3.80.0/Phaser.GameObjects.Video).
+Adds a folder for a [Video game object](https://docs.phaser.io/api-documentation/class/gameobjects-video).
 
 ### AddVisible(items, pane, options?) → folder
 
