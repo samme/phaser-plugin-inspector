@@ -6,10 +6,10 @@ View and change game properties, with [Tweakpane](https://github.com/cocopon/twe
 Demos
 -----
 
-- [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) — simple game, helper functions
-- [All the demos](https://codepen.io/collection/LPeVMY)
+- [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) — simple game, helper functions (TODO)
+- [All the demos](https://codepen.io/collection/LPeVMY) (TODO)
 
-You can also paste the [Quick load](#quick-load) snippet into any of the [labs examples](https://labs.phaser.io).
+You can also paste the [Quick load](#quick-load) snippet into the [Phaser Sandbox](https://phaser.io/sandbox).
 
 Install
 -------
@@ -18,14 +18,14 @@ The plugins add controls for the game and scene systems. If you don't need these
 
 ### Browser / UMD
 
-[First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) shows this setup.
+[First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) (TODO) shows this setup.
 
 Include Phaser, [Tweakpane](https://cdn.jsdelivr.net/npm/tweakpane/), and [the plugin UMD script](https://cdn.jsdelivr.net/npm/phaser-plugin-inspector/) in this order. You can download the scripts or use the CDN links.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/phaser@3.87.0/dist/phaser.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser@4.0.0-beta.2/dist/phaser.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@2.5.0/dist/phaser-plugin-inspector.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@3.0.0-0/dist/phaser-plugin-inspector.umd.js"></script>
 ```
 
 If this is the only plugin you're using then you can use the "default" configuration:
@@ -106,7 +106,7 @@ import { AddGameObject } from 'phaser-plugin-inspector';
 function preload() {
   this.load.scripts('inspector', [
     'https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.js',
-    'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@2.5.0/dist/phaser-plugin-inspector.umd.js',
+    'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@3.0.0-0/dist/phaser-plugin-inspector.umd.js',
   ]);
   this.load.once('complete', () => {
     PhaserPluginInspector.Install(this.plugins);
@@ -123,7 +123,7 @@ const scene = game.scene.getScenes(true)[0];
 
 scene.load.scripts('inspector', [
   'https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.js',
-  'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@2.5.0/dist/phaser-plugin-inspector.umd.js',
+  'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@3.0.0-0/dist/phaser-plugin-inspector.umd.js',
 ]);
 scene.load.once('complete', () => {
   PhaserPluginInspector.Install(game.plugins);
@@ -206,23 +206,17 @@ Adds a folder for a [tween chain](https://docs.phaser.io/api-documentation/class
 
 Dispose this folder if you remove the tween chain.
 
-### AddFXComponent(component, pane, options?) → folder
+### AddFilterController(ctrl, pane, options?) → folder
 
-Adds a folder for a game object's [FX component](https://docs.phaser.io/api-documentation/class/gameobjects-components-fx), e.g.,
+Adds a folder for a filter controller, e.g., from `addBlur()` or `addMask()`.
 
-    AddFXComponent(sprite.preFX, pane);
+### AddFilterList(list, pane, options?) → folder
 
-Note that Post FX controllers are always [enabled](https://docs.phaser.io/api-documentation/class/gameobjects-components-fx#enabled).
+Adds a folder for a filter list, e.g., `filters.external` or `filters.internal`.
 
-### AddFXController(controller, pane, options?) → folder
+### AddFilters(filters, pane, options) → folder
 
-Adds a folder for a game object's [FX controller](https://docs.phaser.io/api-documentation/class/fx-controller), e.g.,
-
-    const barrelEffect = sprite.preFX.addBarrel();
-
-    AddFXController(barrelEffect, pane);
-
-Note that Post FX controllers are always [active](https://docs.phaser.io/api-documentation/class/fx-controller#active).
+Adds a folder for a filters object, e.g., `camera.filters` or `renderFilter.filters`.
 
 ### AddGameObject(obj, pane, options?) → folder
 
@@ -258,7 +252,25 @@ Adds a folder for a [light](https://docs.phaser.io/api-documentation/class/gameo
 
 Adds a folder for a [particle emitter](https://docs.phaser.io/api-documentation/class/gameobjects-particles-particleemitter).
 
-### AddScenes(scene, pane, options?) → folder
+### AddPoint(point, pane, options?) → folder
+
+Adds a folder for a point-like object or 2d vector (x, y).
+
+### AddPointer(pointer, pane, options?) → folder
+
+Adds a folder for an input pointer, e.g.,
+
+    AddPointer(this.input.mousePointer, pane);
+
+### AddRectangle(rect, pane, options?) → folder
+
+Adds a folder for a Phaser.Geom.Rectangle.
+
+### AddRectangleLike(rect, pane, options?) → folder
+
+Adds a folder for a rectangle-like object (x, y, width, height).
+
+### AddScenes(scenes, pane, options?) → folder
 
 Adds a set of "visible" toggles for the scenes, e.g.,
 

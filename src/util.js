@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import { FXMap } from './FXMap';
 
 const TAU = 2 * Math.PI;
 const CacheNames = ['audio', 'binary', 'bitmapFont', 'html', 'json', 'obj', 'physics', 'shader', 'text', 'tilemap', 'video', 'xml'];
@@ -183,7 +182,7 @@ export function AddCamera (camera, pane) {
   const defaultCamera = camera.cameraManager.default;
   const w = defaultCamera.width;
   const h = defaultCamera.height;
-  const folder = pane.addFolder({ title: `Camera ${camera.id} ${camera.name || ''}`, expanded: false });
+  const folder = pane.addFolder({ title: `Camera ${camera.id} ${camera.name || ''}` });
 
   folder.addMonitor(camera, 'name');
   folder.addInput(camera, 'alpha', { min: 0, max: 1, step: 0.05 });
@@ -208,30 +207,22 @@ export function AddCamera (camera, pane) {
   folder.addMonitor(camera, 'centerY');
   folder.addMonitor(camera.midPoint, 'x', { label: 'midPoint x' });
   folder.addMonitor(camera.midPoint, 'y', { label: 'midPoint y' });
-  folder.addMonitor(camera.worldView, 'x', { label: 'world x' });
-  folder.addMonitor(camera.worldView, 'y', { label: 'world y' });
-  folder.addMonitor(camera.worldView, 'width', { label: 'world width' });
-  folder.addMonitor(camera.worldView, 'height', { label: 'world height' });
+
+  AddRectangle(camera.worldView, folder, { title: 'World View' });
 
   // TODO
   const { deadzone } = camera;
   if (deadzone) {
-    folder.addMonitor(deadzone, 'x', { label: 'deadzone x' });
-    folder.addMonitor(deadzone, 'y', { label: 'deadzone y' });
-    folder.addMonitor(deadzone, 'width', { label: 'deadzone width' });
-    folder.addMonitor(deadzone, 'height', { label: 'deadzone height' });
+    AddRectangle(deadzone, folder, { title: 'Deadzone' });
   }
 
-  if (camera.hasPostPipeline) {
-    AddPipelines(camera.postPipelines, folder, { title: 'Post Pipelines' });
-  }
+  AddFilters(camera.filters, folder, { title: 'Filters' });
 
   folder.addButton({ title: 'Fade in' }).on('click', () => { camera.fadeIn(); });
   folder.addButton({ title: 'Fade out' }).on('click', () => { camera.fadeOut(); });
   folder.addButton({ title: 'Flash' }).on('click', () => { camera.flash(); });
   folder.addButton({ title: 'Shake' }).on('click', () => { camera.shake(); });
   folder.addButton({ title: 'Reset effects' }).on('click', () => { camera.resetFX(); });
-  folder.addButton({ title: 'Reset post pipeline' }).on('click', () => { camera.resetPostPipeline(); });
 
   camera.on(CameraEvents.DESTROY, () => {
     folder.dispose();
@@ -309,16 +300,6 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(proxy, 'frame.name', { format: String });
   }
 
-  if ('displayTexture' in obj) {
-    const proxy = {
-      get 'displayTexture.key' () { return obj.displayTexture.key; },
-      get 'displayFrame.name' () { return obj.displayFrame.name; }
-    };
-
-    folder.addMonitor(proxy, 'displayTexture.key');
-    folder.addMonitor(proxy, 'displayFrame.name', { format: String });
-  }
-
   if ('alpha' in obj) {
     folder.addInput(obj, 'alpha', { min: 0, max: 1, step: 0.05 });
   }
@@ -381,28 +362,6 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(obj, 'w');
   }
 
-  if ('modelPosition' in obj) {
-    folder.addInput(obj, 'modelPosition');
-    folder.addInput(obj, 'modelScale');
-    folder.addInput(obj, 'modelRotation');
-  }
-
-  if ('fov' in obj) {
-    folder.addMonitor(obj, 'fov');
-  }
-
-  if ('faces' in obj && 'length' in obj.faces) {
-    folder.addMonitor(obj.faces, 'length', { label: 'faces.length', format: FormatLength });
-  }
-
-  if ('vertices' in obj && 'length' in obj.vertices) {
-    folder.addMonitor(obj.vertices, 'length', { label: 'vertices.length', format: FormatLength });
-  }
-
-  if ('totalRendered' in obj) {
-    folder.addMonitor(obj, 'totalRendered', { format: FormatLength });
-  }
-
   if ('tilesDrawn' in obj) {
     folder.addMonitor(obj, 'tilesDrawn', { format: FormatLength });
   }
@@ -411,50 +370,56 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(obj, 'tilesTotal', { format: FormatLength });
   }
 
-  if (obj.pipeline) {
-    // WebGL only
+  if ('timeElapsed' in obj) {
+    const timerFolder = folder.addFolder({ title: 'Timer' });
 
-    if ('getPipelineName' in obj) {
-      const proxy = { get 'getPipelineName()' () { return obj.getPipelineName(); } };
+    timerFolder.addMonitor(obj, 'timeElapsed');
 
-      folder.addMonitor(proxy, 'getPipelineName()', { label: 'getPipelineName()' });
-    }
+    timerFolder.addInput(obj, 'timePaused');
 
-    if ('hasPostPipeline' in obj) {
-      folder.addMonitor(obj, 'hasPostPipeline');
-
-      if (obj.hasPostPipeline) {
-        AddPipelines(obj.postPipelines, folder, { title: 'Post Pipelines' });
-      }
-    }
-
-    if ('resetPipeline' in obj) {
-      folder.addButton({ title: 'Reset pipeline' }).on('click', () => { console.info('Reset pipeline', obj.type, obj.name); obj.resetPipeline(); });
-    }
-
-    if ('resetPostPipeline' in obj) {
-      folder.addButton({ title: 'Reset post pipeline' }).on('click', () => { console.info('Reset post pipeline', obj.type, obj.name); obj.resetPostPipeline(); });
-    }
+    timerFolder.addButton({ title: 'Reset timer' }).on('click', () => { console.info('Reset timer'); obj.resetTimer(); });
   }
-
-  if ('preFX' in obj && obj.preFX && obj.preFX.list.length > 0) {
-    AddFXComponent(obj.preFX, folder);
-  }
-
-  // The `postFX` controller doesn't seem to show any relevant state.
 
   if ('children' in obj && 'length' in obj.children) {
     folder.addMonitor(obj.children, 'length', { label: 'children.length', format: FormatLength });
   }
 
+  if (obj.type === 'RenderFilters') {
+    folder.addInput(obj, 'autoFocus');
+    folder.addInput(obj, 'autoFocusContext');
+    folder.addInput(obj, 'decomposite');
+    folder.addInput(obj, 'ignoreLighting');
+    folder.addInput(obj, 'runChildPreUpdate');
+
+    AddFilters(obj.filters, folder);
+  }
+
   if ('displayList' in obj) {
     const { displayList } = obj;
+    const displayFolder = folder.addFolder({ title: 'Display List' });
 
-    folder.addButton({ title: 'Bring to top' }).on('click', () => { console.info('Bring to top', obj.type, obj.name); displayList.bringToTop(obj); });
-    folder.addButton({ title: 'Move down' }).on('click', () => { console.info('Move down', obj.type, obj.name); displayList.moveDown(obj); });
-    folder.addButton({ title: 'Move to …' }).on('click', () => { const idx = prompt(`Move to index (0 to ${displayList.length - 1}):`); if (!idx) { return; } console.info('Move to index', idx, obj.type, obj.name); displayList.moveTo(obj, idx); });
-    folder.addButton({ title: 'Move up' }).on('click', () => { console.info('Move up', obj.type, obj.name); displayList.moveUp(obj); });
-    folder.addButton({ title: 'Send to back' }).on('click', () => { console.info('Send to back', obj.type, obj.name); displayList.sendToBack(obj); });
+    displayFolder.addButton({ title: 'Bring to top' }).on('click', () => { console.info('Bring to top', obj.type, obj.name); displayList.bringToTop(obj); });
+    displayFolder.addButton({ title: 'Move down' }).on('click', () => { console.info('Move down', obj.type, obj.name); displayList.moveDown(obj); });
+    displayFolder.addButton({ title: 'Move to …' }).on('click', () => { const idx = prompt(`Move to index (0 to ${displayList.length - 1}):`); if (!idx) { return; } console.info('Move to index', idx, obj.type, obj.name); displayList.moveTo(obj, idx); });
+    displayFolder.addButton({ title: 'Move up' }).on('click', () => { console.info('Move up', obj.type, obj.name); displayList.moveUp(obj); });
+    displayFolder.addButton({ title: 'Send to back' }).on('click', () => { console.info('Send to back', obj.type, obj.name); displayList.sendToBack(obj); });
+
+    displayFolder.addButton({ title: 'Add to Display List' }).on('click', () => { console.info('Add to Display List', obj.type, obj.name); obj.addToDisplayList(); });
+    displayFolder.addButton({ title: 'Remove from Display List' }).on('click', () => { console.info('Remove from Display List', obj.type, obj.name); obj.removeFromDisplayList(); });
+  }
+
+  if ('preUpdate' in obj) {
+    const updateFolder = folder.addFolder({ title: 'Update List' });
+
+    updateFolder.addButton({ title: 'Add to Update List' }).on('click', () => { console.info('Add to Update List', obj.type, obj.name); obj.addToUpdateList(); });
+    updateFolder.addButton({ title: 'Remove from Update List' }).on('click', () => { console.info('Remove from Update List', obj.type, obj.name); obj.removeFromUpdateList(); });
+  }
+
+  if ('setInteractive' in obj) {
+    const inputFolder = folder.addFolder({ title: 'Input' });
+
+    inputFolder.addButton({ title: 'Set interactive' }).on('click', () => { console.info('Set interactive', obj.type, obj.name); obj.setInteractive(); });
+    inputFolder.addButton({ title: 'Disable interactive' }).on('click', () => { console.info('Disable interactive', obj.type, obj.name); obj.disableInteractive(); });
   }
 
   folder.addButton({ title: 'Destroy' }).on('click', () => { console.info('Destroy', obj.type, obj.name); obj.destroy(); });
@@ -889,104 +854,6 @@ export function AddKeys (keys, pane, options = { title: 'Keys' }) {
   return folder;
 }
 
-export function AddFXComponent (comp, pane, options = { title: `${comp.isPost ? 'Post' : 'Pre'} FX` }) {
-  const folder = pane.addFolder(options);
-
-  folder.addMonitor(comp, 'enabled');
-
-  folder.addInput(comp, 'padding', { min: 0, max: 32, step: 1 });
-
-  folder.addButton({ title: 'Clear' }).on('click', () => { comp.clear(); });
-  folder.addButton({ title: 'Disable' }).on('click', () => { comp.disable(); });
-  folder.addButton({ title: 'Enable' }).on('click', () => { comp.enable(); });
-
-  for (const ctrl of comp.list) {
-    AddFXController(ctrl, folder);
-  }
-
-  return folder;
-}
-
-export function AddFXController (ctrl, pane, options = { title: `FX ${FXMap[ctrl.type]}` }) {
-  const folder = pane.addFolder(options);
-
-  for (const key in ctrl) {
-    if (key.startsWith('_')) continue;
-
-    if (key === 'type') continue;
-
-    const val = ctrl[key];
-    const typ = typeof val;
-
-    if (typ !== 'number' && typ !== 'boolean') continue;
-
-    if (key === 'alpha') {
-      folder.addInput(ctrl, key, { min: 0, max: 1 });
-
-      continue;
-    }
-
-    if (key === 'axis' || key === 'direction') {
-      folder.addInput(ctrl, key, { min: 0, max: 1, step: 1 });
-
-      continue;
-    }
-
-    if (key === 'color' || key === 'color1' || key === 'color2' || key === 'backgroundColor') {
-      folder.addInput(ctrl, key, { view: 'color' });
-
-      continue;
-    }
-
-    if (key === 'progress') {
-      folder.addInput(ctrl, key, { min: 0, max: 1 });
-
-      continue;
-    }
-
-    if (key === 'quality') {
-      folder.addInput(ctrl, key, { options: { low: 0, medium: 1, high: 2 } });
-
-      continue;
-    }
-
-    if (key === 'samples') {
-      folder.addInput(ctrl, key, { min: 1, max: 12, step: 1 });
-
-      continue;
-    }
-
-    if (key === 'steps') {
-      folder.addInput(ctrl, key, { min: 1, max: 10, step: 1 });
-
-      continue;
-    }
-
-    folder.addInput(ctrl, key);
-  }
-
-  return folder;
-}
-
-export function AddPipelines (pipelines, pane, options = { title: 'Pipelines' }) {
-  const folder = pane.addFolder(options);
-
-  for (const pipeline of pipelines) {
-    folder.addInput(pipeline, 'active', { label: `${pipeline.name} active` });
-  }
-
-  return folder;
-}
-
-export function AddPipeline (pipeline, pane, options = { title: `${pipeline.isPost ? 'Post Pipeline' : 'Pipeline'} “${pipeline.name}”` }) {
-  const folder = pane.addFolder(options);
-
-  folder.addInput(pipeline, 'active');
-  // What else?
-
-  return folder;
-}
-
 export function AddActive (items, pane, options = { title: 'Active' }) {
   const folder = pane.addFolder(options);
 
@@ -1023,6 +890,83 @@ export function AddScenes (scenes, pane, options = { title: 'Scenes Visible' }) 
   for (const scene of scenes) {
     folder.addInput(scene.sys.settings, 'visible', { label: scene.sys.settings.key });
   }
+
+  return folder;
+}
+
+export function AddFilters (filters, pane, options = { title: 'Filters' }) {
+  const folder = pane.addFolder(options);
+
+  AddFilterList(filters.internal, folder, { title: 'Internal filters' });
+  AddFilterList(filters.external, folder, { title: 'External filters' });
+
+  return folder;
+}
+
+export function AddFilterList (filterList, pane, options = { title: 'Filter List' }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(filterList.list, 'length', { label: 'list.length', format: FormatLength });
+
+  const ctrlFolder = folder.addFolder({ title: 'Controllers' });
+
+  for (const ctrl of filterList.list) {
+    ctrlFolder.addInput(ctrl, 'active', { label: `${ctrl.renderNode} active` });
+  }
+
+  folder.addButton({ title: 'Clear' }).on('click', () => { console.info('Clear filters'); filterList.clear(); ctrlFolder.dispose(); });
+
+  return folder;
+}
+
+export function AddFilterController (ctrl, pane, options = { title: `${ctrl.renderNode} Controller` }) {
+  const folder = pane.addFolder(options);
+
+  folder.addInput(ctrl, 'active');
+
+  // Mask
+  if ('invert' in ctrl) {
+    folder.addInput(ctrl, 'invert');
+  }
+
+  if (ctrl.currentPadding) {
+    AddRectangle(ctrl.currentPadding, folder, { title: 'currentPadding' });
+  }
+
+  return folder;
+}
+
+export function AddPoint (point, pane, options = { title: 'Point' }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(point, 'x');
+  folder.addMonitor(point, 'y');
+
+  return folder;
+}
+
+export function AddRectangle (rect, pane, options = { title: 'Rectangle' }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(rect, 'left');
+  folder.addMonitor(rect, 'top');
+  folder.addMonitor(rect, 'right');
+  folder.addMonitor(rect, 'bottom');
+  folder.addMonitor(rect, 'centerX');
+  folder.addMonitor(rect, 'centerY');
+  folder.addMonitor(rect, 'width');
+  folder.addMonitor(rect, 'height');
+
+  return folder;
+}
+
+export function AddRectangleLike (rect, pane, options = { title: 'Rectangle' }) {
+  const folder = pane.addFolder(options);
+
+  folder.addMonitor(rect, 'x');
+  folder.addMonitor(rect, 'y');
+  folder.addMonitor(rect, 'width');
+  folder.addMonitor(rect, 'height');
 
   return folder;
 }

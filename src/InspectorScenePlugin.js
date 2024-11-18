@@ -50,6 +50,12 @@ export class InspectorScenePlugin extends Phaser.Plugins.ScenePlugin {
     const sceneKey = scenePlugin.settings.key;
     const sceneStatus = scenePlugin.settings.status;
 
+    if (sceneKey === '__SYSTEM') {
+      this.folder.disabled = true;
+
+      return;
+    }
+
     const camerasFolder = this.folder.addFolder({ title: 'Cameras', expanded: false });
     camerasFolder.addButton({ title: 'Print cameras' }).on('click', () => { console.info('Cameras:'); console.table(cameras.cameras.map(cameraToPrint)); });
 

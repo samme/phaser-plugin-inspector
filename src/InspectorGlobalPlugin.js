@@ -16,8 +16,10 @@ import {
 
 export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
   constructor (pluginManager) {
-    if (Phaser.VERSION.split('.')[1] < 60) {
-      throw new Error('Phaser v3.60 or later is required');
+    const ver = '4.0.0 Beta 2';
+
+    if (Phaser.VERSION !== ver) {
+      throw new Error(`Phaser v${ver} is required but this is Phaser v${Phaser.VERSION}`);
     }
 
     super(pluginManager);
@@ -112,6 +114,7 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
     loopFolder.addMonitor(loop, 'frame', { format: Math.floor });
     loopFolder.addMonitor(loopProxy, 'getDuration()');
     loopFolder.addMonitor(loop, 'now');
+    loopFolder.addMonitor(loop, 'pauseDuration');
     loopFolder.addMonitor(loop, 'rawDelta', { view: 'graph', min: 0, max: 50 });
     loopFolder.addMonitor(loop, 'running');
     loopFolder.addMonitor(loop, 'startTime');
@@ -127,6 +130,9 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
     if (renderer.type === Phaser.CANVAS) {
       rendererFolder.addInput(renderer, 'antialias');
       rendererFolder.addMonitor(renderer, 'drawCount', { view: 'graph', min: 0, max: 100 });
+    }
+    if (renderer.type === Phaser.WEBGL) {
+      rendererFolder.addButton({ title: 'Lose context' }).on('click', () => { console.info('Lose WebGL context'); renderer.gl.getExtension('WEBGL_lose_context').loseContext(); });
     }
     rendererFolder.addButton({ title: 'Snapshot' }).on('click', () => {
       console.info('Snapshot');

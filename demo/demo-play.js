@@ -4,9 +4,13 @@
 console.info(PhaserPluginInspector);
 // console.info('{ %s }', Object.keys(PhaserPluginInspector).sort().join(', '));
 
-const { AddArcadeBody, AddGameObject, AddParticleEmitter } = PhaserPluginInspector;
+const { AddArcadeBody, AddCamera, AddGameObject, AddParticleEmitter } = PhaserPluginInspector;
 
 let sky;
+
+function init () {
+  console.log('camera', this.cameras.main);
+}
 
 function preload () {
   this.load.image('sky', 'assets/skies/starfield.png');
@@ -15,6 +19,8 @@ function preload () {
 }
 
 function create () {
+  const camera = this.cameras.main;
+
   sky = this.add.tileSprite(0, 0, 1024, 768, 'sky')
     .setOrigin(0, 0)
     .setName('sky');
@@ -38,12 +44,17 @@ function create () {
     .setBounce(1, 1)
     .setCollideWorldBounds(true);
 
+  console.log('logo', logo);
+
   this.physics.add.overlap(ghost, logo);
 
   emitter.startFollow(logo);
 
+  camera.filters.internal.addBlur();
+
   const { pane } = this.inspectorScene;
 
+  AddCamera(camera, pane);
   AddGameObject(sky, pane);
   AddGameObject(logo, pane);
   AddArcadeBody(logo.body, pane);
@@ -57,7 +68,7 @@ function update () {
 
 // eslint-disable-next-line no-new
 new Phaser.Game({
-  scene: { preload, create, update },
+  scene: { init, preload, create, update },
   plugins: PhaserPluginInspector.DefaultPluginsConfig,
   audio: {
     disableWebAudio: true

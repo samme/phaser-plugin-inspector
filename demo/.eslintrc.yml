@@ -6,4 +6,8 @@ globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
   Phaser: readonly
+  PhaserPluginInspector: readonly
+  Tweakpane: readonly
   __Global__: readonly
+rules:
+  no-new: off

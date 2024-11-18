@@ -3,7 +3,7 @@
 
 // eslint-disable-next-line no-new
 new Phaser.Game({
-  type: Phaser.CANVAS,
+  type: Phaser.WEBGL,
   plugins: PhaserPluginInspector.DefaultPluginsConfig,
   scene: [
     { key: 'active' },

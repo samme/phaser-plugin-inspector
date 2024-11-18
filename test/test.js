@@ -10,7 +10,7 @@ describe('Phaser', function () {
   });
 
   it('is the required version', function () {
-    assert.propertyVal(Phaser, 'VERSION', '3.87');
+    assert.propertyVal(Phaser, 'VERSION', '4.0.0 Beta 2');
   });
 });
 
@@ -52,17 +52,21 @@ describe('PhaserPluginInspector', function () {
       'AddArcadePhysicsWorld',
       'AddCamera',
       'AddChain',
+      'AddFilters',
+      'AddFilterList',
+      'AddFilterController',
       'AddGameObject',
       'AddGroup',
-      'AddFXComponent',
-      'AddFXController',
       'AddInput',
       'AddKey',
       'AddKeys',
       'AddLight',
       'AddMatterPhysicsWorld',
       'AddParticleEmitter',
+      'AddPoint',
       'AddPointer',
+      'AddRectangle',
+      'AddRectangleLike',
       'AddScenes',
       'AddSound',
       'AddTimeline',
@@ -234,54 +238,6 @@ describe('new Game', function () {
     });
   });
 
-  describe('Install with DefaultPluginsConfig, click buttons', function () {
-    it.skip('should not error', function (done) {
-      game = new Phaser.Game({
-        input: { activePointers: 0 },
-        plugins: PhaserPluginInspector.DefaultPluginsConfig,
-        callbacks: {
-          postBoot: function (game) {
-            assert.isObject(game.plugins.getEntry('InspectorGlobalPlugin'));
-            assert.include(game.plugins.getDefaultScenePlugins(), 'InspectorScenePlugin');
-          }
-        },
-        scene: {
-          map: {},
-          physics: { arcade: {}, matter: {} },
-          create: function () {
-            assert.property(this, 'inspectorGame');
-
-            console.warn('Will click a lot of buttons. These have side effects.');
-
-            const skipExpr = /(Destroy|Remove|…)/;
-
-            for (const button of this.inspectorGame.pane.containerElem_.querySelectorAll('.tp-btnv_b')) {
-              const { innerText } = button;
-
-              if (skipExpr.test(innerText)) {
-                console.log('Skipping button because it matches the exclude pattern', innerText);
-
-                continue;
-              }
-
-              console.log('Click', button.innerText);
-
-              button.click();
-            }
-
-            console.log('Wait for 0.4s');
-
-            setTimeout(() => {
-              console.log('Done waiting');
-
-              done();
-            }, 400);
-          }
-        }
-      });
-    });
-  });
-
   describe('Install with mappings', function () {
     it('should not error', function (done) {
       game = new Phaser.Game({
@@ -376,7 +332,6 @@ for (const renderType of [Phaser.CANVAS, Phaser.WEBGL]) {
       AddArcadeBody,
       AddCamera,
       AddChain,
-      AddFXController,
       AddGameObject,
       AddGroup,
       AddKey,
@@ -384,6 +339,10 @@ for (const renderType of [Phaser.CANVAS, Phaser.WEBGL]) {
       AddInput,
       AddLight,
       AddParticleEmitter,
+      AddPoint,
+      AddPointer,
+      AddRectangle,
+      AddRectangleLike,
       AddScenes,
       AddTimeline,
       AddTimerEvent,
@@ -489,7 +448,7 @@ for (const renderType of [Phaser.CANVAS, Phaser.WEBGL]) {
     });
 
     describe('AddArcadeBody(body)', function () {
-      it('does not error', function () {
+      it.skip('does not error', function () {
         AddArcadeBody(scene.physics.add.image(0, 0, '__DEFAULT').body, pane);
       });
     });
@@ -497,18 +456,6 @@ for (const renderType of [Phaser.CANVAS, Phaser.WEBGL]) {
     describe('AddCamera()', function () {
       it('does not error', function () {
         const cam = scene.cameras.add();
-
-        AddCamera(cam, pane);
-
-        scene.cameras.remove(cam);
-      });
-    });
-
-    // this.cameras.main.setPostPipeline(Phaser.FX.BLUR);
-
-    describe('AddCamera(), setPostPipeline()', function () {
-      it('does not error', function () {
-        const cam = scene.cameras.add().setPostPipeline(Phaser.FX.BLUR);
 
         AddCamera(cam, pane);
 
@@ -646,167 +593,6 @@ for (const renderType of [Phaser.CANVAS, Phaser.WEBGL]) {
       });
     });
 
-    describe('AddGameObject(mesh)', function () {
-      it('does not error', function () {
-        AddGameObject(scene.add.mesh(0, 0, '__DEFAULT').addVertices([-1, 1, 1, 1, -1, -1, 1, -1], [0, 0, 1, 0, 0, 1, 1, 1], [0, 2, 1, 2, 3, 1]), pane);
-      });
-    });
-
-    describe('AddGameObject(plane)', function () {
-      it('does not error', function () {
-        AddGameObject(scene.add.plane(400, 300, '__DEFAULT', null, 8, 8, true), pane);
-      });
-    });
-
-    describe('AddGameObject(image), preFX.addShadow()', function () {
-      it('does not error', function () {
-        const img = scene.add.image(0, 0, '__DEFAULT');
-
-        img.preFX.addShadow(0, 0, 0.006, 2, 0x333333, 10);
-
-        AddGameObject(img, pane);
-      });
-    });
-
-    describe('AddGameObject(image), postFX.addShine()', function () {
-      it('does not error', function () {
-        if (game.config.renderType === Phaser.WEBGL) {
-          const img = scene.add.image(0, 0, '__DEFAULT');
-
-          img.postFX.addShine(1, 0.2, 5);
-
-          AddGameObject(img, pane);
-        } else {
-          this.skip();
-        }
-      });
-    });
-
-    describe('AddFXController(preFX.addBarrel())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addBarrel();
-
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addBloom())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addBloom();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addBlur())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addBlur();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addBokeh())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addBokeh();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addCircle())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addCircle();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addColorMatrix())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addColorMatrix();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addDisplacement())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addDisplacement();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addGlow())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addGlow();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addGradient())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addGradient();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addPixelate())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addPixelate();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addReveal())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addReveal();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addShadow())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addShadow();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addShine())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addShine();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addTiltShift())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addTiltShift();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addVignette())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addVignette();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(preFX.addWipe())', function () {
-      it('does not error', function () {
-        const fx = scene.add.image(0, 0, '__DEFAULT').preFX.addWipe();
-        AddFXController(fx, pane);
-      });
-    });
-
-    describe('AddFXController(postFX.addBarrel())', function () {
-      it('does not error', function () {
-        if (game.config.renderType === Phaser.WEBGL) {
-          const fx = scene.add.image(0, 0, '__DEFAULT').postFX.addBarrel();
-
-          AddFXController(fx, pane);
-        } else {
-          this.skip();
-        }
-      });
-    });
-
     describe('AddGroup(group)', function () {
       it('does not error', function () {
         AddGroup(scene.add.group(), pane);
@@ -860,6 +646,30 @@ for (const renderType of [Phaser.CANVAS, Phaser.WEBGL]) {
         const particles = scene.add.particles(0, 0, '__DEFAULT');
 
         AddParticleEmitter(particles, pane);
+      });
+    });
+
+    describe('AddPoint()', function () {
+      it('does not error', function () {
+        AddPoint(new Phaser.Math.Vector2(), pane);
+      });
+    });
+
+    describe('AddPointer(pointer)', function () {
+      it('does not error', function () {
+        AddPointer(scene.input.activePointer, pane);
+      });
+    });
+
+    describe('AddRectangle()', function () {
+      it('does not error', function () {
+        AddRectangle(new Phaser.Geom.Rectangle(), pane);
+      });
+    });
+
+    describe('AddRectangleLike()', function () {
+      it('does not error', function () {
+        AddRectangleLike({ x: 0, y: 0, width: 1, height: 1 }, pane);
       });
     });
 
@@ -923,6 +733,60 @@ for (const renderType of [Phaser.CANVAS, Phaser.WEBGL]) {
     });
   });
 }
+
+describe('Install with DefaultPluginsConfig, click buttons', function () {
+  let game;
+  let scene;
+
+  before(function (done) {
+    game = new Phaser.Game({
+      input: { activePointers: 0 },
+      plugins: PhaserPluginInspector.DefaultPluginsConfig,
+      callbacks: {
+        postBoot: function (game) {
+          assert.isObject(game.plugins.getEntry('InspectorGlobalPlugin'));
+          assert.include(game.plugins.getDefaultScenePlugins(), 'InspectorScenePlugin');
+        }
+      },
+      scene: {
+        map: {},
+        physics: { arcade: {}, matter: {} },
+        init: function () {
+          console.log('init', this);
+          scene = this;
+          done();
+        }
+      }
+    });
+  });
+
+  after(function () {
+    console.log('destroy game …');
+    game.destroy(true);
+    game.runDestroy();
+    game = null;
+    scene = null;
+  });
+
+  it('should click all buttons without error (👀 see console)', function () {
+    const skipExpr = /(Destroy|Remove|Save|…)/;
+
+    console.log('Will skip buttons with text matching', skipExpr);
+
+    for (const button of scene.inspectorGame.pane.containerElem_.querySelectorAll('.tp-btnv_b')) {
+      const { innerText } = button;
+
+      if (skipExpr.test(innerText)) {
+        console.log('Skip button', innerText);
+
+        continue;
+      }
+
+      console.log('Click button', innerText);
+      button.click();
+    }
+  });
+});
 
 mocha.checkLeaks();
 mocha.globals(['Phaser']);

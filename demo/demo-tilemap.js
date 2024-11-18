@@ -19,8 +19,7 @@ class Example extends Phaser.Scene {
       0, 0,
       this.map.widthInPixels, this.map.heightInPixels,
       this.map.tileWidth, this.map.tileHeight,
-      0, 1,
-      0xffff00, 1
+      0xffffff, 1
     ).setAlpha(0.2).setOrigin(0, 0);
 
     for (const layer of this.map.layers) {
