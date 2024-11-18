@@ -403,6 +403,14 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(obj, 'totalRendered', { format: FormatLength });
   }
 
+  if ('tilesDrawn' in obj) {
+    folder.addMonitor(obj, 'tilesDrawn', { format: FormatLength });
+  }
+
+  if ('tilesTotal' in obj) {
+    folder.addMonitor(obj, 'tilesTotal', { format: FormatLength });
+  }
+
   if (obj.pipeline) {
     // WebGL only
 
