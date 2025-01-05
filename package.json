@@ -25,12 +25,12 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "mocha": "^10.8.2",
-    "phaser": "4.0.0-beta.2",
+    "phaser": "4.0.0-beta.3",
     "rollup": "^2.23.0",
     "tweakpane": "3.1.10"
   },
   "peerDependencies": {
-    "phaser": "4.0.0-beta.1",
+    "phaser": "4.0.0-beta.3",
     "tweakpane": "^3.1.0"
   },
   "scripts": {
