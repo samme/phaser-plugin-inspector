@@ -231,9 +231,9 @@ export function AddCamera (camera, pane) {
   return folder;
 }
 
-export function AddArcadePhysicsWorld (world, pane) {
+export function AddArcadePhysicsWorld (world, pane, options = { title: 'Arcade Physics World' }) {
   const { arcadePhysics, events } = world.scene.sys;
-  const folder = pane.addFolder({ title: 'Arcade Physics', expanded: false });
+  const folder = pane.addFolder(options);
 
   folder.addMonitor(world.bodies, 'size', { label: 'bodies.size' });
   folder.addInput(world, 'fixedStep');
