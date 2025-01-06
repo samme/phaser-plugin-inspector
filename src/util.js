@@ -393,6 +393,10 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     AddFilters(obj.filters, folder);
   }
 
+  if ('lighting' in obj) {
+    folder.addInput(obj, 'lighting');
+  }
+
   if ('displayList' in obj) {
     const { displayList } = obj;
     const displayFolder = folder.addFolder({ title: 'Display List' });
