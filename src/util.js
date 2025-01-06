@@ -931,6 +931,13 @@ export function AddFilterController (ctrl, pane, options = { title: `${ctrl.rend
   if (renderNode === 'FilterBlend') {
     folder.addInput(ctrl, 'blendMode', { options: BlendModes });
     folder.addInput(ctrl, 'amount', { min: 0, max: 1 });
+
+    const { color } = ctrl;
+
+    folder.addInput(color, 0, { label: 'color[0] (red)' });
+    folder.addInput(color, 1, { label: 'color[1] (green)' });
+    folder.addInput(color, 2, { label: 'color[2] (blue)' });
+    folder.addInput(color, 3, { label: 'color[3] (alpha)' });
   } else if (renderNode === 'FilterMask') {
     folder.addInput(ctrl, 'invert');
     folder.addInput(ctrl, 'autoUpdate');
