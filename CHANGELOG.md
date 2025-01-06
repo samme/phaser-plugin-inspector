@@ -1,3 +1,26 @@
+v3.0.0-1 for Phaser v4.0.0 Beta 3
+=================================
+
+Added
+-----
+
+- Blend filter controller
+- Mask filter controller
+- Parallel filter controller
+- Other filter controller `amount`
+- Game object filter inputs
+- Game object `lighting` input
+
+Changed
+-------
+
+- Arcade Physics folders are expanded
+
+Removed
+-------
+
+- The package `browser` field, for `main` instead
+
 v3.0.0-0 for Phaser v4.0.0 Beta 2
 =================================
 
