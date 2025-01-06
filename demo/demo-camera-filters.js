@@ -1,4 +1,4 @@
-const { AddCamera, AddFilters } = PhaserPluginInspector;
+const { AddFilterController } = PhaserPluginInspector;
 
 const pane = new Tweakpane.Pane({ title: 'Camera Filters' });
 
@@ -16,21 +16,9 @@ class Example extends Phaser.Scene {
     parallelFilters.top.addThreshold(0.5, 1);
     parallelFilters.top.addBlur();
     parallelFilters.blend.blendMode = Phaser.BlendModes.ADD;
-    parallelFilters.blend.amount = 0;
+    parallelFilters.blend.amount = 0.5;
 
-    this.tweens.add({
-      targets: parallelFilters.blend,
-      amount: 2,
-      duration: 1000,
-      yoyo: true,
-      repeat: -1,
-      ease: 'Sine.easeInOut'
-    });
-
-    console.log('Camera', this.cameras.main);
-
-    AddFilters(this.cameras.main.filters, pane);
-    AddCamera(this.cameras.main, pane);
+    AddFilterController(parallelFilters, pane);
   }
 }
 

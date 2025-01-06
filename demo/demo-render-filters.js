@@ -1,4 +1,4 @@
-const { AddFilterController, AddGameObject } = PhaserPluginInspector;
+const { AddCamera, AddGameObject } = PhaserPluginInspector;
 
 const pane = new Tweakpane.Pane({ title: 'Render Filters' });
 
@@ -18,7 +18,7 @@ class Example extends Phaser.Scene {
     container1.add(ball3);
 
     // Create overlapping balls in a container.
-    const container2 = this.add.container(840, 360);
+    const container2 = this.add.container(840, 360).setName('container2');
     const ball4 = this.add.image(0, -140, 'ball-pink');
     const ball5 = this.add.image(0, 0, 'ball-pink');
     const ball6 = this.add.image(0, 140, 'ball-pink');
@@ -26,25 +26,14 @@ class Example extends Phaser.Scene {
     container2.add(ball5);
     container2.add(ball6);
 
-    // Add container2 to a RenderFilters wrapper.
-    const box = this.add.renderFilters(container2).setName('box');
+    container2.enableFilters();
+    container2.filterCamera.setAlpha(0.5);
+    container2.filtersForceComposite = true;
 
-    const blur = box.filters.internal.addBlur();
-    blur.setPaddingOverride(1, 1, 2, 2);
+    console.log('container2', container2);
 
-    const bokeh = box.filters.internal.addBokeh();
-    bokeh.setPaddingOverride(null);
-
-    // Set the alpha of the RenderFilters wrapper.
-    box.setAlpha(0.5);
-
-    console.log('Box', box);
-
-    AddFilterController(blur, pane);
-    AddFilterController(bokeh, pane);
-    AddGameObject(box, pane);
-
-    // The alpha is applied to the composite of the container.
+    AddGameObject(container2, pane);
+    AddCamera(container2.filterCamera, pane);
   }
 }
 

@@ -14,8 +14,6 @@ class Example extends Phaser.Scene {
     this.face = this.add.image(640, 360, 'face')
       .setScale(1);
 
-    this.faceFilters = this.add.renderFilters(this.face);
-
     // Add an ellipse over the mouth.
     const ellipse = this.add.ellipse(640, 520, 180, 240, 0xff0000);
 
@@ -34,7 +32,9 @@ class Example extends Phaser.Scene {
     container.add(ellipse);
     container.add(glass);
 
-    const mask = this.faceFilters.filters.external.addMask(glass);
+    this.face.enableFilters();
+
+    const mask = this.face.filters.external.addMask(glass);
 
     AddFilterController(mask, pane);
   }

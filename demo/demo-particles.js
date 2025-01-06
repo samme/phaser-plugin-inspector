@@ -43,6 +43,7 @@ function createGlowEmitter () {
   AddParticleEmitter(emitter, pane);
 }
 
+// eslint-disable-next-line no-unused-vars
 function createZoneEmitter () {
   const shape1 = new Phaser.Geom.Circle(0, 0, 160);
   const shape2 = new Phaser.Geom.Ellipse(0, 0, 500, 150);
