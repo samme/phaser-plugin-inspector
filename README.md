@@ -6,29 +6,30 @@ View and change game properties, with [Tweakpane](https://github.com/cocopon/twe
 Demos
 -----
 
-- [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) — simple game, helper functions (TODO)
-- [All the demos](https://codepen.io/collection/LPeVMY) (TODO)
+- [Sprite Mask Demo](https://phaser.io/sandbox/e1Upnrzk)
+- [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) — simple game, helper functions (Phaser 4 TODO)
+- [All the demos](https://codepen.io/collection/LPeVMY) (Phaser 4 TODO)
 
 You can also paste the [Quick load](#quick-load) snippet into the [Phaser Sandbox](https://phaser.io/sandbox).
 
 Install
 -------
 
-The plugins add controls for the game and scene systems. If you don't need these, you can skip this step and use the [helper functions](#helper-functions) only.
+This package includes two Phaser plugins (global and scene) and helper functions. The plugins add controls for the game and scene systems. If you don't need these, you can skip adding the plugins to your game and use the [helper functions](#helper-functions) only.
 
-### Browser / UMD
+### Script tags / UMD
 
-[First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) (TODO) shows this setup.
+[First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) (Phaser 4 TODO) shows this setup.
 
 Include Phaser, [Tweakpane](https://cdn.jsdelivr.net/npm/tweakpane/), and [the plugin UMD script](https://cdn.jsdelivr.net/npm/phaser-plugin-inspector/) in this order. You can download the scripts or use the CDN links.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/phaser@4.0.0-beta.2/dist/phaser.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser@4.0.0-beta.3/dist/phaser.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@3.0.0-0/dist/phaser-plugin-inspector.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@3.0.0-1/dist/phaser-plugin-inspector.umd.js"></script>
 ```
 
-If this is the only plugin you're using then you can use the "default" configuration:
+If these are the only Phaser plugins you're using then you can use the "default" plugin configuration:
 
 ```js
 /* global PhaserPluginInspector */
@@ -63,15 +64,13 @@ The helper functions are on the same namespace:
 const { AddGameObject } = PhaserPluginInspector
 ```
 
-### Module
+### Modules
 
 ```sh
-npm install phaser-plugin-inspector tweakpane
+npm install phaser@beta phaser-plugin-inspector@beta tweakpane
 ```
 
-This package has an ES module (`phaser-plugin-inspector.esm.js`, marked as `module`) and a CommonJS-compatible UMD module(`phaser-plugin-inspector.umd.js`, marked as `browser`). You should use the ES module, but some bundlers may pick the UMD module by default. Configure your bundler to use the `module` field, or add an alias to the ES module file, or import the ES module file directly.
-
-If this is the only plugin you're using then you can use the "default" configuration:
+If these are the only Phaser plugins you're using then you can use the "default" plugin configuration:
 
 ```js
 import { DefaultPluginsConfig } from 'phaser-plugin-inspector';
@@ -106,7 +105,7 @@ import { AddGameObject } from 'phaser-plugin-inspector';
 function preload() {
   this.load.scripts('inspector', [
     'https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.js',
-    'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@3.0.0-0/dist/phaser-plugin-inspector.umd.js',
+    'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@3.0.0-1/dist/phaser-plugin-inspector.umd.js',
   ]);
   this.load.once('complete', () => {
     PhaserPluginInspector.Install(this.plugins);
@@ -119,15 +118,14 @@ function preload() {
 Given a `game` variable:
 
 ```js
-const scene = game.scene.getScenes(true)[0];
-
-scene.load.scripts('inspector', [
-  'https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.js',
-  'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@3.0.0-0/dist/phaser-plugin-inspector.umd.js',
-]);
-scene.load.once('complete', () => {
-  PhaserPluginInspector.Install(game.plugins);
-}).start();
+game.scene.systemScene.load
+  .scripts('inspector', [
+    'https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.js',
+    'https://cdn.jsdelivr.net/npm/phaser-plugin-inspector@3.0.0-1/dist/phaser-plugin-inspector.umd.js',
+  ])
+  .once('complete', () => {
+    PhaserPluginInspector.Install(game.plugins);
+  }).start();
 ```
 
 Use
@@ -150,7 +148,9 @@ These create a set of controls for common Phaser objects.
 
 You can use these functions with or without the plugins.
 
-The `pane` argument is the Tweakpane pane or a folder in it. The `options` argument is options for the folder.
+The `pane` argument is the Tweakpane pane or a folder in it. The `options` argument is options for the folder. The most useful options are
+
+    { title: 'Title', expanded: false }
 
 Each function creates a [folder](https://cocopon.github.io/tweakpane/ui-components.html#folder) and returns it.
 
@@ -212,11 +212,11 @@ Adds a folder for a filter controller, e.g., from `addBlur()` or `addMask()`.
 
 ### AddFilterList(list, pane, options?) → folder
 
-Adds a folder for a filter list, e.g., `filters.external` or `filters.internal`.
+Adds a folder for a filter list, e.g., `gameObject.filters.external` or `gameObject.filters.internal`.
 
 ### AddFilters(filters, pane, options) → folder
 
-Adds a folder for a filters object, e.g., `camera.filters` or `renderFilter.filters`.
+Adds a folder for a filters object, e.g., `camera.filters` or `gameObject.filters`.
 
 ### AddGameObject(obj, pane, options?) → folder
 
