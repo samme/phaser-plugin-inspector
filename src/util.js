@@ -384,12 +384,11 @@ export function AddGameObject (obj, pane, options = { title: `${obj.type} “${o
     folder.addMonitor(obj.children, 'length', { label: 'children.length', format: FormatLength });
   }
 
-  if (obj.type === 'RenderFilters') {
-    folder.addInput(obj, 'autoFocus');
-    folder.addInput(obj, 'autoFocusContext');
-    folder.addInput(obj, 'decomposite');
-    folder.addInput(obj, 'ignoreLighting');
-    folder.addInput(obj, 'runChildPreUpdate');
+  if ('filters' in obj && obj.filters) {
+    folder.addInput(obj, 'filtersAutoFocus');
+    folder.addInput(obj, 'filtersFocusContext');
+    folder.addInput(obj, 'filtersForceComposite');
+    folder.addInput(obj, 'renderFilters');
 
     AddFilters(obj.filters, folder);
   }
@@ -921,12 +920,24 @@ export function AddFilterList (filterList, pane, options = { title: 'Filter List
 
 export function AddFilterController (ctrl, pane, options = { title: `${ctrl.renderNode} Controller` }) {
   const folder = pane.addFolder(options);
+  const { renderNode } = ctrl;
 
   folder.addInput(ctrl, 'active');
 
-  // Mask
-  if ('invert' in ctrl) {
+  if (renderNode === 'FilterBlend') {
+    folder.addInput(ctrl, 'blendMode', { options: BlendModes });
+    folder.addInput(ctrl, 'amount', { min: 0, max: 1 });
+  } else if (renderNode === 'FilterMask') {
     folder.addInput(ctrl, 'invert');
+    folder.addInput(ctrl, 'autoUpdate');
+  } else if (renderNode === 'FilterParallelFilters') {
+    AddFilterList(ctrl.top, folder, { title: 'Top' });
+    AddFilterList(ctrl.bottom, folder, { title: 'Bottom' });
+    AddFilterController(ctrl.blend, folder);
+  } else {
+    if ('amount' in ctrl) {
+      folder.addInput(ctrl, 'amount');
+    }
   }
 
   if (ctrl.currentPadding) {
