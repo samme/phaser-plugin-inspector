@@ -10,7 +10,7 @@ describe('Phaser', function () {
   });
 
   it('is the required version', function () {
-    assert.propertyVal(Phaser, 'VERSION', '4.0.0 Beta 2');
+    assert.propertyVal(Phaser, 'VERSION', '4.0.0 Beta 3');
   });
 });
 
@@ -332,6 +332,9 @@ for (const renderType of [Phaser.CANVAS, Phaser.WEBGL]) {
       AddArcadeBody,
       AddCamera,
       AddChain,
+      AddFilters,
+      AddFilterList,
+      AddFilterController,
       AddGameObject,
       AddGroup,
       AddKey,
@@ -448,7 +451,7 @@ for (const renderType of [Phaser.CANVAS, Phaser.WEBGL]) {
     });
 
     describe('AddArcadeBody(body)', function () {
-      it.skip('does not error', function () {
+      it('does not error', function () {
         AddArcadeBody(scene.physics.add.image(0, 0, '__DEFAULT').body, pane);
       });
     });
@@ -473,6 +476,83 @@ for (const renderType of [Phaser.CANVAS, Phaser.WEBGL]) {
         AddChain(chain, pane);
 
         chain.destroy();
+      });
+    });
+
+    describe('AddFilters(sprite.filters)', function () {
+      it('does not error', function () {
+        if (game.config.renderType === Phaser.WEBGL) {
+          const sprite = scene.add.sprite(0, 0, '__DEFAULT');
+          sprite.enableFilters();
+          AddFilters(sprite.filters, pane);
+        } else {
+          this.skip();
+        }
+      });
+    });
+
+    describe('AddFilterList(sprite.filters.internal)', function () {
+      it('does not error', function () {
+        if (game.config.renderType === Phaser.WEBGL) {
+          const sprite = scene.add.sprite(0, 0, '__DEFAULT');
+          sprite.enableFilters();
+          sprite.filters.internal.addBlur();
+          AddFilterList(sprite.filters.internal, pane);
+        } else {
+          this.skip();
+        }
+      });
+    });
+
+    describe('AddFilterList(sprite.filters.external)', function () {
+      it('does not error', function () {
+        if (game.config.renderType === Phaser.WEBGL) {
+          const sprite = scene.add.sprite(0, 0, '__DEFAULT');
+          sprite.enableFilters();
+          sprite.filters.external.addBlur();
+          AddFilterList(sprite.filters.external, pane);
+        } else {
+          this.skip();
+        }
+      });
+    });
+
+    describe('AddFilterController(barrel)', function () {
+      it('does not error', function () {
+        if (game.config.renderType === Phaser.WEBGL) {
+          const sprite = scene.add.sprite(0, 0, '__DEFAULT');
+          sprite.enableFilters();
+          const barrel = sprite.filters.internal.addBarrel();
+          AddFilterController(barrel, pane);
+        } else {
+          this.skip();
+        }
+      });
+    });
+
+    describe('AddFilterController(blend)', function () {
+      it('does not error', function () {
+        if (game.config.renderType === Phaser.WEBGL) {
+          const sprite = scene.add.sprite(0, 0, '__DEFAULT');
+          sprite.enableFilters();
+          const blend = sprite.filters.internal.addBlend();
+          AddFilterController(blend, pane);
+        } else {
+          this.skip();
+        }
+      });
+    });
+
+    describe('AddFilterController(parallel)', function () {
+      it('does not error', function () {
+        if (game.config.renderType === Phaser.WEBGL) {
+          const sprite = scene.add.sprite(0, 0, '__DEFAULT');
+          sprite.enableFilters();
+          const parallel = sprite.filters.internal.addParallelFilters();
+          AddFilterController(parallel, pane);
+        } else {
+          this.skip();
+        }
       });
     });
 

@@ -10,7 +10,7 @@ describe('Phaser', function () {
   });
 
   it('is the required version', function () {
-    assert.propertyVal(Phaser, 'VERSION', '4.0.0 Beta 2');
+    assert.propertyVal(Phaser, 'VERSION', '4.0.0 Beta 3');
   });
 });
 
