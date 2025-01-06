@@ -16,7 +16,7 @@ import {
 
 export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
   constructor (pluginManager) {
-    const ver = '4.0.0 Beta 2';
+    const ver = '4.0.0 Beta 3';
 
     if (Phaser.VERSION !== ver) {
       throw new Error(`Phaser v${ver} is required but this is Phaser v${Phaser.VERSION}`);
