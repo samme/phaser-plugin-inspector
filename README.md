@@ -6,7 +6,9 @@ View and change game properties, with [Tweakpane](https://github.com/cocopon/twe
 Demos
 -----
 
-- [Sprite Mask Demo](https://phaser.io/sandbox/e1Upnrzk)
+- [Sprite mask](https://phaser.io/sandbox/3W2XsCJE)
+- [Bloom with parallel filters](https://phaser.io/sandbox/trXs3Bd9)
+- [Container composite alpha](https://phaser.io/sandbox/AAaKugAu)
 - [First Phaser 3 game](https://codepen.io/samme/pen/YzxbMBV?editors=0010) — simple game, helper functions (Phaser 4 TODO)
 - [All the demos](https://codepen.io/collection/LPeVMY) (Phaser 4 TODO)
 
