@@ -35,7 +35,7 @@ export class InspectorGlobalPlugin extends Phaser.Plugins.BasePlugin {
     this.add();
 
     this.style = document.createElement('style');
-    this.style.innerText = '.tp-dfwv { top: 8px; bottom: 8px; width: 320px; overflow: auto; }';
+    this.style.innerText = '.tp-dfwv { width: 320px; }';
     document.head.appendChild(this.style);
   }
 
