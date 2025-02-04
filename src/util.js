@@ -766,6 +766,8 @@ export function AddTimerEvent (timer, pane, options = { title: 'Timer Event' }) 
 
 export function AddInput (input, pane, options = { title: `Input (${input.gameObject.type} “${input.gameObject.name}”)` }) {
   const folder = pane.addFolder(options);
+  const { gameObject } = input;
+  const inputPlugin = gameObject.scene.sys.input;
 
   folder.addMonitor(input, 'cursor');
   folder.addMonitor(input, 'customHitArea');
@@ -781,6 +783,9 @@ export function AddInput (input, pane, options = { title: `Input (${input.gameOb
   folder.addMonitor(input, 'enabled');
   folder.addMonitor(input, 'localX');
   folder.addMonitor(input, 'localY');
+
+  folder.addButton({ title: 'Enable debug' }).on('click', () => { inputPlugin.enableDebug(gameObject); });
+  folder.addButton({ title: 'Remove debug' }).on('click', () => { inputPlugin.removeDebug(gameObject); });
 
   input.gameObject.once(GameObjectEvents.DESTROY, () => { folder.dispose(); });
 
