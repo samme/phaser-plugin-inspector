@@ -1,6 +1,6 @@
 {
   "name": "phaser-plugin-inspector",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "description": "View and change Phaser 3 game properties",
   "type": "module",
   "module": "dist/phaser-plugin-inspector.esm.js",
