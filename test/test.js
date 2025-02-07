@@ -863,6 +863,59 @@ for (const renderType of [Phaser.CANVAS, Phaser.WEBGL]) {
       });
     });
 
+    describe('AddParticleEmitter(particle emitter) ops', function () {
+      describe('static value', function () {
+        it('does not error', function () {
+          AddParticleEmitter(scene.add.particles(0, 0, '__DEFAULT', { alpha: 0 }), pane);
+        });
+      });
+      describe('random array', function () {
+        it('does not error', function () {
+          AddParticleEmitter(scene.add.particles(0, 0, '__DEFAULT', { alpha: [0, 1] }), pane);
+        });
+      });
+      describe('custom emit', function () {
+        it('does not error', function () {
+          AddParticleEmitter(scene.add.particles(0, 0, '__DEFAULT', { alpha: { onEmit: () => 1 } }), pane);
+        });
+      });
+      describe('stepped start-end', function () {
+        it('does not error', function () {
+          AddParticleEmitter(scene.add.particles(0, 0, '__DEFAULT', { alpha: { start: 0, end: 1, steps: 2 } }), pane);
+        });
+      });
+      describe('eased start-end', function () {
+        it('does not error', function () {
+          AddParticleEmitter(scene.add.particles(0, 0, '__DEFAULT', { alpha: { start: 0, end: 1 } }), pane);
+        });
+      });
+      describe('random min-max', function () {
+        it('does not error', function () {
+          AddParticleEmitter(scene.add.particles(0, 0, '__DEFAULT', { alpha: { min: 0, max: 1 } }), pane);
+        });
+      });
+      describe('random integer', function () {
+        it('does not error', function () {
+          AddParticleEmitter(scene.add.particles(0, 0, '__DEFAULT', { alpha: { random: [0, 1] } }), pane);
+        });
+      });
+      describe('custom emit update', function () {
+        it('does not error', function () {
+          AddParticleEmitter(scene.add.particles(0, 0, '__DEFAULT', { alpha: { onEmit: () => 0, onUpdate: () => 1 } }), pane);
+        });
+      });
+      describe('interpolated', function () {
+        it('does not error', function () {
+          AddParticleEmitter(scene.add.particles(0, 0, '__DEFAULT', { alpha: { values: [0, 1], interpolation: 'catmull' } }), pane);
+        });
+      });
+      describe('color', function () {
+        it('does not error', function () {
+          AddParticleEmitter(scene.add.particles(0, 0, '__DEFAULT', { color: [0, 1, 2] }), pane);
+        });
+      });
+    });
+
     describe('AddScenes()', function () {
       it('does not error', function () {
         AddScenes(
