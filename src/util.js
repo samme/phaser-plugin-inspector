@@ -536,6 +536,33 @@ export function AddParticleEmitter (emitter, pane, options = { title: `Particle 
   folder.addInput(emitter, 'timeScale', { min: 0.1, max: 10, step: 0.1 });
   folder.addInput(emitter, 'visible');
 
+  const opsFolder = folder.addFolder({ title: 'Ops', expanded: false });
+
+  for (const op of Object.values(emitter.ops)) {
+    const { propertyKey, start, end, current, method } = op;
+    const opFolder = opsFolder.addFolder({ title: propertyKey, expanded: false });
+
+    if (typeof current === 'number') {
+      if (method === 1) {
+        opFolder.addInput(op, 'current');
+      } else {
+        opFolder.addMonitor(op, 'current');
+      }
+    }
+
+    if (method === 4 || method === 5 || method === 6) {
+      opFolder.addInput(op, 'start');
+      opFolder.addInput(op, 'end');
+    }
+
+    if (method === 4) {
+      opFolder.addInput(op, 'steps', { step: 1 });
+      opFolder.addInput(op, 'yoyo');
+      opFolder.addInput(op, 'direction', { min: 0, max: 1, step: 1 });
+      opFolder.addMonitor(op, 'counter', { min: start, max: end, view: 'graph' });
+    }
+  }
+
   const graphsFolder = folder.addFolder({ title: 'Counters', expanded: false });
 
   graphsFolder.addMonitor(emitter.alive, 'length', { view: 'graph', min: 0, max: max, label: 'getAliveParticleCount()', format: FormatLength });
