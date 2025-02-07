@@ -6,13 +6,13 @@ const { AddGameObject, AddParticleEmitter } = PhaserPluginInspector;
 function preload () {
   this.load.atlas('flares', 'assets/particles/flares.png', 'assets/particles/flares.json');
   this.load.image('bg', 'assets/skies/darkstone.png');
-  this.load.image('bg', 'assets/skies/darkstone.png');
   this.load.image('flare', 'assets/particles/white-flare.png');
   this.load.image('fox', 'assets/pics/card3.png');
 }
 
 function create () {
   createGlowEmitter.call(this);
+  createZoneEmitter.call(this);
 }
 
 function createGlowEmitter () {
@@ -24,23 +24,25 @@ function createGlowEmitter () {
 
   const emitter = this.add.particles(0, 0, 'flare', {
     speed: 24,
-    lifespan: 1500,
-    quantity: 10,
+    frequency: -1,
+    lifespan: 2000,
+    quantity: 100,
     maxParticles: 1000,
     scale: { start: 0.4, end: 0 },
+    color: [0xffffff, 0x00ffff, 0x0000ff],
     emitZone: emitZone1,
-    duration: 500,
+    duration: 1000,
     emitting: false
   });
 
-  card.on('pointerover', () => {
-    emitter.start(2000);
+  card.on('pointerdown', () => {
+    emitter.explode();
   });
 
   const { pane } = this.inspectorScene;
 
-  AddGameObject(emitter, pane);
   AddParticleEmitter(emitter, pane);
+  AddGameObject(emitter, pane);
 }
 
 function createZoneEmitter () {
@@ -52,13 +54,13 @@ function createZoneEmitter () {
 
   const emitter = this.add.particles(400, 300, 'flares', {
     blendMode: 'ADD',
-    delay: 200,
-    duration: 30000,
+    delay: 100,
+    duration: 60000,
     frame: { frames: ['red', 'green', 'blue'], cycle: true },
-    frequency: 20,
+    frequency: 25,
     hold: 200,
     lifespan: 600,
-    maxAliveParticles: 40,
+    maxAliveParticles: 100,
     name: 'cycling flares',
     scale: { start: 0.6, end: 0.1 }
   });
@@ -81,8 +83,8 @@ function createZoneEmitter () {
 
   const { pane } = this.inspectorScene;
 
-  AddGameObject(emitter, pane);
   AddParticleEmitter(emitter, pane);
+  AddGameObject(emitter, pane);
 }
 
 function update () {
